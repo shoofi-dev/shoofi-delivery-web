@@ -1,0 +1,30 @@
+.App-map {
+    height: 800px;
+    width: 100%;
+    border: solid;
+  }
+
+  .fill-gradient-instagram {
+    background-clip: text;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+    
+    /* needed for browser support */
+    -webkit-background-clip: text; /* see https://caniuse.com/#feat=background-img-opts */
+    -webkit-text-fill-color: transparent; /* https://caniuse.com/#feat=text-stroke */
+  }
+
+  .animate__delay-14s {
+    --animate-duration: 1.5s;
+  }
+  .animate__delay-15s {
+    --animate-duration: 1.7s;
+  }
+  .animate__delay-16s {
+    --animate-duration: 2.2s;
+  }
+  .animate__delay-17s {
+    --animate-duration: 2.7s;
+  }
+  .animate__delay-18s {
+    --animate-duration: 3.2s;
+  }
