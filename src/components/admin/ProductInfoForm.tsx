@@ -10,6 +10,7 @@ interface ProductInfoFormProps {
   imgFile: File | undefined;
   getImgSrc: () => string;
   handleFileChange: (event: any) => void;
+  handlAddClick: () => void;
 }
 
 const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
@@ -22,56 +23,175 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
   imgFile,
   getImgSrc,
   handleFileChange,
+  handlAddClick,
 }) => {
   return (
     <form className={isDisabled ? "pointer-events-none" : "pointer-events-auto"}>
       <div className="flex flex-wrap">
         <div className="w-full lg:w-6/12 px-4">
           <div className="relative w-full mb-3">
-            <label className={inputLabelClass} htmlFor="grid-password">
-              שם
+            <label className={inputLabelClass} htmlFor="nameAR">
+              שם (עברית)
             </label>
             <input
-              name="name"
+              name="nameHE"
               type="text"
               className={`${inputClass} ${getInputClass()}`}
-              defaultValue={selectedProduct?.name}
+              value={selectedProduct?.nameHE || ""}
               onChange={handleInputChange}
+              disabled={isDisabled}
             />
           </div>
         </div>
         <div className="w-full lg:w-6/12 px-4">
           <div className="relative w-full mb-3">
-            <label className={inputLabelClass} htmlFor="grid-password">
+            <label className={inputLabelClass} htmlFor="nameAR">
+              اسم (عربي)
+            </label>
+            <input
+              name="nameAR"
+              type="text"
+              className={`${inputClass} ${getInputClass()}`}
+              value={selectedProduct?.nameAR || ""}
+              onChange={handleInputChange}
+              disabled={isDisabled}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap">
+        <div className="w-full lg:w-6/12 px-4">
+          <div className="relative w-full mb-3 flex items-center">
+            <input
+              name="isInStore"
+              type="checkbox"
+              checked={!!selectedProduct?.isInStore}
+              onChange={handleInputChange}
+              disabled={isDisabled}
+              className="mr-2"
+            />
+            <label className={inputLabelClass} htmlFor="isInStore">
+              האם זמין בחנות
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap">
+        <div className="w-full lg:w-6/12 px-4">
+          <div className="relative w-full mb-3">
+            <label className={inputLabelClass} htmlFor="price">
               מחיר
             </label>
             <input
               name="price"
               type="number"
               className={`${inputClass} ${getInputClass()}`}
-              defaultValue={selectedProduct?.price}
+              value={selectedProduct?.price || ""}
               onChange={handleInputChange}
+              disabled={isDisabled}
             />
           </div>
         </div>
       </div>
+      {/* Discount Section */}
       <div className="flex flex-wrap">
-        <div className="w-full lg:w-12/12 px-4">
+        <div className="w-full lg:w-6/12 px-4">
+          <div className="relative w-full mb-3 flex items-center">
+            <input
+              name="hasDiscount"
+              type="checkbox"
+              checked={!!selectedProduct?.hasDiscount}
+              onChange={handleInputChange}
+              disabled={isDisabled}
+              className="mr-2"
+            />
+            <label className={inputLabelClass} htmlFor="hasDiscount">
+              אפשר הנחת כמות
+            </label>
+          </div>
+        </div>
+        {selectedProduct?.hasDiscount && (
+          <>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className={inputLabelClass} htmlFor="discountQuantity">
+                  כמות להנחה (ק"ג)
+                </label>
+                <input
+                  name="discountQuantity"
+                  type="number"
+                  className={`${inputClass} ${getInputClass()}`}
+                  value={selectedProduct?.discountQuantity || ""}
+                  onChange={handleInputChange}
+                  disabled={isDisabled}
+                />
+              </div>
+            </div>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className={inputLabelClass} htmlFor="discountPrice">
+                  מחיר כולל להנחה
+                </label>
+                <input
+                  name="discountPrice"
+                  type="number"
+                  className={`${inputClass} ${getInputClass()}`}
+                  value={selectedProduct?.discountPrice || ""}
+                  onChange={handleInputChange}
+                  disabled={isDisabled}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      {/* Description fields */}
+      <div className="flex flex-wrap">
+        <div className="w-full lg:w-6/12 px-4">
           <div className="relative w-full mb-3">
-            <label className={inputLabelClass} htmlFor="grid-password">
-              תיאור מוצר
+            <label className={inputLabelClass} htmlFor="descriptionAR">
+              תיאור (ערבית)
             </label>
             <textarea
-              name="description"
-              role="textbox"
+              name="descriptionAR"
               className={`${inputClass} ${getInputClass()}`}
-              defaultValue={selectedProduct?.description}
-              rows={4}
+              value={selectedProduct?.descriptionAR || ""}
               onChange={handleInputChange}
+              rows={3}
+              disabled={isDisabled}
+            ></textarea>
+          </div>
+        </div>
+        <div className="w-full lg:w-6/12 px-4">
+          <div className="relative w-full mb-3">
+            <label className={inputLabelClass} htmlFor="descriptionHE">
+              תיאור (עברית)
+            </label>
+            <textarea
+              name="descriptionHE"
+              className={`${inputClass} ${getInputClass()}`}
+              value={selectedProduct?.descriptionHE || ""}
+              onChange={handleInputChange}
+              rows={3}
+              disabled={isDisabled}
             ></textarea>
           </div>
         </div>
       </div>
+      {/* Extras placeholder */}
+      <div className="flex flex-wrap">
+        <div className="w-full px-4">
+          <div className="relative w-full mb-3">
+            <label className={inputLabelClass}>
+              תוספות (Extras)
+            </label>
+            <div className="border rounded p-4 bg-blueGray-50 text-blueGray-400">
+              <span>ניהול תוספות יתבצע כאן בעתיד (לא מיושם עדיין בווב)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Image upload (unchanged) */}
       <div className="flex flex-wrap">
         <div className="w-full lg:w-12/12 px-4">
           <div className="relative w-full mb-3">
@@ -118,6 +238,21 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
                 </label>
               )}
             </div>
+          </div>
+        </div>
+      </div>
+      {/* Submit Button */}
+      <div className="flex flex-wrap">
+        <div className="w-full px-4">
+          <div className="relative w-full mb-3">
+            <button
+              type="button"
+              onClick={handlAddClick}
+              disabled={isDisabled}
+              className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            >
+              שמור מוצר
+            </button>
           </div>
         </div>
       </div>

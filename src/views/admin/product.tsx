@@ -32,7 +32,7 @@ const formModes = {
 };
 const ProductPage = () => {
   const params = useParams();
-  const [selectedProduct, setSelectedProduct] = useState<TProduct>();
+  const [selectedProduct, setSelectedProduct] = useState<any>();
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [formMode, setFormMode] = useState<number>();
   const [imgFile, setImgFile] = useState<File>();
@@ -97,11 +97,12 @@ const ProductPage = () => {
         console.log("imgFile",imgFile)
         const updatedData = { ...selectedProduct, img: imgFile };
         setSelectedProduct(updatedData);
-        addNewProductApi(updatedData).then((res: any) => {
-          console.log(res);
-          navigate(`/admin/product/${res.productId}`);
-          setIsLoading(false);
-        });
+        addNewProductApi(updatedData, storeAppName)
+        // .then((res: any) => {
+        //   console.log(res);
+        //   navigate(`/admin/product/${res.productId}`);
+        //   setIsLoading(false);
+        // });
       //});
     }
   };
@@ -194,6 +195,7 @@ const ProductPage = () => {
               imgFile={imgFile}
               getImgSrc={getImgSrc}
               handleFileChange={handleFileChange}
+              handlAddClick={handlAddClick}
             />
           </div>
         ) : storeAppName ? (
