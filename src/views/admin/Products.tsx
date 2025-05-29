@@ -28,8 +28,8 @@ export default function ProductsList() {
 
   const getProductsList = () => {
     if (!storeAppName) return;
-    getProductsListApi({ 'app-name': storeAppName }).then((res) => {
-      console.log("res", res)
+    getProductsListApi({ "app-name": storeAppName }).then((res) => {
+      console.log("res", res);
       setMenu(res);
       if (res.length > 0 && !categoryId) {
         setCategoryId(res[0]._id);
@@ -55,13 +55,13 @@ export default function ProductsList() {
     if (params.id) {
       switch (params.id) {
         case "1":
-          return CategoryConsts[ CategoryEnum.cheeseCake]
+          return CategoryConsts[CategoryEnum.cheeseCake];
         case "2":
-          return CategoryConsts[ CategoryEnum.chockolateCate]
+          return CategoryConsts[CategoryEnum.chockolateCate];
         case "3":
-          return CategoryConsts[ CategoryEnum.uniqueCake]
+          return CategoryConsts[CategoryEnum.uniqueCake];
         case "4":
-          return CategoryConsts[ CategoryEnum.birthdayCake]
+          return CategoryConsts[CategoryEnum.birthdayCake];
       }
     }
   };
@@ -86,7 +86,7 @@ export default function ProductsList() {
 
   const deleteSelectedItems = () => {
     setIsdeleteActive(false);
-    deleteProductApi(deleteList);
+    deleteProductApi(deleteList, storeAppName);
     //TODO : call delete products api
   };
 
@@ -101,97 +101,125 @@ export default function ProductsList() {
     navigate("/admin/product");
   };
 
+  // Responsive product card
+  const ProductCard = ({ product }: { product: any }) => (
+    <Link
+      key={product._id}
+      onClick={(e) => {
+        handleProductClick(e, product);
+      }}
+      className={clsx(
+        "transition duration-500 hover:scale-105 w-full max-w-xs mx-auto"
+      )}
+      to={`/admin/product/${storeAppName}/${product._id}`}
+    >
+      <div className="bg-white rounded-xl shadow-lg flex flex-col justify-between overflow-hidden">
+        <div className="flex-1 flex items-center justify-center bg-gray-50 aspect-[3/4]">
+          <img
+            alt={product.nameAR}
+            className="object-contain w-full h-full"
+            src={`${cdnUrl}${product.img[0].uri}`}
+          />
+        </div>
+        <div className="p-4 text-center">
+          <div className="font-bold text-base md:text-lg text-gray-800 mb-1">
+            {product.nameAR}
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+
   return (
-    <div className="flex flex-wrap justify-center relative">
-      <StoreDropdown value={storeAppName} onChange={setStoreAppName} label="בחר חנות" />
-      <CategoryDropdown
-        value={categoryId}
-        onChange={setCategoryId}
-        label="בחר קטגוריה"
-        categories={menu}
-      />
-      <div className="w-full px-4">
-        <div
-          className={clsx(
-            "flex items-center rounded-lg rounded p-3 shadow-lg bg-gray-100",
-            isDeleteActive ? "bg-red-300" : "bg-white"
-          )}
-        >
-          <div
-            onClick={deleteSelectedItems}
-            role="button"
-            className={clsx(
-              "bg-orange-600 disabled",
-              iconClass,
-              isDeleteActive ? "visible" : "invisible",
-              deleteList.length === 0
-                ? "opacity-30 pointer-events-none"
-                : "opacity-100 pointer-events-auto"
-            )}
-          >
-            <i className="fas fa-check"></i>
-          </div>
-          <h1 className="text-4xl m-auto w-fit">{getCategoryName()}</h1>
-          <div className="flex gap-3">
-            <div
-              role="button"
-              onClick={handleDeleteItemsClick}
-              className={clsx(iconClass, "bg-red-600")}
-            >
-              <i
-                className={clsx(
-                  isDeleteActive ? "fa fa-times" : "fas fa-trash"
-                )}
-              ></i>
-            </div>
-            <div
-              role="button"
-              onClick={handleAddNewClick}
-              className={clsx(
-                "bg-lightBlue-600 disabled",
-                iconClass,
-                isDeleteActive
-                  ? "opacity-30 pointer-events-none"
-                  : "opacity-100 pointer-events-auto"
-              )}
-            >
-              <i className="fas fa-plus"></i>
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-5 flex-wrap mt-10 -mx-1 lg:-mx-4">
-          {productsList?.map((product: any) => (
-            <Link
-              onClick={(e) => {
-                handleProductClick(e, product);
-              }}
-              className={clsx("my-1 transition duration-500 hover:scale-105")}
-              to={`/admin/product/${storeAppName}/${product._id}`}
-            >
-              <div>
-                <article className="overflow-hidden rounded-lg shadow-lg">
-                  <img
-                    alt="Placeholder"
-                    className="block  max-w-50 max-h-80"
-                    src={`${cdnUrl}${product.img[0].uri}`}
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-4 md:py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8">
+          {/* Title (RTL: right) */}
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-0 text-right order-3">
+            ניהול מוצרים
+          </h1>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              {/* Dropdowns (center) */}
+              <div className="flex gap-2 sm:gap-4 items-center flex-1  order-1 md:order-2">
+                <div className="w-48">
+                  <StoreDropdown
+                    value={storeAppName}
+                    onChange={setStoreAppName}
+                    label="בחר חנות"
                   />
-                  <div
-                    className={clsx(
-                      "flex items-center leading-tight p-2 md:p-4",
-                      isDeleteActive && isInDeleteList(product)
-                        ? "bg-red-600"
-                        : "bg-white"
-                    )}
-                  >
-                    <div className="text-lg w-full text-center">
-                      <span className="text-black	">{product.nameAR}</span>
-                    </div>
-                  </div>
-                </article>
+                </div>
+                <div className="w-48">
+                  <CategoryDropdown
+                    value={categoryId}
+                    onChange={setCategoryId}
+                    label="בחר קטגוריה"
+                    categories={menu}
+                  />
+                </div>
               </div>
-            </Link>
-          ))}
+            </div>
+
+            {/* Actions (RTL: left) */}
+            <div className="flex gap-2 sm:gap-3 items-center justify-start order-2 md:order-1">
+              <button
+                onClick={handleDeleteItemsClick}
+                className={clsx(
+                  "bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow text-2xl",
+                  isDeleteActive ? "ring-2 ring-red-300" : ""
+                )}
+                title="מחק מוצרים"
+              >
+                <i
+                  className={clsx(
+                    isDeleteActive ? "fa fa-times" : "fas fa-trash"
+                  )}
+                ></i>
+              </button>
+              <button
+                onClick={handleAddNewClick}
+                className={clsx(
+                  "bg-lightBlue-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow text-2xl hover:bg-lightBlue-700 transition",
+                  isDeleteActive
+                    ? "opacity-30 pointer-events-none"
+                    : "opacity-100 pointer-events-auto"
+                )}
+                title="הוסף מוצר"
+                disabled={isDeleteActive}
+              >
+                <i className="fas fa-plus"></i>
+              </button>
+              <button
+                onClick={deleteSelectedItems}
+                className={clsx(
+                  "bg-orange-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow text-2xl",
+                  isDeleteActive ? "visible" : "invisible",
+                  deleteList.length === 0
+                    ? "opacity-30 pointer-events-none"
+                    : "opacity-100 pointer-events-auto"
+                )}
+                title="אשר מחיקה"
+                style={{ marginRight: "8px" }}
+              >
+                <i className="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
         </div>
+        {/* Product Grid or Empty State */}
+        {productsList.length === 0 ? (
+          <div className="text-center text-gray-400 py-20">
+            <i className="fas fa-box-open text-5xl mb-4"></i>
+            <div>אין מוצרים בקטגוריה זו</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {productsList?.map((product: any) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

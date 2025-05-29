@@ -232,7 +232,7 @@ const ProductPage = () => {
           {formMode === formModes.preview && (
             <button
               onClick={() => setFormMode(formModes.edit)}
-              className="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow"
+              className="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-16 h-12 flex items-center justify-center shadow"
               title="ערוך מוצר"
             >
               <i className="fas fa-edit"></i>
@@ -242,7 +242,7 @@ const ProductPage = () => {
           {formMode === formModes.edit && (
             <button
               onClick={reloadProduct}
-              className="bg-red-700 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow"
+              className="bg-red-700 hover:bg-red-600 text-white rounded-full w-16 h-12 flex items-center justify-center shadow"
               title="בטל עריכה"
             >
               <i className="fas fa-times"></i>
