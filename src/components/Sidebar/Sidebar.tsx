@@ -285,7 +285,7 @@ export default function Sidebar() {
             className="md:block md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
             to="/"
           >
-            <img className="h-12 m-auto" src="/creme-caramel-logo.png" />
+            <img className="h-12 m-auto" src="/icon.png" />
           </Link>
           {/* Collapse */}
           <div
@@ -430,6 +430,77 @@ export default function Sidebar() {
                     }
                   ></i>
                   <div>רשימת שגיאות</div>
+                </Link>
+              </li>
+
+              <hr className="my-4 md:min-w-full" />
+              <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Analytics
+              </h6>
+
+              <li className="items-center">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/analytics/orders") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/analytics/orders"
+                >
+                  <i
+                    className={
+                      "fas fa-chart-bar mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/analytics/orders") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>Orders Analytics</div>
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/analytics/deliveries") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/analytics/deliveries"
+                >
+                  <i
+                    className={
+                      "fas fa-truck mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/analytics/deliveries") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>Delivery Analytics</div>
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/analytics/customers") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/analytics/customers"
+                >
+                  <i
+                    className={
+                      "fas fa-users mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/analytics/customers") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>Customer Analytics</div>
                 </Link>
               </li>
             </ul>

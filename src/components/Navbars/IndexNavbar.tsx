@@ -1,112 +1,25 @@
 /*eslint-disable*/
-import { useState, useEffect, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 // components
 
 import IndexDropdown from "components/Dropdowns/IndexDropdown.js";
-import getStoreDataApi from "apis/delivery/get-store";
-import clsx from "clsx";
-import { StoreContext } from "stores";
-import { observer } from "mobx-react-lite";
 
-function Navbar(props: any) {
-  const navigate = useNavigate();
-  const { storeDataStore } = useContext(StoreContext);
-  const [navbarOpen, setNavbarOpen] = useState(false);
-  const [customerData, setCustomerData] = useState<any>();
-  const navbarRef = useRef<any>(null); // Reference for the navbar container
-
-  const getStoreDataFromApi = async () => {
-    const storeDataRes: any = await getStoreDataApi();
-    localStorage.setItem("storeData", JSON.stringify(storeDataRes[0]));
-    storeDataStore.setStoreData(storeDataRes[0]);
-  };
-  useEffect(() => {
-    const customerData = localStorage.getItem("customerData");
-    if (customerData) {
-      const parsedCustomerData = JSON.parse(customerData);
-      setCustomerData(parsedCustomerData);
-
-      getStoreDataFromApi();
-
-      const interval = setInterval(() => {
-        if (customerData) {
-          getStoreDataFromApi();
-        }
-      }, 60 * 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, []);
-  useEffect(() => {
-    // Close the navbar when clicking outside of it
-    const handleClickOutside = (event: any) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
-        setNavbarOpen(false);
-      }
-    };
-
-    // Add the event listener
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Clean up the event listener on unmount
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const logOut = () => {
-    localStorage.removeItem("customerData");
-    navigate(`/`);
-  };
-  const gotToEmployePayments = () => {
-    navigate(`/employe-payments`);
-  };
-  const gotToDeliveryList = () => {
-    navigate(`/delivery-list`);
-  };
-  const goToBooDelivery = () => {
-    navigate(`/delivery-order`);
-  };
-  const goToAddCustomer = () => {
-    navigate(`/add-customer`);
-  };
-  const gotToAdminSettings = () => {
-    navigate(`/admin-settings`);
-  };
-
+export default function Navbar(props: any) {
+  const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
     <>
-      <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-1 navbar-expand-lg bg-white shadow ">
+      <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
-          <div className="w-full items-center relative flex justify-between  ">
+          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link
-              to="/delivery-list"
-              className="text-blueGray-700 text-sm font-bold leading-relaxed inline-block mr-0 whitespace-nowrap uppercase self-center mx0a"
+              to="/"
+              className="text-blueGray-700 text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
             >
-              <img
-                alt="..."
-                src="/icon.png"
-                className="align-middle rounded-t-lg h-12 md:h-20 self-center m-auto"
-              />
+              Notus React
             </Link>
-
-            <div className="text-2xl">{customerData?.fullName}</div>
-
             <button
-              className="cursor-pointer absolute left-10 text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block outline-none focus:outline-none"
-              type="button"
-              onClick={() => goToBooDelivery()}
-            >
-              <i
-                className={clsx(
-                  "fas fa-shipping-fast ",
-                  storeDataStore.storeData?.isOpen ? "text-green-500" : "text-red-500"
-                )}
-              ></i>
-            </button>
-            <button
-              className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block  outline-none focus:outline-none"
+              className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
@@ -114,58 +27,67 @@ function Navbar(props: any) {
             </button>
           </div>
           <div
-            ref={navbarRef}
             className={
-              "flex-grow items-center bg-white lg:shadow-none" +
+              "lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none" +
               (navbarOpen ? " block" : " hidden")
             }
             id="example-navbar-warning"
           >
-            <ul className="flex flex-col  list-none mr-auto pt-5">
-              {
-                <li
-                  onClick={gotToDeliveryList}
-                  className="flex items-center border-t"
+            <ul className="flex flex-col lg:flex-row list-none mr-auto">
+              <li className="flex items-center">
+                <a
+                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus?ref=nr-index-navbar"
                 >
-                  <div className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-lg uppercase font-bold">
-                    قائمة الارساليات
-                  </div>
-                </li>
-              }
-              {customerData?.role === "admin" && (
-                <li
-                  onClick={gotToEmployePayments}
-                  className="flex items-center border-t"
+                  <i className="text-blueGray-400 far fa-file-alt text-lg leading-lg mr-2" />{" "}
+                  Docs
+                </a>
+              </li>
+            </ul>
+            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+              <li className="flex items-center">
+                <IndexDropdown />
+              </li>
+              <li className="flex items-center">
+                <a
+                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdemos.creative-tim.com%2Fnotus-react%2F%23%2F"
+                  target="_blank"
                 >
-                  <div className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-lg uppercase font-bold">
-                    قائمة بعدد الارساليات
-                  </div>
-                </li>
-              )}
-              {customerData?.role === "admin" && (
-                <li
-                  onClick={gotToAdminSettings}
-                  className="flex items-center border-t"
+                  <i className="text-blueGray-400 fab fa-facebook text-lg leading-lg " />
+                  <span className="lg:hidden inline-block ml-2">Share</span>
+                </a>
+              </li>
+
+              <li className="flex items-center">
+                <a
+                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdemos.creative-tim.com%2Fnotus-react%2F%23%2F&text=Start%20your%20development%20with%20a%20Free%20Tailwind%20CSS%20and%20React%20UI%20Kit%20and%20Admin.%20Let%20Notus%20React%20amaze%20you%20with%20its%20cool%20features%20and%20build%20tools%20and%20get%20your%20project%20to%20a%20whole%20new%20level.%20"
+                  target="_blank"
                 >
-                  <div className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-lg uppercase font-bold">
-                    الاعدادات
-                  </div>
-                </li>
-              )}
-              {customerData?.role === "master" && (
-                <li
-                  onClick={goToAddCustomer}
-                  className="flex items-center border-t"
+                  <i className="text-blueGray-400 fab fa-twitter text-lg leading-lg " />
+                  <span className="lg:hidden inline-block ml-2">Tweet</span>
+                </a>
+              </li>
+
+              <li className="flex items-center">
+                <a
+                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  href="https://github.com/creativetimofficial/notus-react?ref=nr-index-navbar"
+                  target="_blank"
                 >
-                  <div className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-lg uppercase font-bold">
-                    اضف مستخدم
-                  </div>
-                </li>
-              )}
-              <li onClick={logOut} className="flex items-center border-t">
-                <div className="hover:text-blueGray-500 text-red-500 px-3 py-4 lg:py-2 flex items-center text-lg uppercase font-bold">
-                  الخروج
-                </div>
+                  <i className="text-blueGray-400 fab fa-github text-lg leading-lg " />
+                  <span className="lg:hidden inline-block ml-2">Star</span>
+                </a>
+              </li>
+
+              <li className="flex items-center">
+                <button
+                  className="bg-lightBlue-500 text-white active:bg-lightBlue-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                  type="button"
+                >
+                  <i className="fas fa-arrow-alt-circle-down"></i> Download
+                </button>
               </li>
             </ul>
           </div>
@@ -174,5 +96,3 @@ function Navbar(props: any) {
     </>
   );
 }
-export default observer(Navbar);
-

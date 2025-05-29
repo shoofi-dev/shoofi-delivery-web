@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
     if (config.headers["Content-Type"] !== "multipart/form-data") {
       config.headers["Content-Type"] = "application/json";
     }
-        config.headers["app-name"] = 'delivery-company'
+    config.headers["app-name"] = config.headers["app-name"] || 'shoofi';
     return config;
   },
   function (error) {

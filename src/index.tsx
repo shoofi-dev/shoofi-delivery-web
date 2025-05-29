@@ -45,6 +45,9 @@ import AdminSettings from "views/delivery/settigns";
 import AddCustomer from "views/delivery/add-customer";
 import { StoreContext } from "stores";
 import { storeDataStore } from "stores/store";
+import OrdersAnalytics from "views/admin/analytics/OrdersAnalytics";
+import DeliveryAnalytics from "views/admin/analytics/DeliveryAnalytics";
+import CustomerAnalytics from "views/admin/analytics/CustomerAnalytics";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -75,6 +78,9 @@ root.render(
         <Route path="/admin/settings" element={<Settings />} />
         <Route path="/admin/tables" element={<Tables />} />
         <Route path="/admin/delivery/area" element={<DeliveryArea />} />
+        <Route path="/admin/analytics/orders" element={<OrdersAnalytics />} />
+        <Route path="/admin/analytics/deliveries" element={<DeliveryAnalytics />} />
+        <Route path="/admin/analytics/customers" element={<CustomerAnalytics />} />
         <Route path="" element={<Navigate to="/admin/dashboard" />} />
       </Route>
       <Route path="auth" element={<Auth />}>
