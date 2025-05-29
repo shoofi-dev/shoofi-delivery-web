@@ -44,7 +44,7 @@ const ProductPage = () => {
 
   const [categorytList, setCategorytList] = useState<TCategory[]>([]);
   const [globalCategorytList, setGlobalCategorytList] = useState<TCategory[]>([]);
-  const [globalExtrastList, setGlobalExtrastList] = useState<any[]>([]);
+  const [globalExtrasList, setGlobalExtrasList] = useState<any[]>([]);
   const [storeAppName, setStoreAppName] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
 
@@ -86,10 +86,22 @@ const ProductPage = () => {
         headers: { 'app-name': 'shoofi' }
       }).then((categories: any) => {
         setGlobalCategorytList(categories);
-        setGlobalExtrastList(categories.extras);
+ 
       });
  
   }, []);
+
+  // useEffect(() => {
+  //   console.log("selectedProduct", selectedProduct)
+  //   if (globalCategorytList) {
+  //     console.log("globalCategorytList", globalCategorytList)
+  //     console.log("categoryId", categoryId)
+  //     console.log("selectedProduct?.categoryId", selectedProduct?.categoryId)
+  //     const categoryRes = globalCategorytList.find((c: any) => (c._id === categoryId || c._id === selectedProduct?.categoryId));
+  //     console.log("categoryRes", categoryRes)
+  //     // setGlobalExtrasList(categoryRes?.extras); 
+  //      }
+  // }, [globalCategorytList]);
 
   useEffect(() => {
     switch (formMode) {
@@ -271,7 +283,7 @@ const ProductPage = () => {
               <ExtrasManager
                 value={selectedProduct?.extras || []}
                 onChange={(extras) => setSelectedProduct({ ...selectedProduct, extras })}
-                globalExtras={globalExtrastList as any} // TODO: fetch from backend
+                globalExtras={globalExtrasList as any} // TODO: fetch from backend
               />
               <ProductInfoForm
                 selectedProduct={selectedProduct}

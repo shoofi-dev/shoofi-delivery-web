@@ -27,13 +27,13 @@ const ExtraEditModal = ({
   const [title, setTitle] = useState(extra?.title || "");
   const [options, setOptions] = useState(extra?.options || [defaultOption()]);
 
-  const handleOptionChange = (idx: number, field: string, value: string) => {
+  const handleOptionChange = (idx: number, field: string, value: string | number) => {
     setOptions((opts) =>
-      opts.map((opt, i) => (i === idx ? { ...opt, [field]: value } : opt))
+      opts.map((opt, i) => (i === idx ? { ...opt, [field]: field === "price" ? Number(value) : value } : opt))
     );
   };
 
-  const handleAddOption = () => setOptions((opts) => [...opts, defaultOption()]);
+  const handleAddOption = () => setOptions((opts) => [...opts, { ...defaultOption(), id: Math.random().toString(36).substr(2, 9) }]);
   const handleRemoveOption = (idx: number) =>
     setOptions((opts) => opts.filter((_, i) => i !== idx));
 

@@ -125,10 +125,18 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             </div>
             {/* Show options for this extra */}
             {extra.options && (
-              <ul className="ml-4 list-disc">
+              <ul className="pr-4 list-disc">
                 {extra.options.map((opt) => (
-                  <li key={opt.id}>
-                    {opt.name} {opt.price ? `- ₪${opt.price}` : ""}
+                  <li  key={opt.id}>
+                    <div className="flex flex-row gap-2">
+                    <div>
+                    {opt.name}
+                      </div>
+                      <div>
+                      {opt.price ? `- ₪${opt.price}` : ""}
+                      </div>
+                    </div>
+                     
                   </li>
                 ))}
               </ul>
