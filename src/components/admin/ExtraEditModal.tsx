@@ -1,0 +1,123 @@
+import React, { useState } from "react";
+
+const defaultOption = () => ({ id: "", name: "", price: 0 });
+
+type ExtraType = "single" | "multi" | "counter" | "pizza-topping";
+type Option = { id: string; name: string; price?: number };
+type Extra = {
+  id: string;
+  type: ExtraType;
+  title: string;
+  options?: Option[];
+  [key: string]: any;
+};
+
+const ExtraEditModal = ({ 
+  extra, 
+  onSave, 
+  onClose, 
+  onCreateGlobalExtra 
+}: { 
+  extra?: Extra | null; 
+  onSave: (extra: Extra) => void; 
+  onClose: () => void; 
+  onCreateGlobalExtra?: (extra: Extra) => void; 
+}) => {
+  const [type, setType] = useState(extra?.type || "single");
+  const [title, setTitle] = useState(extra?.title || "");
+  const [options, setOptions] = useState(extra?.options || [defaultOption()]);
+
+  const handleOptionChange = (idx: number, field: string, value: string) => {
+    setOptions((opts) =>
+      opts.map((opt, i) => (i === idx ? { ...opt, [field]: value } : opt))
+    );
+  };
+
+  const handleAddOption = () => setOptions((opts) => [...opts, defaultOption()]);
+  const handleRemoveOption = (idx: number) =>
+    setOptions((opts) => opts.filter((_, i) => i !== idx));
+
+  const handleSave = () => {
+    const newExtra = {
+      id: extra?.id || Math.random().toString(36).substr(2, 9),
+      type,
+      title,
+      options,
+    };
+    onSave(newExtra);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+        <h2 className="text-xl font-bold mb-4">{extra ? "ערוך תוספת" : "הוסף תוספת"}</h2>
+        <div className="mb-3">
+          <label className="block font-bold mb-1">סוג תוספת</label>
+          <select
+            className="border rounded px-3 py-2 w-full"
+            value={type}
+            onChange={(e) => setType(e.target.value as ExtraType)}
+          >
+            <option value="single">בחירה בודדת</option>
+            <option value="multi">בחירה מרובה</option>
+            <option value="counter">מונה</option>
+            <option value="pizza-topping">תוספת פיצה</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label className="block font-bold mb-1">שם תוספת</label>
+          <input
+            className="border rounded px-3 py-2 w-full"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        {/* Options */}
+        <div className="mb-3">
+          <label className="block font-bold mb-1">אפשרויות</label>
+          {options.map((opt, idx) => (
+            <div key={idx} className="flex gap-2 mb-2">
+              <input
+                className="border rounded px-2 py-1 flex-1"
+                placeholder="שם"
+                value={opt.name}
+                onChange={(e) => handleOptionChange(idx, "name", e.target.value)}
+              />
+              <input
+                className="border rounded px-2 py-1 w-24"
+                placeholder="מחיר"
+                type="number"
+                value={opt.price}
+                onChange={(e) => handleOptionChange(idx, "price", e.target.value)}
+              />
+              <button
+                className="text-red-600"
+                onClick={() => handleRemoveOption(idx)}
+                type="button"
+              >
+                הסר
+              </button>
+            </div>
+          ))}
+          <button
+            className="bg-blueGray-200 px-2 py-1 rounded"
+            onClick={handleAddOption}
+            type="button"
+          >
+            הוסף אפשרות
+          </button>
+        </div>
+        <div className="flex justify-end gap-2 mt-4">
+          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
+            ביטול
+          </button>
+          <button className="bg-blueGray-800 text-white px-4 py-2 rounded" onClick={handleSave}>
+            שמור
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ExtraEditModal; 

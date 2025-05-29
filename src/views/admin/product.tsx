@@ -6,6 +6,7 @@ import StoreDropdown from "../../components/admin/StoreDropdown";
 import { axiosInstance } from "../../utils/http-interceptor";
 import CategoryDropdown from "../../components/admin/CategoryDropdown";
 import ProductInfoForm from "../../components/admin/ProductInfoForm";
+import ExtrasManager from "../../components/admin/ExtrasManager";
 
 /*consts*/
 import { CategoryEnum, CategoryConsts } from "shared/constants";
@@ -42,6 +43,8 @@ const ProductPage = () => {
   const navigate = useNavigate();
 
   const [categorytList, setCategorytList] = useState<TCategory[]>([]);
+  const [globalCategorytList, setGlobalCategorytList] = useState<TCategory[]>([]);
+  const [globalExtrastList, setGlobalExtrastList] = useState<any[]>([]);
   const [storeAppName, setStoreAppName] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
 
@@ -78,6 +81,17 @@ const ProductPage = () => {
   }, [storeAppName]);
 
   useEffect(() => {
+    console.log("globalCategorytList")
+      axiosInstance.get("/admin/categories", {
+        headers: { 'app-name': 'shoofi' }
+      }).then((categories: any) => {
+        setGlobalCategorytList(categories);
+        setGlobalExtrastList(categories.extras);
+      });
+ 
+  }, []);
+
+  useEffect(() => {
     switch (formMode) {
       case formModes.edit:
         setIsDisabled(false);
@@ -102,7 +116,8 @@ const ProductPage = () => {
   };
 
   const handlAddClick = () => {
-    if (selectedProduct && imgFile) {
+    console.log("selectedProduct", imgFile)
+    if (selectedProduct && getImgSrc() !== "") {
       setIsLoading(true);
       const updatedData = { ...selectedProduct, img: imgFile };
       setSelectedProduct(updatedData);
@@ -252,6 +267,12 @@ const ProductPage = () => {
         {storeAppName && (categoryId || selectedProduct?.categoryId) ? (
           <div className="flex-auto px-4 lg:px-10 py-10 pt-5">
             <div className="relative">
+              {/* Extras Manager Section */}
+              <ExtrasManager
+                value={selectedProduct?.extras || []}
+                onChange={(extras) => setSelectedProduct({ ...selectedProduct, extras })}
+                globalExtras={globalExtrastList as any} // TODO: fetch from backend
+              />
               <ProductInfoForm
                 selectedProduct={selectedProduct}
                 isDisabled={isDisabled}
