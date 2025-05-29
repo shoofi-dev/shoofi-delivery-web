@@ -1,1 +1,1 @@
-export const cdnUrl = 'https://creme-caramel-images.fra1.cdn.digitaloceanspaces.com/';
+export const cdnUrl = 'https://app-main-bucket.fra1.cdn.digitaloceanspaces.com/';

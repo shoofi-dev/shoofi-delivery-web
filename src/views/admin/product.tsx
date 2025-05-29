@@ -11,12 +11,13 @@ import ProductInfoForm from "../../components/admin/ProductInfoForm";
 import { CategoryEnum, CategoryConsts } from "shared/constants";
 
 /* api */
-import addNewProductApi from "apis/admin/product/add-new-product";
+import addOrUpdateProduct from "apis/admin/product/add-new-product";
 import uploadImage from "apis/admin/product/upload-image";
 import getProductApi from "apis/admin/product/get-product";
 import getCategoriesListApi from "apis/admin/category/get-categories";
 import { TCategory } from "shared/types/category";
 import React from "react";
+import { cdnUrl } from "consts/shared";
 
 const iconClass =
   "text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full";
@@ -32,6 +33,7 @@ const formModes = {
 };
 const ProductPage = () => {
   const params = useParams();
+  console.log("params", params)
   const [selectedProduct, setSelectedProduct] = useState<any>();
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [formMode, setFormMode] = useState<number>();
@@ -47,8 +49,17 @@ const ProductPage = () => {
     if (params.id === undefined) {
       setFormMode(formModes.addNew);
     } else {
-      getProductApi(params.id).then((res) => {
+      if (params.storeAppName) {
+        setStoreAppName(params.storeAppName);
+      }
+      
+      getProductApi(params.id, params.storeAppName || "").then((res: any) => {
+        console.log("res",res)
         setSelectedProduct(res);
+        if (res.categoryId) {
+        console.log("res.categoryId",res.categoryId)
+          setCategoryId(res.categoryId);
+        }
         setFormMode(formModes.preview);
       });
     }
@@ -93,24 +104,40 @@ const ProductPage = () => {
   const handlAddClick = () => {
     if (selectedProduct && imgFile) {
       setIsLoading(true);
-      //uploadImage(imgFile).then((res) => {
-        console.log("imgFile",imgFile)
-        const updatedData = { ...selectedProduct, img: imgFile };
-        setSelectedProduct(updatedData);
-        addNewProductApi(updatedData, storeAppName)
-        // .then((res: any) => {
-        //   console.log(res);
-        //   navigate(`/admin/product/${res.productId}`);
-        //   setIsLoading(false);
-        // });
-      //});
+      const updatedData = { ...selectedProduct, img: imgFile };
+      setSelectedProduct(updatedData);
+      addOrUpdateProduct(updatedData, storeAppName, formMode === formModes.edit)
+        .then((res: any) => {
+          // After update, reload product from backend
+          if (formMode === formModes.edit && selectedProduct._id) {
+            getProductApi(selectedProduct._id, storeAppName).then((fresh) => {
+              setSelectedProduct(fresh);
+              setFormMode(formModes.preview);
+              setIsLoading(false);
+            });
+          } else {
+            setIsLoading(false);
+          }
+        })
+        .catch(() => setIsLoading(false));
     }
   };
 
   const handleFileChange = (event: any) => {
     const target = event.target;
-    console.log("event.target.files[0]",event.target.files[0])
-    setImgFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setImgFile(file);
+    
+    // Update selectedProduct with new image
+    if (selectedProduct) {
+      setSelectedProduct({
+        ...selectedProduct,
+        img: [{
+          uri: URL.createObjectURL(file),
+          file: file
+        }]
+      });
+    }
   };
 
   const handleInputChange = (event: any) => {
@@ -158,22 +185,41 @@ const ProductPage = () => {
   const getImgSrc = () => {
     switch (formMode) {
       case formModes.addNew:
-        return URL.createObjectURL(imgFile);
+        return imgFile ? URL.createObjectURL(imgFile) : "";
       case formModes.preview:
       case formModes.edit:
-        return selectedProduct?.img;
+        if (selectedProduct?.img?.[0]?.uri) {
+          const uri = selectedProduct.img[0].uri;
+          return uri.startsWith("blob:") ? uri : `${cdnUrl}${uri}`;
+        }
+        return "";
       default:
         return "";
+    }
+  };
+
+  // Add a function to reload the product from the server
+  const reloadProduct = () => {
+    if (params.id) {
+      getProductApi(params.id, params.storeAppName || "").then((res: any) => {
+        setSelectedProduct(res);
+        if (res.categoryId) {
+          setCategoryId(res.categoryId);
+        }
+        setFormMode(formModes.preview);
+      });
+    } else {
+      setFormMode(formModes.preview);
     }
   };
 
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-        <div className="rounded-t bg-white mb-0 px-6 py-6 w-full">
+        <div className="rounded-t bg-white mb-0 px-6 py-6 w-full flex items-center gap-4">
           <StoreDropdown value={storeAppName} onChange={handleStoreChange} label="בחר חנות" />
           {storeAppName && (
-            <div className=" w-full">
+            <div className="w-full">
               <CategoryDropdown
                 value={categoryId || selectedProduct?.categoryId || ""}
                 onChange={handleCategoryChange}
@@ -182,21 +228,43 @@ const ProductPage = () => {
               />
             </div>
           )}
+          {/* Edit button in preview mode */}
+          {formMode === formModes.preview && (
+            <button
+              onClick={() => setFormMode(formModes.edit)}
+              className="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow"
+              title="ערוך מוצר"
+            >
+              <i className="fas fa-edit"></i>
+            </button>
+          )}
+          {/* Cancel Edit button in edit mode */}
+          {formMode === formModes.edit && (
+            <button
+              onClick={reloadProduct}
+              className="bg-red-700 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow"
+              title="בטל עריכה"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          )}
         </div>
         {storeAppName && (categoryId || selectedProduct?.categoryId) ? (
           <div className="flex-auto px-4 lg:px-10 py-10 pt-5">
-            <ProductInfoForm
-              selectedProduct={selectedProduct}
-              isDisabled={isDisabled}
-              inputClass={inputClass}
-              inputLabelClass={inputLabelClass}
-              getInputClass={getInputClass}
-              handleInputChange={handleInputChange}
-              imgFile={imgFile}
-              getImgSrc={getImgSrc}
-              handleFileChange={handleFileChange}
-              handlAddClick={handlAddClick}
-            />
+            <div className="relative">
+              <ProductInfoForm
+                selectedProduct={selectedProduct}
+                isDisabled={isDisabled}
+                inputClass={inputClass}
+                inputLabelClass={inputLabelClass}
+                getInputClass={getInputClass}
+                handleInputChange={handleInputChange}
+                imgFile={imgFile}
+                getImgSrc={getImgSrc}
+                handleFileChange={handleFileChange}
+                handlAddClick={handlAddClick}
+              />
+            </div>
           </div>
         ) : storeAppName ? (
           <div className="flex justify-center items-center py-10 text-lg text-gray-500">בחר קטגוריה כדי להוסיף או לערוך מוצר</div>

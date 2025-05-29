@@ -72,6 +72,7 @@ root.render(
         <Route path="/admin/product" element={<ProductPage />} />
         <Route path="/admin/product/add" element={<ProductPage />} />
         <Route path="/admin/product/:id" element={<ProductPage />} />
+        <Route path="/admin/product/:storeAppName/:id" element={<ProductPage />} />
         <Route path="/admin/errors" element={<ErrorsPage />} />
         <Route path="/admin/orders" element={<OrderdsPage />} />
         <Route path="/admin/maps" element={<Maps />} />

@@ -3,7 +3,7 @@ import { BASE_URL } from "consts/api";
 import { TProduct } from "shared/types/product";
 import { axiosInstance } from "utils/http-interceptor";
 
-export const addNewProductApi = (product: TProduct, storeAppName: string) => {
+export const addOrUpdateProduct = (product: TProduct, storeAppName: string, isEditMode: boolean) => {
   let formData = new FormData();
   product.nameAR && formData.append("nameAR", product.nameAR);
   product.nameHE && formData.append("nameHE", product.nameHE);
@@ -37,8 +37,15 @@ export const addNewProductApi = (product: TProduct, storeAppName: string) => {
     formData.append("discountPrice", product.discountPrice?.toString() || "0");
   }
 
+  // If edit mode, add productId
+  if (isEditMode && product._id) {
+    formData.append("productId", product._id);
+  }
+
+  const endpoint = isEditMode ? "admin/product/update" : "admin/product/insert";
+
   return axiosInstance
-    .post(BASE_URL + "admin/product/insert", formData, {
+    .post(BASE_URL + endpoint, formData, {
       headers: { "Content-Type": "multipart/form-data", "app-name": storeAppName },
     })
     .then(function (response) {
@@ -46,7 +53,7 @@ export const addNewProductApi = (product: TProduct, storeAppName: string) => {
     });
 };
 
-export default addNewProductApi;
+export default addOrUpdateProduct;
 
 // JSON.stringify({
 //   name: product.name,

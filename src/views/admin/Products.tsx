@@ -10,6 +10,8 @@ import deleteProductApi from "apis/admin/product/delete-product";
 import getProductsByCategoryIdApi from "apis/admin/product/get-products-by-category-id";
 import { CategoryConsts, CategoryEnum } from "shared/constants";
 import { cdnUrl } from "consts/shared";
+import StoreDropdown from "components/admin/StoreDropdown";
+import CategoryDropdown from "components/admin/CategoryDropdown";
 
 const iconClass =
   "text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full";
@@ -17,38 +19,37 @@ export default function ProductsList() {
   const params = useParams<any>();
   const navigate = useNavigate();
 
-  const [productsList, setProductsList] = useState<any>();
+  const [productsList, setProductsList] = useState<any[]>([]);
   const [isDeleteActive, setIsdeleteActive] = useState(false);
   const [deleteList, setDeleteList] = useState<any>([]);
-  // if(params.id){
+  const [storeAppName, setStoreAppName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [menu, setMenu] = useState<any[]>([]);
 
-  //   const categoryName= CategoryConsts[CategoryEnum.cheeseCake];
-  // }
   const getProductsList = () => {
-    getProductsListApi().then((res) => {
-       const category = res.find((categroy:any)=> categroy._id === params.id)
-       console.log(category.products)
-
-       setProductsList(category.products);
+    if (!storeAppName) return;
+    getProductsListApi({ 'app-name': storeAppName }).then((res) => {
+      console.log("res", res)
+      setMenu(res);
+      if (res.length > 0 && !categoryId) {
+        setCategoryId(res[0]._id);
+      }
     });
-    
   };
-  useEffect(() => {
-        // if (params.id && productsList) {
 
-        // }
-    //if (params.id && productsList) {
-      // setInterval(() => {
-        // getProductsByCategoryIdApi((params.id), 1).then((res) => {
-        //   setProductsList(res);
-        // });
-    //   }, 1000);
-    // } else {
-    //   setInterval(() => {
-     getProductsList();
-    //   }, 1000);
-    //}
-  }, []);
+  useEffect(() => {
+    getProductsList();
+    // eslint-disable-next-line
+  }, [storeAppName]);
+
+  useEffect(() => {
+    if (!categoryId || !menu.length) {
+      setProductsList([]);
+      return;
+    }
+    const category = menu.find((cat: any) => cat._id === categoryId);
+    setProductsList(category?.products || []);
+  }, [categoryId, menu]);
 
   const getCategoryName = () => {
     if (params.id) {
@@ -100,12 +101,15 @@ export default function ProductsList() {
     navigate("/admin/product");
   };
 
-  if (!productsList) {
-    return null;
-  }
-
   return (
     <div className="flex flex-wrap justify-center relative">
+      <StoreDropdown value={storeAppName} onChange={setStoreAppName} label="בחר חנות" />
+      <CategoryDropdown
+        value={categoryId}
+        onChange={setCategoryId}
+        label="בחר קטגוריה"
+        categories={menu}
+      />
       <div className="w-full px-4">
         <div
           className={clsx(
@@ -156,13 +160,13 @@ export default function ProductsList() {
           </div>
         </div>
         <div className="flex gap-5 flex-wrap mt-10 -mx-1 lg:-mx-4">
-          {productsList.map((product: any) => (
+          {productsList?.map((product: any) => (
             <Link
               onClick={(e) => {
                 handleProductClick(e, product);
               }}
               className={clsx("my-1 transition duration-500 hover:scale-105")}
-              to={`/admin/product/${product._id}`}
+              to={`/admin/product/${storeAppName}/${product._id}`}
             >
               <div>
                 <article className="overflow-hidden rounded-lg shadow-lg">
