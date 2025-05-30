@@ -16,6 +16,7 @@ type Extra = {
   type: ExtraType;
   title: string;
   options?: Option[];
+  maxCount?: number;
   [key: string]: any;
 };
 
@@ -33,6 +34,7 @@ const ExtraEditModal = ({
   const [type, setType] = useState<ExtraType>(extra?.type || "single");
   const [title, setTitle] = useState(extra?.title || "");
   const [options, setOptions] = useState<Option[]>(extra?.options || [defaultOption()]);
+  const [maxCount, setMaxCount] = useState<number>(extra?.maxCount || 1);
 
   const handleOptionChange = (idx: number, field: string, value: string | number) => {
     setOptions((opts) =>
@@ -80,6 +82,7 @@ const ExtraEditModal = ({
       type,
       title,
       options,
+      ...(type === "multi" ? { maxCount } : {}),
     };
     onSave(newExtra);
   };
@@ -101,6 +104,18 @@ const ExtraEditModal = ({
             <option value="pizza-topping">תוספת פיצה</option>
           </select>
         </div>
+        {type === "multi" && (
+          <div className="mb-3">
+            <label className="block font-bold mb-1">מקסימום בחירות</label>
+            <input
+              className="border rounded px-3 py-2 w-full"
+              type="number"
+              min={1}
+              value={maxCount}
+              onChange={e => setMaxCount(Number(e.target.value))}
+            />
+          </div>
+        )}
         <div className="mb-3">
           <label className="block font-bold mb-1">שם תוספת</label>
           <input

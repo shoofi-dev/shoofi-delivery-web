@@ -14,6 +14,7 @@ type Extra = {
   type: ExtraType;
   title: string;
   options?: Option[];
+  maxCount?: number;
   [key: string]: any;
 };
 
