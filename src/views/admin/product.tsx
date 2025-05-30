@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TProduct } from "shared/types/product";
-import StoreDropdown from "../../components/admin/StoreDropdown";
+import StoreDropdown, { Store } from "../../components/admin/StoreDropdown";
 import { axiosInstance } from "../../utils/http-interceptor";
 import CategoryDropdown from "../../components/admin/CategoryDropdown";
 import ProductInfoForm from "../../components/admin/ProductInfoForm";
@@ -47,7 +47,7 @@ const ProductPage = () => {
   const [globalExtrasList, setGlobalExtrasList] = useState<any[]>([]);
   const [storeAppName, setStoreAppName] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
-
+  const [selectedStore, setSelectedStore] = useState<Store>();
   useEffect(() => {
     if (params.id === undefined) {
       setFormMode(formModes.addNew);
@@ -81,15 +81,19 @@ const ProductPage = () => {
   }, [storeAppName]);
 
   useEffect(() => {
+    console.log("selectedStore", selectedStore)
+    if(!selectedStore) return;
     console.log("globalCategorytList")
       axiosInstance.get("/admin/categories", {
         headers: { 'app-name': 'shoofi' }
       }).then((categories: any) => {
+        console.log("selectedStore", selectedStore)
         setGlobalCategorytList(categories);
- 
+        const categoryExtras = categories.find((c: any) => c._id === selectedStore.categoryId);
+        setGlobalExtrasList(categoryExtras?.extras);
       });
  
-  }, []);
+  }, [selectedStore]);
 
   // useEffect(() => {
   //   console.log("selectedProduct", selectedProduct)
@@ -174,8 +178,10 @@ const ProductPage = () => {
     setSelectedProduct({ ...selectedProduct, [name]: value });
   };
 
-  const handleStoreChange = (appName: string) => {
-    setStoreAppName(appName);
+  const handleStoreChange = (store: Store) => {
+    console.log("storetttt", store)
+    setSelectedStore(store);
+    setStoreAppName(store.appName);
   };
 
   const handleCategoryChange = (event: any) => {

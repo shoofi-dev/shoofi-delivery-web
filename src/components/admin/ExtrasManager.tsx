@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import ExtraEditModal from "./ExtraEditModal";
 
 type ExtraType = "single" | "multi" | "counter" | "pizza-topping";
-type Option = { id: string; name: string; price?: number };
+type AreaOption = { id: string; name: string; price: number };
+type Option = { 
+  id: string; 
+  name: string; 
+  price?: number;
+  areaOptions?: AreaOption[];
+};
 type Extra = {
   id: string;
   type: ExtraType;
@@ -24,7 +30,6 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
   globalExtras,
   onCreateGlobalExtra,
 }) => {
-  console.log("globalExtras", globalExtras)
   const [assignedExtras, setAssignedExtras] = useState<Extra[]>(value || []);
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
@@ -61,6 +66,30 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
     if (!assignedExtras.find((e) => e.id === extra.id)) {
       handleSaveExtra({ ...extra });
     }
+  };
+
+  const renderOption = (opt: Option) => {
+    if (opt.areaOptions) {
+      return (
+        <div className="pr-4">
+          <div className="font-medium mb-1">{opt.name}</div>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {opt.areaOptions.map((area) => (
+              <div key={area.id} className="flex justify-between">
+                <span>{area.name}</span>
+                <span>₪{area.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="flex flex-row gap-2">
+        <div>{opt.name}</div>
+        <div>{opt.price ? `- ₪${opt.price}` : ""}</div>
+      </div>
+    );
   };
 
   return (
@@ -107,7 +136,14 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             className="bg-white rounded shadow p-3 mb-3 flex flex-col gap-2"
           >
             <div className="flex justify-between items-center">
-              <span className="font-semibold">{extra.title}</span>
+              <div>
+                <span className="font-semibold">{extra.title}</span>
+                <span className="text-sm text-gray-500 mr-2">
+                  ({extra.type === "pizza-topping" ? "תוספת פיצה" : 
+                    extra.type === "single" ? "בחירה בודדת" :
+                    extra.type === "multi" ? "בחירה מרובה" : "מונה"})
+                </span>
+              </div>
               <div className="flex gap-2">
                 <button
                   className="text-blue-600"
@@ -127,21 +163,12 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             {extra.options && (
               <ul className="pr-4 list-disc">
                 {extra.options.map((opt) => (
-                  <li  key={opt.id}>
-                    <div className="flex flex-row gap-2">
-                    <div>
-                    {opt.name}
-                      </div>
-                      <div>
-                      {opt.price ? `- ₪${opt.price}` : ""}
-                      </div>
-                    </div>
-                     
+                  <li key={opt.id}>
+                    {renderOption(opt)}
                   </li>
                 ))}
               </ul>
             )}
-            {/* TODO: Show more fields for pizza-topping, counter, etc. */}
           </div>
         ))}
       </div>
@@ -161,4 +188,4 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
   );
 };
 
-export default ExtrasManager; 
+export default ExtrasManager;

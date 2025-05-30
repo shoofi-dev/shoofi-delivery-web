@@ -103,36 +103,7 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
               <span className="text-gray-700">כן</span>
             </div>
           </div>
-          {selectedProduct?.hasDiscount && (
-            <>
-              <div>
-                <label className={inputLabelClass} htmlFor="discountQuantity">
-                  כמות להנחה (ק"ג)
-                </label>
-                <input
-                  name="discountQuantity"
-                  type="number"
-                  className={`${inputClass} ${getInputClass()} mb-4`}
-                  value={selectedProduct?.discountQuantity || ""}
-                  onChange={handleInputChange}
-                  disabled={isDisabled}
-                />
-              </div>
-              <div>
-                <label className={inputLabelClass} htmlFor="discountPrice">
-                  מחיר כולל להנחה
-                </label>
-                <input
-                  name="discountPrice"
-                  type="number"
-                  className={`${inputClass} ${getInputClass()} mb-4`}
-                  value={selectedProduct?.discountPrice || ""}
-                  onChange={handleInputChange}
-                  disabled={isDisabled}
-                />
-              </div>
-            </>
-          )}
+    
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           <div>
@@ -163,10 +134,7 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
           </div>
         </div>
         <hr className="my-8" />
-        <h3 className="text-xl font-semibold mb-4">תוספות (EXTRAS)</h3>
-        <div className="mb-8 bg-blueGray-50 rounded p-4 text-blueGray-400">
-          <span>ניהול תוספות יתבצע כאן בעתיד (לא מיושם עדיין בווב)</span>
-        </div>
+
         <h3 className="text-xl font-semibold mb-4">הוסף תמונה</h3>
         <div className="flex flex-col items-center mb-8">
           <div className="flex justify-center items-center w-full border rounded shadow relative bg-gray-50 p-4">

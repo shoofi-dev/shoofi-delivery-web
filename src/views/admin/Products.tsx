@@ -10,7 +10,7 @@ import deleteProductApi from "apis/admin/product/delete-product";
 import getProductsByCategoryIdApi from "apis/admin/product/get-products-by-category-id";
 import { CategoryConsts, CategoryEnum } from "shared/constants";
 import { cdnUrl } from "consts/shared";
-import StoreDropdown from "components/admin/StoreDropdown";
+import StoreDropdown, { Store } from "components/admin/StoreDropdown";
 import CategoryDropdown from "components/admin/CategoryDropdown";
 
 const iconClass =
@@ -25,7 +25,7 @@ export default function ProductsList() {
   const [storeAppName, setStoreAppName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [menu, setMenu] = useState<any[]>([]);
-
+  const [selectedStore, setSelectedStore] = useState<Store>();
   const getProductsList = () => {
     if (!storeAppName) return;
     getProductsListApi({ "app-name": storeAppName }).then((res) => {
@@ -90,6 +90,11 @@ export default function ProductsList() {
     //TODO : call delete products api
   };
 
+  const handleStoreChange = (store: Store) => {
+    setSelectedStore(store);
+    setStoreAppName(store.appName);
+  };
+
   const handleDeleteItemsClick = () => {
     if (isDeleteActive) {
       setDeleteList([]);
@@ -146,7 +151,7 @@ export default function ProductsList() {
                 <div className="w-48">
                   <StoreDropdown
                     value={storeAppName}
-                    onChange={setStoreAppName}
+                    onChange={handleStoreChange}
                     label="בחר חנות"
                   />
                 </div>

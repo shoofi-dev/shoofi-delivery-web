@@ -3,28 +3,57 @@ import { axiosInstance } from "../../utils/http-interceptor";
 
 interface StoreDropdownProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: Store) => void;
   label?: string;
 }
 
-interface Store {
+export interface Store {
   storeName: string;
   appName: string;
+  categoryId?: string;
 }
 
-const StoreDropdown: React.FC<StoreDropdownProps> = ({ value, onChange, label }) => {
+const StoreDropdown: React.FC<StoreDropdownProps> = ({
+  value,
+  onChange,
+  label,
+}) => {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosInstance.get("/shoofiAdmin/store/all")
-      .then((res: any) => {
-        setStores(res);
-        setLoading(false);
-      });
-  }, []);
+    console.log("useEffect", value);
+    axiosInstance.get("/shoofiAdmin/store/all").then((res: any) => {
+      setStores(res);
+      if (value) {
+        handleOnChange(value, res);
+      }
+      setLoading(false);
+    });
+  }, [value]);
 
+  const handleOnChange = (e: any, storesRes: Store[]) => {
+    console.log("handleOnChange", storesRes);
+    let store = null;
 
+    if (stores.length > 0) {
+      store = stores.find(
+        (store) => store.appName === e?.target?.value || store.appName === e
+      );
+    } else {
+      store = storesRes.find(
+        (store) => (store.appName === e?.target?.value || store.appName === e)
+      );
+    }
+    console.log(" e?.target?.value || store.appName === e",  e?.target?.value , e, storesRes)
+
+    console.log("store", store)
+    if (store) {
+      onChange(store);
+    }
+  };
+
+  if (!stores.length) return null;
   return (
     <div className="flex flex-col mb-4">
       {label && <label className="mb-1 font-bold">{label}</label>}
@@ -32,7 +61,7 @@ const StoreDropdown: React.FC<StoreDropdownProps> = ({ value, onChange, label })
         dir="rtl"
         className="border rounded px-3 py-2 text-right pr-8 rtl-select"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleOnChange(e.target.value, [])}
         disabled={loading}
       >
         <option value="">בחר חנות</option>
@@ -46,4 +75,4 @@ const StoreDropdown: React.FC<StoreDropdownProps> = ({ value, onChange, label })
   );
 };
 
-export default StoreDropdown; 
+export default StoreDropdown;
