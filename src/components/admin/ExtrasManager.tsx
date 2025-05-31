@@ -9,7 +9,7 @@ type Option = {
   price?: number;
   areaOptions?: AreaOption[];
 };
-type Extra = {
+export type Extra = {
   id: string;
   type: ExtraType;
   title: string;

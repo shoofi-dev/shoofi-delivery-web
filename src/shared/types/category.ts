@@ -2,6 +2,6 @@ export type TCategory = {
     _id: string;
     id: string;
     nameAR: string;
-    img: string;
+    image: any;
     categoryId: number;
 };

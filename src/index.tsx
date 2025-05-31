@@ -48,6 +48,8 @@ import { storeDataStore } from "stores/store";
 import OrdersAnalytics from "views/admin/analytics/OrdersAnalytics";
 import DeliveryAnalytics from "views/admin/analytics/DeliveryAnalytics";
 import CustomerAnalytics from "views/admin/analytics/CustomerAnalytics";
+import DeliveryListAnalytics from "views/admin/analytics/DeliveryListAnalytics";
+import AddCategory from "views/admin/analytics/AddCategory";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -82,6 +84,9 @@ root.render(
         <Route path="/admin/analytics/orders" element={<OrdersAnalytics />} />
         <Route path="/admin/analytics/deliveries" element={<DeliveryAnalytics />} />
         <Route path="/admin/analytics/customers" element={<CustomerAnalytics />} />
+        <Route path="/admin/analytics/deliveries-list" element={<DeliveryListAnalytics />} />
+        <Route path="/admin/category/add" element={<AddCategory />} />
+        <Route path="/admin/category/edit/:id" element={<AddCategory />} />
         <Route path="" element={<Navigate to="/admin/dashboard" />} />
       </Route>
       <Route path="auth" element={<Auth />}>

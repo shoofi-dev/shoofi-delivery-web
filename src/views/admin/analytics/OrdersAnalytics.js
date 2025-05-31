@@ -14,6 +14,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { format } from "date-fns";
+
 // import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
@@ -29,8 +31,10 @@ ChartJS.register(
 );
 
 export default function OrdersAnalytics() {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const today = format(new Date(), "yyyy-MM-dd");
+
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
   const [orderData, setOrderData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -50,7 +54,13 @@ export default function OrdersAnalytics() {
       const response = await axiosInstance.post("/api/analytics/orders-per-restaurant", {
         startDate,
         endDate,
-      });
+      },
+      {
+        headers: {
+          "app-name": "delivery-company",
+        },
+      }
+    );
       setOrderData(response);
     } catch (error) {
       console.error("Error fetching order data:", error);
