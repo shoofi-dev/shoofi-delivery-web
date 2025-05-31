@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 
@@ -50,66 +51,85 @@ import DeliveryAnalytics from "views/admin/analytics/DeliveryAnalytics";
 import CustomerAnalytics from "views/admin/analytics/CustomerAnalytics";
 import DeliveryListAnalytics from "views/admin/analytics/DeliveryListAnalytics";
 import AddCategory from "views/admin/analytics/AddCategory";
+import DeliveryCompaniesList from "views/admin/delivery-companies/DeliveryCompaniesList";
+import DeliveryCompanyForm from "views/admin/delivery-companies/DeliveryCompanyForm";
+import { loadGoogleMapsApi } from "utils/loadGoogleMaps";
+
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
+
+const AppWithGoogleMaps = () => {
+  const [mapsReady, setMapsReady] = useState(false);
+  useEffect(() => {
+    loadGoogleMapsApi(GOOGLE_MAPS_API_KEY)
+      .then(() => setMapsReady(true))
+      .catch(() => alert("Failed to load Google Maps"));
+  }, []);
+  if (!mapsReady) return <div>Loading map...</div>;
+  return (
+    <BrowserRouter>
+      <StoreContext.Provider
+        value={{
+          storeDataStore: storeDataStore,
+        }}
+      >
+        <Routes>
+          {/* add routes with layouts */}
+          <Route path="/admin" element={<Admin />}>
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/categories" element={<CategoriesList />} />
+            <Route path="/admin/categories/:id" element={<ProductsList />} />
+            <Route path="/admin/products" element={<ProductsList />} />
+            <Route path="/admin/products/:id" element={<ProductsList />} />
+            <Route path="/admin/product" element={<ProductPage />} />
+            <Route path="/admin/product/add" element={<ProductPage />} />
+            <Route path="/admin/product/:id" element={<ProductPage />} />
+            <Route path="/admin/product/:storeAppName/:id" element={<ProductPage />} />
+            <Route path="/admin/errors" element={<ErrorsPage />} />
+            <Route path="/admin/orders" element={<OrderdsPage />} />
+            <Route path="/admin/maps" element={<Maps />} />
+            <Route path="/admin/settings" element={<Settings />} />
+            <Route path="/admin/tables" element={<Tables />} />
+            <Route path="/admin/delivery/area" element={<DeliveryArea />} />
+            <Route path="/admin/analytics/orders" element={<OrdersAnalytics />} />
+            <Route path="/admin/analytics/deliveries" element={<DeliveryAnalytics />} />
+            <Route path="/admin/analytics/customers" element={<CustomerAnalytics />} />
+            <Route path="/admin/analytics/deliveries-list" element={<DeliveryListAnalytics />} />
+            <Route path="/admin/category/add" element={<AddCategory />} />
+            <Route path="/admin/category/edit/:id" element={<AddCategory />} />
+            <Route path="/admin/delivery-companies" element={<DeliveryCompaniesList />} />
+            <Route path="/admin/delivery-companies/add" element={<DeliveryCompanyForm />} />
+            <Route path="/admin/delivery-companies/edit/:id" element={<DeliveryCompanyForm />} />
+            <Route path="" element={<Navigate to="/admin/dashboard" />} />
+          </Route>
+          <Route path="auth" element={<Auth />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="" element={<Navigate to="/auth/login" />} />
+          </Route>
+          {/* add routes without layouts */}
+          <Route path="/landing" element={<Landing />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/swimming-types/free-style" element={<FreeStyleSwimming />} />
+          <Route path="/swimming-types/marathon" element={<MarathonSwimming />} />
+          <Route path="/swimming-types/sea" element={<SeaSwimming />} />
+          <Route path="/delivery-list" element={<DeliveryListView />} />
+          <Route path="/delivery-order" element={<DeliveryOrderForm />} />
+          <Route path="/add-customer" element={<AddCustomer />} />
+          <Route path="/admin-settings" element={<AdminSettings />} />
+          <Route path="/employe-payments" element={<EmployePayments />} />
+          <Route path="/butcherl/video-1" element={<FullScreenVideo1 />} />
+          <Route path="/butcherl/video-2" element={<FullScreenVideo2 />} />
+          <Route path="/" element={<Index />} />
+        </Routes>
+      </StoreContext.Provider>
+    </BrowserRouter>
+  );
+};
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 serviceWorkerRegistration.register({});
 
-root.render(
-  <BrowserRouter>
-       <StoreContext.Provider
-          value={{
-            storeDataStore: storeDataStore,
-          }}
-        >
-    <Routes>
-      {/* add routes with layouts */}
-      <Route path="/admin" element={<Admin />}>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/categories" element={<CategoriesList />} />
-        <Route path="/admin/categories/:id" element={<ProductsList />} />
-        <Route path="/admin/products" element={<ProductsList />} />
-        <Route path="/admin/products/:id" element={<ProductsList />} />
-        <Route path="/admin/product" element={<ProductPage />} />
-        <Route path="/admin/product/add" element={<ProductPage />} />
-        <Route path="/admin/product/:id" element={<ProductPage />} />
-        <Route path="/admin/product/:storeAppName/:id" element={<ProductPage />} />
-        <Route path="/admin/errors" element={<ErrorsPage />} />
-        <Route path="/admin/orders" element={<OrderdsPage />} />
-        <Route path="/admin/maps" element={<Maps />} />
-        <Route path="/admin/settings" element={<Settings />} />
-        <Route path="/admin/tables" element={<Tables />} />
-        <Route path="/admin/delivery/area" element={<DeliveryArea />} />
-        <Route path="/admin/analytics/orders" element={<OrdersAnalytics />} />
-        <Route path="/admin/analytics/deliveries" element={<DeliveryAnalytics />} />
-        <Route path="/admin/analytics/customers" element={<CustomerAnalytics />} />
-        <Route path="/admin/analytics/deliveries-list" element={<DeliveryListAnalytics />} />
-        <Route path="/admin/category/add" element={<AddCategory />} />
-        <Route path="/admin/category/edit/:id" element={<AddCategory />} />
-        <Route path="" element={<Navigate to="/admin/dashboard" />} />
-      </Route>
-      <Route path="auth" element={<Auth />}>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="" element={<Navigate to="/auth/login" />} />
-      </Route>
-      {/* add routes without layouts */}
-      <Route path="/landing" element={<Landing />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/swimming-types/free-style" element={<FreeStyleSwimming />} />
-      <Route path="/swimming-types/marathon" element={<MarathonSwimming />} />
-      <Route path="/swimming-types/sea" element={<SeaSwimming />} />
-      <Route path="/delivery-list" element={<DeliveryListView />} />
-      <Route path="/delivery-order" element={<DeliveryOrderForm />} />
-      <Route path="/add-customer" element={<AddCustomer />} />
-      <Route path="/admin-settings" element={<AdminSettings />} />
-      <Route path="/employe-payments" element={<EmployePayments />} />
-      <Route path="/butcherl/video-1" element={<FullScreenVideo1 />} />
-      <Route path="/butcherl/video-2" element={<FullScreenVideo2 />} />
-      <Route path="/" element={<Index />} />
-    </Routes>
-    </StoreContext.Provider>
-  </BrowserRouter>
-);
+root.render(<AppWithGoogleMaps />);
