@@ -22,6 +22,7 @@ export default function CategoriesList() {
       alert("Delete logic not implemented");
     }
   };
+  const handleRowClick = (id: string) => navigate(`/admin/categories/${id}/stores`);
 
   if (!categoryList) {
     return null;
@@ -50,7 +51,7 @@ export default function CategoriesList() {
           </thead>
           <tbody>
             {categoryList.map((category) => (
-              <tr key={category._id} className="border-t">
+              <tr key={category._id} className="border-t cursor-pointer hover:bg-blue-50" onClick={() => handleRowClick(category._id)}>
                 <td className="px-4 py-2">{category.nameAR}</td>
                 <td className="px-4 py-2">{category.nameHE}</td>
                 <td className="px-4 py-2">
@@ -61,8 +62,8 @@ export default function CategoriesList() {
                   />
                 </td>
                 <td className="px-4 py-2">
-                  <button onClick={() => handleEdit(category._id)} className="text-blue-500 mr-2">Edit</button>
-                  <button onClick={() => handleDelete(category._id)} className="text-red-500">Delete</button>
+                  <button onClick={e => { e.stopPropagation(); handleEdit(category._id); }} className="text-blue-500 mr-2">Edit</button>
+                  <button onClick={e => { e.stopPropagation(); handleDelete(category._id); }} className="text-red-500">Delete</button>
                 </td>
               </tr>
             ))}
