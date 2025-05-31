@@ -51,7 +51,7 @@ export default function OrdersAnalytics() {
 
     setLoading(true);
     try {
-      const response = await axiosInstance.post("/api/analytics/orders-per-restaurant", {
+      const response = await axiosInstance.post("/analytics/orders-per-restaurant", {
         startDate,
         endDate,
       },
