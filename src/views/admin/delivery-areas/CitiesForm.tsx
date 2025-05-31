@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "utils/http-interceptor";
 import { GoogleMap, useLoadScript, DrawingManager, Polygon } from "@react-google-maps/api";
 
 const libraries: ("drawing")[] = ["drawing"];
 
-const DeliveryAreaForm = () => {
-  const { id, cityId: paramCityId } = useParams();
+const CitiesForm = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [cityId, setCityId] = useState("");
-  const [cities, setCities] = useState<Array<{ _id: string; nameAR: string; nameHE: string, geometry: any }>>([]);
+  const { id } = useParams();
+  const [nameAR, setNameAR] = useState("");
+  const [nameHE, setNameHE] = useState("");
   const [geometry, setGeometry] = useState<any>(null); // GeoJSON Polygon
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
@@ -19,21 +18,15 @@ const DeliveryAreaForm = () => {
     libraries,
   });
 
-  // Load cities
-  useEffect(() => {
-    axiosInstance.get('/delivery/cities').then((res: any) => setCities(res));
-  }, []);
-
-  // Load area for edit
   useEffect(() => {
     if (id) {
-      axiosInstance.get(`/delivery/area/${id}`).then((res: any) => {
-        setName(res.name);
-        setGeometry(res.geometry); // Should be GeoJSON Polygon
-        setCityId(paramCityId || res.cityId || "");
+      axiosInstance.get(`/delivery/city/${id}`).then((res: any) => {
+        setNameAR(res.nameAR || "");
+        setNameHE(res.nameHE || "");
+        setGeometry(res.geometry || null);
       });
     }
-  }, [id, paramCityId]);
+  }, [id]);
 
   // Convert Google Maps Polygon to GeoJSON Polygon
   const getGeoJsonFromPolygon = (polygonObj: google.maps.Polygon) => {
@@ -55,15 +48,14 @@ const DeliveryAreaForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!geometry) return alert("Please draw a polygon on the map");
-    if (!cityId) return alert("Please select a city");
-    const data = { name, geometry, cityId };
+    if (!geometry) return alert("Please draw a polygon for the city");
+    if (!nameAR || !nameHE) return alert("Please fill in both names");
     if (id) {
-      await axiosInstance.post(`/delivery/area/update/${id}`, data);
+      await axiosInstance.post(`/delivery/city/update/${id}`, { nameAR, nameHE, geometry });
     } else {
-      await axiosInstance.post("/delivery/area/add", data);
+      await axiosInstance.post("/delivery/city/add", { nameAR, nameHE, geometry });
     }
-    navigate("/admin/delivery-areas");
+    navigate("/admin/cities");
   };
 
   const onPolygonComplete = useCallback((polygonObj: google.maps.Polygon) => {
@@ -88,47 +80,43 @@ const DeliveryAreaForm = () => {
   const renderPolygonPath = geometry?.coordinates?.[0]?.map((coord: number[]) => ({ lng: coord[0], lat: coord[1] })) || [];
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">{id ? "Edit" : "Add"} Delivery Area</h2>
+    <div className="p-6 max-w-xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">{id ? "Edit" : "Add"} City</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <label className="block text-sm font-medium text-gray-700">Name (AR)</label>
           <input
             type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={nameAR}
+            onChange={e => setNameAR(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             required
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">City</label>
-          <select
-            value={cityId}
-            onChange={e => setCityId(e.target.value)}
+          <label className="block text-sm font-medium text-gray-700">Name (HE)</label>
+          <input
+            type="text"
+            value={nameHE}
+            onChange={e => setNameHE(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             required
-          >
-            <option value="">Select City</option>
-            {cities.map(city => (
-              <option key={city._id} value={city._id}>{city.nameAR}</option>
-            ))}
-          </select>
+          />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Draw Polygon</label>
+          <label className="block text-sm font-medium text-gray-700">Draw City Polygon</label>
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
-              center={{ lat: 32.23530210603023, lng: 34.951724518379834 }}
-              zoom={12}
+              center={{ lat: 31.7683, lng: 35.2137 }}
+              zoom={10}
               onLoad={onMapLoad}
             >
               {geometry && renderPolygonPath.length > 0 && (
                 <Polygon
                   path={renderPolygonPath}
                   options={{
-                    fillColor: "#000",
+                    fillColor: "#007bff",
                     fillOpacity: 0.3,
                     strokeColor: "#111",
                     strokeWeight: 2,
@@ -157,4 +145,4 @@ const DeliveryAreaForm = () => {
   );
 };
 
-export default DeliveryAreaForm; 
+export default CitiesForm; 

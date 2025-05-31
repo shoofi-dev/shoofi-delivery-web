@@ -61,6 +61,8 @@ import DeliveryAreasList from "views/admin/delivery-areas/DeliveryAreasList";
 import DeliveryAreaForm from "views/admin/delivery-areas/DeliveryAreaForm";
 import CompanyAreasList from "views/admin/delivery-areas/CompanyAreasList";
 import CompanyAreaForm from "views/admin/delivery-areas/CompanyAreaForm";
+import CitiesList from "views/admin/delivery-areas/CitiesList";
+import CitiesForm from "views/admin/delivery-areas/CitiesForm";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
 
@@ -112,11 +114,14 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/categories/:categoryId/stores" element={<CategoryStoresList />} />
             <Route path="/admin/delivery-areas" element={<DeliveryAreasList />} />
             <Route path="/admin/delivery-areas/add" element={<DeliveryAreaForm />} />
-            <Route path="/admin/delivery-areas/edit/:id" element={<DeliveryAreaForm />} />
+            <Route path="/admin/delivery-areas/edit/:id/:cityId" element={<DeliveryAreaForm />} />
             <Route path="/admin/delivery-company-areas" element={<CompanyAreasList />} />
             <Route path="/admin/delivery-company-areas/:companyId" element={<CompanyAreasList />} />
             <Route path="/admin/delivery-company-areas/:companyId/add" element={<CompanyAreaForm />} />
             <Route path="/admin/delivery-company-areas/:companyId/edit/:id" element={<CompanyAreaForm />} />
+            <Route path="/admin/cities" element={<CitiesList />} />
+            <Route path="/admin/cities/add" element={<CitiesForm />} />
+            <Route path="/admin/cities/edit/:id" element={<CitiesForm />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />
           </Route>
           <Route path="auth" element={<Auth />}>
