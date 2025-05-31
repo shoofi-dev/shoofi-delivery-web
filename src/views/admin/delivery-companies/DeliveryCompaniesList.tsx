@@ -19,6 +19,7 @@ const DeliveryCompaniesList = () => {
       fetchCompanies();
     }
   };
+  const handleRowClick = (id: string) => navigate(`/admin/delivery-companies/${id}/employees`);
 
   return (
     <div className="p-6">
@@ -46,7 +47,7 @@ const DeliveryCompaniesList = () => {
           </thead>
           <tbody>
             {companies.map((c: any) => (
-              <tr key={c._id} className="border-t">
+              <tr key={c._id} className="border-t cursor-pointer hover:bg-blue-50" onClick={() => handleRowClick(c._id)}>
                 <td className="px-4 py-2">{c.name}</td>
                 <td className="px-4 py-2">{c.nameAR}</td>
                 <td className="px-4 py-2">{c.nameHE}</td>
@@ -54,8 +55,8 @@ const DeliveryCompaniesList = () => {
                 <td className="px-4 py-2">{c.status ? 'Active' : 'Inactive'}</td>
                 <td className="px-4 py-2">{c.coverageRadius}</td>
                 <td className="px-4 py-2">
-                  <button onClick={() => handleEdit(c._id)} className="text-blue-500 mr-2">Edit</button>
-                  <button onClick={() => handleDelete(c._id)} className="text-red-500">Delete</button>
+                  <button onClick={e => { e.stopPropagation(); handleEdit(c._id); }} className="text-blue-500 mr-2">Edit</button>
+                  <button onClick={e => { e.stopPropagation(); handleDelete(c._id); }} className="text-red-500">Delete</button>
                 </td>
               </tr>
             ))}

@@ -53,6 +53,8 @@ import DeliveryListAnalytics from "views/admin/analytics/DeliveryListAnalytics";
 import AddCategory from "views/admin/analytics/AddCategory";
 import DeliveryCompaniesList from "views/admin/delivery-companies/DeliveryCompaniesList";
 import DeliveryCompanyForm from "views/admin/delivery-companies/DeliveryCompanyForm";
+import DeliveryCompanyEmployeesList from "views/admin/delivery-companies/DeliveryCompanyEmployeesList";
+import DeliveryCompanyEmployeeForm from "views/admin/delivery-companies/DeliveryCompanyEmployeeForm";
 import { loadGoogleMapsApi } from "utils/loadGoogleMaps";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
@@ -99,6 +101,9 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/delivery-companies" element={<DeliveryCompaniesList />} />
             <Route path="/admin/delivery-companies/add" element={<DeliveryCompanyForm />} />
             <Route path="/admin/delivery-companies/edit/:id" element={<DeliveryCompanyForm />} />
+            <Route path="/admin/delivery-companies/:companyId/employees" element={<DeliveryCompanyEmployeesList />} />
+            <Route path="/admin/delivery-companies/:companyId/employees/add" element={<DeliveryCompanyEmployeeForm />} />
+            <Route path="/admin/delivery-companies/:companyId/employees/edit/:id" element={<DeliveryCompanyEmployeeForm />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />
           </Route>
           <Route path="auth" element={<Auth />}>

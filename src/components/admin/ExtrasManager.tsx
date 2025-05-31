@@ -131,7 +131,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
       </div>
       {/* List assigned extras */}
       <div>
-        {assignedExtras.map((extra) => (
+        {assignedExtras?.map((extra) => (
           <div
             key={extra.id}
             className="bg-white rounded shadow p-3 mb-3 flex flex-col gap-2"
