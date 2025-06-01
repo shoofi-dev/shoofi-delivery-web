@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "utils/http-interceptor";
 
+interface City {
+  _id: string;
+  nameAR: string;
+  nameHE: string;
+}
+
 const DeliveryAreasList = () => {
-  const [cities, setCities] = useState<Array<{ _id: string; nameAR: string; nameHE: string, geometry: any }>>([]);
-  const [cityId, setCityId] = useState("");
-  const [areas, setAreas] = useState<Array<{ _id: string; name: string; cityId?: string }>>([]);
+  const [areas, setAreas] = useState<Array<{ _id: string; name: string }>>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [selectedCityId, setSelectedCityId] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,39 +19,50 @@ const DeliveryAreasList = () => {
   }, []);
 
   useEffect(() => {
-    if (cityId) {
-      axiosInstance.get("/delivery/areas").then((res: any) => setAreas(res.filter((a: any) => a.cityId === cityId)));
+    if (selectedCityId) {
+      axiosInstance.get(`/delivery/areas/by-city/${selectedCityId}`).then((res: any) => setAreas(res));
     } else {
       setAreas([]);
     }
-  }, [cityId]);
+  }, [selectedCityId]);
 
-  const handleAdd = () => navigate(`/admin/delivery-areas/add`);
-  const handleEdit = (id: string) => navigate(`/admin/delivery-areas/edit/${id}/${cityId}`);
+  const handleAdd = () => navigate(`/admin/delivery-areas/add/${selectedCityId}`);
+  const handleEdit = (id: string) => navigate(`/admin/delivery-areas/edit/${id}/${selectedCityId}`);
   const handleDelete = async (id: string) => {
-    if (window.confirm("Delete this delivery area?")) {
+    if (window.confirm("Delete this area?")) {
       await axiosInstance.delete(`/delivery/area/${id}`);
-      setAreas(areas.filter(area => area._id !== id));
+      setAreas(areas.filter(a => a._id !== id));
     }
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Delivery Areas</h2>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">City</label>
-        <select
-          value={cityId}
-          onChange={e => setCityId(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="">Select City</option>
-          {cities.map(city => (
-            <option key={city._id} value={city._id}>{city.nameAR}</option>
-          ))}
-        </select>
-        <button onClick={handleAdd} style={{ zIndex: 1000, position: 'relative', pointerEvents: 'auto' }} className="ml-4 bg-blue-500 text-white px-4 py-2 rounded" disabled={!cityId}>Add Area</button>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Delivery Areas</h2>
+
       </div>
+
+      <div className="flex items-center gap-4">
+          <select
+            value={selectedCityId}
+            onChange={e => setSelectedCityId(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="">Select City</option>
+            {cities.map(city => (
+              <option key={city._id} value={city._id}>
+                {city.nameAR} / {city.nameHE}
+              </option>
+            ))}
+          </select>
+          <button 
+            onClick={handleAdd} 
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            disabled={!selectedCityId}
+          >
+            Add Area
+          </button>
+        </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded shadow">
           <thead>

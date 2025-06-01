@@ -106,18 +106,19 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/category/add" element={<AddCategory />} />
             <Route path="/admin/category/edit/:id" element={<AddCategory />} />
             <Route path="/admin/delivery-companies" element={<DeliveryCompaniesList />} />
-            <Route path="/admin/delivery-companies/add" element={<DeliveryCompanyForm />} />
+            <Route path="/admin/delivery-companies/city/:cityId" element={<DeliveryCompaniesList />} />
+            <Route path="/admin/delivery-companies/add/:cityId" element={<DeliveryCompanyForm />} />
             <Route path="/admin/delivery-companies/edit/:id" element={<DeliveryCompanyForm />} />
             <Route path="/admin/delivery-companies/:companyId/employees" element={<DeliveryCompanyEmployeesList />} />
             <Route path="/admin/delivery-companies/:companyId/employees/add" element={<DeliveryCompanyEmployeeForm />} />
             <Route path="/admin/delivery-companies/:companyId/employees/edit/:id" element={<DeliveryCompanyEmployeeForm />} />
             <Route path="/admin/categories/:categoryId/stores" element={<CategoryStoresList />} />
             <Route path="/admin/delivery-areas" element={<DeliveryAreasList />} />
-            <Route path="/admin/delivery-areas/add" element={<DeliveryAreaForm />} />
+            <Route path="/admin/delivery-areas/add/:cityId" element={<DeliveryAreaForm />} />
             <Route path="/admin/delivery-areas/edit/:id/:cityId" element={<DeliveryAreaForm />} />
             <Route path="/admin/delivery-company-areas" element={<CompanyAreasList />} />
             <Route path="/admin/delivery-company-areas/:companyId" element={<CompanyAreasList />} />
-            <Route path="/admin/delivery-company-areas/:companyId/add" element={<CompanyAreaForm />} />
+            <Route path="/admin/delivery-company-areas/:companyId/add/:cityId" element={<CompanyAreaForm />} />
             <Route path="/admin/delivery-company-areas/:companyId/edit/:id" element={<CompanyAreaForm />} />
             <Route path="/admin/cities" element={<CitiesList />} />
             <Route path="/admin/cities/add" element={<CitiesForm />} />

@@ -1,52 +1,164 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { axiosInstance } from 'utils/http-interceptor';
+import { useParams, useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../../../utils/http-interceptor';
 
-const initialState = { fullName: '', phone: '', role: '', isActive: true };
+interface EmployeeForm {
+  phone: string;
+  role: string;
+  fullName: string;
+  isActive: boolean;
+  companyId: string;
+}
 
-const DeliveryCompanyEmployeeForm = () => {
-  const { companyId, id } = useParams();
-  const [form, setForm] = useState(initialState);
+const DeliveryCompanyEmployeeForm: React.FC = () => {
+  const { companyId, id } = useParams<{ companyId: string; id?: string }>();
   const navigate = useNavigate();
-  const isEdit = Boolean(id);
+  const [form, setForm] = useState<EmployeeForm>({
+    phone: '',
+    role: '',
+    fullName: '',
+    isActive: true,
+    companyId: companyId || '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isEdit) {
-      axiosInstance.get(`/shoofiAdmin/delivery-company/employee/${id}`).then((res: any) => {
-        setForm({ ...res });
-      });
+    if (id) {
+      fetchEmployee();
     }
-  }, [id, isEdit]);
+  }, [id]);
 
-  const handleChange = (e: any) => {
-    const { name, value, type, checked } = e.target;
-    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
+  const fetchEmployee = async () => {
+    try {
+      setLoading(true);
+      const response: any = await axiosInstance.get<EmployeeForm>(`/delivery/company/employee/${id}`);
+      setForm(response);
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch employee');
+      console.error('Error fetching employee:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEdit) {
-      await axiosInstance.post(`/shoofiAdmin/delivery-company/employee/update/${id}`, form);
-    } else {
-      await axiosInstance.post(`/shoofiAdmin/delivery-company/${companyId}/employee/add`, form);
+    try {
+      setLoading(true);
+      if (id) {
+        await axiosInstance.post(`/delivery/company/employee/update/${id}`, form);
+      } else {
+        await axiosInstance.post(`/delivery/company/${companyId}/employee/add`, form);
+      }
+      navigate(`/admin/delivery-companies/${companyId}/employees`);
+    } catch (err) {
+      setError('Failed to save employee');
+      console.error('Error saving employee:', err);
+    } finally {
+      setLoading(false);
     }
-    navigate(`/admin/delivery-companies/${companyId}/employees`);
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
-    <form className="max-w-md mx-auto p-6 bg-white rounded shadow mt-8" onSubmit={handleSubmit}>
-      <h2 className="text-xl font-bold mb-4">{isEdit ? 'Edit' : 'Add'} Employee</h2>
-      <div className="grid grid-cols-1 gap-4">
-        <input name="fullName" value={form.fullName} onChange={handleChange} placeholder="Full Name" className="border p-2 rounded" required />
-        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" className="border p-2 rounded" required />
-        <input name="role" value={form.role} onChange={handleChange} placeholder="Role" className="border p-2 rounded" required />
-        <label className="flex items-center space-x-2">
-          <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} />
-          <span>Active</span>
-        </label>
-      </div>
-      <button type="submit" className="mt-6 bg-blue-500 text-white px-6 py-2 rounded">{isEdit ? 'Update' : 'Add'} Employee</button>
-    </form>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">
+        {id ? 'Edit Employee' : 'Add Employee'}
+      </h1>
+
+      <form onSubmit={handleSubmit} className="max-w-lg">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
+            Full Name
+          </label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            value={form.fullName}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+            Phone
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
+            Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          >
+            <option value="">Select a role</option>
+            <option value="driver">Driver</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="isActive"
+              checked={form.isActive}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            <span className="text-gray-700 text-sm font-bold">Active</span>
+          </label>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            disabled={loading}
+          >
+            {loading ? 'Saving...' : 'Save'}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(`/admin/delivery-companies/${companyId}/employees`)}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

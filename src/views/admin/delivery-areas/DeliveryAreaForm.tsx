@@ -5,24 +5,32 @@ import { GoogleMap, useLoadScript, DrawingManager, Polygon } from "@react-google
 
 const libraries: ("drawing")[] = ["drawing"];
 
+interface City {
+  _id: string;
+  nameAR: string;
+  nameHE: string;
+}
+
 const DeliveryAreaForm = () => {
-  const { id, cityId: paramCityId } = useParams();
+  const { id, cityId } = useParams();
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const [cityId, setCityId] = useState("");
-  const [cities, setCities] = useState<Array<{ _id: string; nameAR: string; nameHE: string, geometry: any }>>([]);
+  const [city, setCity] = useState<City | null>(null);
   const [geometry, setGeometry] = useState<any>(null); // GeoJSON Polygon
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 32.23530210603023, lng: 34.951724518379834 });
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     libraries,
   });
 
-  // Load cities
+  // Load city details
   useEffect(() => {
-    axiosInstance.get('/delivery/cities').then((res: any) => setCities(res));
-  }, []);
+    if (cityId) {
+      axiosInstance.get(`/delivery/city/${cityId}`).then((res: any) => setCity(res));
+    }
+  }, [cityId]);
 
   // Load area for edit
   useEffect(() => {
@@ -30,10 +38,21 @@ const DeliveryAreaForm = () => {
       axiosInstance.get(`/delivery/area/${id}`).then((res: any) => {
         setName(res.name);
         setGeometry(res.geometry); // Should be GeoJSON Polygon
-        setCityId(paramCityId || res.cityId || "");
+        if (res.geometry?.coordinates?.[0]) {
+          // Calculate center of polygon
+          const coords = res.geometry.coordinates[0];
+          const bounds = new google.maps.LatLngBounds();
+          coords.forEach((coord: number[]) => {
+            bounds.extend({ lat: coord[1], lng: coord[0] });
+          });
+          setMapCenter({
+            lat: bounds.getCenter().lat(),
+            lng: bounds.getCenter().lng()
+          });
+        }
       });
     }
-  }, [id, paramCityId]);
+  }, [id]);
 
   // Convert Google Maps Polygon to GeoJSON Polygon
   const getGeoJsonFromPolygon = (polygonObj: google.maps.Polygon) => {
@@ -56,7 +75,7 @@ const DeliveryAreaForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!geometry) return alert("Please draw a polygon on the map");
-    if (!cityId) return alert("Please select a city");
+    if (!cityId) return alert("City ID is missing");
     const data = { name, geometry, cityId };
     if (id) {
       await axiosInstance.post(`/delivery/area/update/${id}`, data);
@@ -70,7 +89,19 @@ const DeliveryAreaForm = () => {
     const geoJson = getGeoJsonFromPolygon(polygonObj);
     setGeometry(geoJson);
     polygonObj.setMap(null); // Remove drawn polygon
-  }, []);
+
+    // Center map on the new polygon
+    const bounds = new google.maps.LatLngBounds();
+    const path = polygonObj.getPath();
+    for (let i = 0; i < path.getLength(); i++) {
+      bounds.extend(path.getAt(i));
+    }
+    map?.fitBounds(bounds);
+    setMapCenter({
+      lat: bounds.getCenter().lat(),
+      lng: bounds.getCenter().lng()
+    });
+  }, [map]);
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
@@ -103,24 +134,16 @@ const DeliveryAreaForm = () => {
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">City</label>
-          <select
-            value={cityId}
-            onChange={e => setCityId(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            required
-          >
-            <option value="">Select City</option>
-            {cities.map(city => (
-              <option key={city._id} value={city._id}>{city.nameAR}</option>
-            ))}
-          </select>
+          <div className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-50">
+            {city ? `${city.nameAR} / ${city.nameHE}` : 'Loading...'}
+          </div>
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Draw Polygon</label>
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
-              center={{ lat: 32.23530210603023, lng: 34.951724518379834 }}
+              center={mapCenter}
               zoom={12}
               onLoad={onMapLoad}
             >
