@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ReactDOM from "react-dom/client";
+import { ToastContainer } from 'react-toastify';
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/styles/tailwind.css";
 import 'animate.css';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles.css'
 
 // layouts
@@ -63,6 +65,8 @@ import CompanyAreasList from "views/admin/delivery-areas/CompanyAreasList";
 import CompanyAreaForm from "views/admin/delivery-areas/CompanyAreaForm";
 import CitiesList from "views/admin/delivery-areas/CitiesList";
 import CitiesForm from "views/admin/delivery-areas/CitiesForm";
+import StoresList from "views/admin/stores/StoresList";
+import StoreForm from "views/admin/stores/StoreForm";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
 
@@ -81,6 +85,7 @@ const AppWithGoogleMaps = () => {
           storeDataStore: storeDataStore,
         }}
       >
+        <ToastContainer />
         <Routes>
           {/* add routes with layouts */}
           <Route path="/admin" element={<Admin />}>
@@ -123,6 +128,9 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/cities" element={<CitiesList />} />
             <Route path="/admin/cities/add" element={<CitiesForm />} />
             <Route path="/admin/cities/edit/:id" element={<CitiesForm />} />
+            <Route path="/admin/stores" element={<StoresList />} />
+            <Route path="/admin/stores/add" element={<StoreForm />} />
+            <Route path="/admin/stores/edit/:id" element={<StoreForm />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />
           </Route>
           <Route path="auth" element={<Auth />}>
