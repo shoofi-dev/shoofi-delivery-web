@@ -616,6 +616,28 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+              <li className="items-center">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/store-categories") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/store-categories"
+                >
+                  <i
+                    className={
+                      "fas fa-tags mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/store-categories") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>Store Categories</div>
+                </Link>
+              </li>
+
             </ul>
             {/* {sideBarList()} */}
           </div>
