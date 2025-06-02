@@ -4,10 +4,13 @@ import { axiosInstance } from "utils/http-interceptor";
 import { toast } from "react-toastify";
 import { getCategoriesListApi } from "apis/admin/category/get-categories";
 import { cdnUrl } from "consts/shared";
+import StoreData from './StoreData';
 
 interface StoreFormData {
-  storeName: string;
   appName: string;
+  name_ar: string;
+  name_he: string;
+  business_visible: boolean;
   categoryIds: string[];
   supportedCities: string[];
 }
@@ -19,8 +22,10 @@ export default function StoreForm() {
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState([]);
   const [formData, setFormData] = useState<StoreFormData>({
-    storeName: "",
     appName: "",
+    name_ar: "",
+    name_he: "",
+    business_visible: true,
     categoryIds: [],
     supportedCities: [],
   });
@@ -61,8 +66,10 @@ export default function StoreForm() {
       const response: any = await axiosInstance.get(`/shoofiAdmin/store/${id}`);
       const store = response;
       setFormData({
-        storeName: store.storeName,
         appName: store.appName,
+        name_ar: store.name_ar || "",
+        name_he: store.name_he || "",
+        business_visible: store.business_visible ?? true,
         categoryIds: store.categoryIds || [],
         supportedCities: store.supportedCities,
       });
@@ -129,8 +136,10 @@ export default function StoreForm() {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("storeName", formData.storeName);
       formDataToSend.append("appName", formData.appName);
+      formDataToSend.append("name_ar", formData.name_ar);
+      formDataToSend.append("name_he", formData.name_he);
+      formDataToSend.append("business_visible", formData.business_visible.toString());
       formDataToSend.append("categoryIds", JSON.stringify(formData.categoryIds));
       formDataToSend.append("supportedCities", JSON.stringify(formData.supportedCities));
       if (logo) {
@@ -171,21 +180,6 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Store Name
-                </label>
-                <input
-                  type="text"
-                  name="storeName"
-                  value={formData.storeName}
-                  onChange={handleChange}
-                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                  required
-                />
-              </div>
-            </div>
-            <div className="w-full lg:w-6/12 px-4">
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                   App Name
                 </label>
                 <input
@@ -196,6 +190,53 @@ export default function StoreForm() {
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   required
                 />
+              </div>
+            </div>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Name (Arabic)
+                </label>
+                <input
+                  type="text"
+                  name="name_ar"
+                  value={formData.name_ar}
+                  onChange={handleChange}
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  required
+                />
+              </div>
+            </div>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Name (Hebrew)
+                </label>
+                <input
+                  type="text"
+                  name="name_he"
+                  value={formData.name_he}
+                  onChange={handleChange}
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  required
+                />
+              </div>
+            </div>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Business Visibility
+                </label>
+                <div className="flex items-center mt-2">
+                  <input
+                    type="checkbox"
+                    name="business_visible"
+                    checked={formData.business_visible}
+                    onChange={(e) => setFormData(prev => ({ ...prev, business_visible: e.target.checked }))}
+                    className="form-checkbox h-4 w-4 text-blue-600"
+                  />
+                  <span className="ml-2 text-sm">Visible to customers</span>
+                </div>
               </div>
             </div>
             <div className="w-full lg:w-6/12 px-4">
@@ -275,23 +316,38 @@ export default function StoreForm() {
             </div>
           </div>
 
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-end space-x-4">
             <button
               type="button"
-              onClick={() => navigate("/admin/stores")}
-              className="bg-gray-500 text-white active:bg-gray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              onClick={() => navigate('/admin/stores')}
+              className="px-4 py-2 border rounded hover:bg-gray-100"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-500 text-white active:bg-blue-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
             >
-              {loading ? "Saving..." : "Save"}
+              {loading ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>
+
+        {/* Store Data Section */}
+        {formData.appName && id && <div className="mt-8">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-6">Store Settings</h2>
+            <StoreData 
+              logo={logo}
+              name_ar={formData.name_ar}
+              name_he={formData.name_he}
+              appName={formData.appName}
+              storeLogo={logoPreview}
+            
+            />
+          </div>
+        </div>}
       </div>
     </div>
   );

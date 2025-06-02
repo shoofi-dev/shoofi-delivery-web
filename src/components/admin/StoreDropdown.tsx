@@ -8,7 +8,7 @@ interface StoreDropdownProps {
 }
 
 export interface Store {
-  storeName: string;
+  name_ar: string;
   appName: string;
   categoryId?: string;
 }
@@ -67,7 +67,7 @@ const StoreDropdown: React.FC<StoreDropdownProps> = ({
         <option value="">בחר חנות</option>
         {stores.map((store) => (
           <option key={store.appName} value={store.appName}>
-            {store.storeName}
+            {store.name_ar}
           </option>
         ))}
       </select>
