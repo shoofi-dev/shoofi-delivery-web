@@ -1,0 +1,3 @@
+<th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">תקופה</th>
+<th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">הכנסות</th>
+<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">₪{item.revenue.toFixed(2)}</td> 

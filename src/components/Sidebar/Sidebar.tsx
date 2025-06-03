@@ -11,7 +11,7 @@ const sideBarList = () => {
   return (
     <>
     <ul>
-     <li className="items-center">
+     <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -33,7 +33,7 @@ const sideBarList = () => {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -55,7 +55,7 @@ const sideBarList = () => {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -77,7 +77,7 @@ const sideBarList = () => {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -106,7 +106,7 @@ const sideBarList = () => {
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
                   to="/auth/login"
@@ -116,14 +116,14 @@ const sideBarList = () => {
                 </Link>
               </li>
 
-              <li className="items-center ">
+              <li className="items-center cursor-pointer ">
                 <div className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
                   <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
                   Login
                 </div>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
                   to="/auth/register"
@@ -140,7 +140,7 @@ const sideBarList = () => {
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
                   to="/landing"
@@ -150,7 +150,7 @@ const sideBarList = () => {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
                   to="/profile"
@@ -166,7 +166,7 @@ const sideBarList = () => {
               Documentation
             </h6>
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/react/colors/notus"
                   target="_blank"
@@ -177,7 +177,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus"
                   target="_blank"
@@ -188,7 +188,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/angular/overview/notus"
                   target="_blank"
@@ -199,7 +199,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus"
                   target="_blank"
@@ -210,7 +210,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus"
                   target="_blank"
@@ -221,7 +221,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus"
                   target="_blank"
@@ -232,7 +232,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/svelte/overview/notus"
                   target="_blank"
@@ -243,7 +243,7 @@ const sideBarList = () => {
                 </a>
               </li>
 
-              <li className="inline-flex">
+              <li className="inline-flex cursor-pointer">
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/vue/overview/notus"
                   target="_blank"
@@ -323,7 +323,28 @@ export default function Sidebar() {
             <hr className="my-4 md:min-w-full" />
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              <li className="items-center">
+            <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/stores") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/stores"
+                >
+                  <i
+                    className={
+                      "fas fa-store mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/stores") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>ניהול חנויות</div>
+                </Link>
+              </li>
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -345,7 +366,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -367,7 +388,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -389,7 +410,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -411,7 +432,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -433,7 +454,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -455,7 +476,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -482,7 +503,7 @@ export default function Sidebar() {
                 Analytics
               </h6>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -506,7 +527,7 @@ export default function Sidebar() {
 
  
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -528,7 +549,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -550,7 +571,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -572,7 +593,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -594,29 +615,9 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
-                <Link
-                  className={
-                    "flex items-center text-md uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/stores") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/stores"
-                >
-                  <i
-                    className={
-                      "fas fa-store mx-2 text-lg " +
-                      (window.location.href.indexOf("/admin/stores") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>
-                  <div>Stores</div>
-                </Link>
-              </li>
+      
 
-              <li className="items-center">
+              <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +

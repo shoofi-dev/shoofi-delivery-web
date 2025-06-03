@@ -104,11 +104,11 @@ export default function OrdersAnalytics() {
   };
 
   return (
-    <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="rounded-t mb-0 px-4 py-3 border-0">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 className="font-semibold text-base text-blueGray-700">
+            <h3 className="text-2xl font-bold text-blueGray-700 mb-4">
               Orders Analytics
             </h3>
           </div>
@@ -126,36 +126,22 @@ export default function OrdersAnalytics() {
           <div className="text-center">Loading...</div>
         ) : (
           <>
-            {/* <div className="mb-8">
-              <Bar options={chartOptions} data={chartData} />
-            </div> */}
-
-            <table className="items-center w-full bg-transparent border-collapse">
+            <table className="min-w-full bg-white rounded shadow">
               <thead>
                 <tr>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Restaurant ID
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Order Count
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Total Sales
-                  </th>
+                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">מזהה מסעדה</th>
+                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">מספר הזמנות</th>
+                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">סך הכל מכירות</th>
                 </tr>
               </thead>
               <tbody>
                 {orderData.map((item, index) => (
-                  <tr key={index}>
+                  <tr key={index} className="border-t hover:bg-blue-50 transition">
                     <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                       {item._id}
                     </th>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {item.orderCount}
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      ${item.totalSales.toFixed(2)}
-                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">{item.orderCount}</td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">₪{item.totalSales.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>

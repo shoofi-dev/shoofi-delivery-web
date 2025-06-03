@@ -96,10 +96,12 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/categories/:id" element={<ProductsList />} />
             <Route path="/admin/products" element={<ProductsList />} />
             <Route path="/admin/products/:id" element={<ProductsList />} />
+            <Route path="/admin/products/:appName/:categoryIdParam" element={<ProductsList />} />
             <Route path="/admin/product" element={<ProductPage />} />
             <Route path="/admin/product/add" element={<ProductPage />} />
             <Route path="/admin/product/:id" element={<ProductPage />} />
-            <Route path="/admin/product/:storeAppName/:id" element={<ProductPage />} />
+            <Route path="/admin/product/:appName/:categoryIdParam/:id" element={<ProductPage />} />
+            <Route path="/admin/product/:appName/:categoryIdParam" element={<ProductPage />} />
             <Route path="/admin/errors" element={<ErrorsPage />} />
             <Route path="/admin/orders" element={<OrderdsPage />} />
             <Route path="/admin/maps" element={<Maps />} />
@@ -136,7 +138,7 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/store-categories" element={<StoreCategoriesList />} />
             <Route path="/admin/store-categories/add" element={<StoreCategoryForm />} />
             <Route path="/admin/store-categories/edit/:id" element={<StoreCategoryForm />} />
-            <Route path="/admin/store-categories/:appName" element={<StoreCategoriesList />} />
+            <Route path="/admin/store-categories/:appNameParam" element={<StoreCategoriesList />} />
             <Route path="/admin/store-categories/:appName/add" element={<StoreCategoryForm />} />
             <Route path="/admin/store-categories/:appName/edit/:id" element={<StoreCategoryForm />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />

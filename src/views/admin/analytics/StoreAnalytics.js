@@ -36,11 +36,11 @@ function getDefaultDates() {
   return { startDate, endDate };
 }
 
-export default function DeliveryAnalytics() {
+export default function StoreAnalytics() {
   const { startDate: defaultStart, endDate: defaultEnd } = getDefaultDates();
   const [startDate, setStartDate] = useState(defaultStart);
   const [endDate, setEndDate] = useState(defaultEnd);
-  const [deliveryData, setDeliveryData] = useState([]);
+  const [storeData, setStoreData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleDateChange = (type, value) => {
@@ -51,39 +51,39 @@ export default function DeliveryAnalytics() {
     }
   };
 
-  const fetchDeliveryData = async () => {
+  const fetchStoreData = async () => {
     if (!startDate || !endDate) return;
 
     setLoading(true);
     try {
-      const response = await axiosInstance.post("/analytics/deliveries-by-company", {
+      const response = await axiosInstance.post("/analytics/stores-by-category", {
         startDate,
         endDate,
       });
-      setDeliveryData(response);
+      setStoreData(response);
     } catch (error) {
-      console.error("Error fetching delivery data:", error);
+      console.error("Error fetching store data:", error);
     }
     setLoading(false);
   };
 
   useEffect(() => {
     if (startDate && endDate) {
-      fetchDeliveryData();
+      fetchStoreData();
     }
   }, [startDate, endDate]);
 
   const chartData = {
-    labels: deliveryData.map((item) => item._id),
+    labels: storeData.map((item) => item._id),
     datasets: [
       {
-        label: "Number of Deliveries",
-        data: deliveryData.map((item) => item.deliveryCount),
+        label: "Number of Stores",
+        data: storeData.map((item) => item.storeCount),
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
       {
-        label: "Total Earnings",
-        data: deliveryData.map((item) => item.totalEarnings),
+        label: "Total Revenue",
+        data: storeData.map((item) => item.totalRevenue),
         backgroundColor: "rgba(75, 192, 192, 0.5)",
       },
     ],
@@ -97,7 +97,7 @@ export default function DeliveryAnalytics() {
       },
       title: {
         display: true,
-        text: "Deliveries and Earnings by Company",
+        text: "Stores and Revenue by Category",
       },
     },
   };
@@ -108,7 +108,7 @@ export default function DeliveryAnalytics() {
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1">
             <h3 className="text-2xl font-bold text-blueGray-700 mb-4">
-              אנליטיקת משלוחים
+              אנליטיקת חנויות
             </h3>
           </div>
         </div>
@@ -143,22 +143,22 @@ export default function DeliveryAnalytics() {
             <table className="min-w-full bg-white rounded shadow">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">מזהה חברה</th>
-                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">מספר משלוחים</th>
-                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">סך הכל רווחים</th>
+                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">קטגוריה</th>
+                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">מספר חנויות</th>
+                  <th className="px-6 py-3 bg-blueGray-50 text-blueGray-500 align-middle text-right border-b text-xs uppercase font-semibold">סך הכל הכנסות</th>
                 </tr>
               </thead>
               <tbody>
-                {deliveryData.map((item, index) => (
+                {storeData.map((item, index) => (
                   <tr key={index} className="border-t hover:bg-blue-50 transition">
                     <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                       {item._id}
                     </th>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                      {item.deliveryCount}
+                      {item.storeCount}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                      ₪{item.totalEarnings.toFixed(2)}
+                      ₪{item.totalRevenue.toFixed(2)}
                     </td>
                   </tr>
                 ))}

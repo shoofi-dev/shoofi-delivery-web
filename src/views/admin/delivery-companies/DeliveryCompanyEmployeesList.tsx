@@ -50,7 +50,7 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       try {
         await axiosInstance.delete(`/delivery/company/employee/${id}`);
-        fetchEmployees();
+      fetchEmployees();
       } catch (err) {
         setError('Failed to delete employee');
         console.error('Error deleting employee:', err);

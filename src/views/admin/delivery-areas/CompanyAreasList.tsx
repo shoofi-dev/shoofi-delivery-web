@@ -59,17 +59,17 @@ const CompanyAreasList = () => {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Company Supported Areas</h2>
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 className="text-2xl font-bold mb-4">אזורים נתמכים על ידי החברה</h2>
       <div className="mb-4 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Select City</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">בחר עיר</label>
           <select
             className="border p-2 rounded w-full md:w-64"
             value={selectedCityId}
             onChange={e => setSelectedCityId(e.target.value)}
           >
-            <option value="">Select City</option>
+            <option value="">בחר עיר</option>
             {cities.map((city) => (
               <option key={city._id} value={city._id}>
                 {city.nameAR} / {city.nameHE}
@@ -78,21 +78,21 @@ const CompanyAreasList = () => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Select Company</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">בחר חברה</label>
           <select
             className="border p-2 rounded w-full md:w-64"
             value={selectedCompany}
             onChange={e => setSelectedCompany(e.target.value)}
             disabled={!selectedCityId}
           >
-            <option value="">Select Company</option>
+            <option value="">בחר חברה</option>
             {companies.map((c) => (
               <option key={c._id} value={c._id}>{c.nameAR} / {c.nameHE}</option>
             ))}
           </select>
         </div>
         {selectedCompany && (
-          <button onClick={handleAdd} className="bg-blue-500 text-white px-4 py-2 rounded">Add Area</button>
+          <button onClick={handleAdd} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">הוסף אזור</button>
         )}
       </div>
       {selectedCompany && (
@@ -100,23 +100,25 @@ const CompanyAreasList = () => {
           <table className="min-w-full bg-white rounded shadow">
             <thead>
               <tr>
-                <th className="px-4 py-2">Area</th>
-                <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">ETA</th>
-                <th className="px-4 py-2">Actions</th>
+                <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">אזור</th>
+                <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">מחיר</th>
+                <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">זמן הגעה</th>
+                <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-center">פעולות</th>
               </tr>
             </thead>
             <tbody>
               {supportedAreas.map((a: any) => {
                 const area = areas.find((ar: any) => ar._id === (a.areaId._id || a.areaId));
                 return (
-                  <tr key={a.areaId} className="border-t">
-                    <td className="px-4 py-2">{area ? area.name : a.areaId}</td>
-                    <td className="px-4 py-2">{a.price}</td>
-                    <td className="px-4 py-2">{a.eta}</td>
-                    <td className="px-4 py-2">
-                      <button onClick={() => handleEdit(a.areaId)} className="text-blue-500 mr-2">Edit</button>
-                      <button onClick={() => handleDelete(a.areaId)} className="text-red-500">Remove</button>
+                  <tr key={a.areaId} className="border-t hover:bg-blue-50 transition">
+                    <td className="px-4 py-2 text-right">{area ? area.name : a.areaId}</td>
+                    <td className="px-4 py-2 text-right">{a.price}</td>
+                    <td className="px-4 py-2 text-right">{a.eta}</td>
+                    <td className="px-4 py-2 text-center">
+                      <div className="flex justify-center gap-3">
+                        <button onClick={() => handleEdit(a.areaId)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">ערוך</button>
+                        <button onClick={() => handleDelete(a.areaId)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">הסר</button>
+                      </div>
                     </td>
                   </tr>
                 );

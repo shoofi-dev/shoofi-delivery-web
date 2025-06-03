@@ -33,8 +33,7 @@ const formModes = {
   addNew: 3,
 };
 const ProductPage = () => {
-  const params = useParams();
-  console.log("params", params)
+  const {appName,categoryIdParam, id} = useParams();
   const [selectedProduct, setSelectedProduct] = useState<any>();
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [formMode, setFormMode] = useState<number>();
@@ -45,18 +44,18 @@ const ProductPage = () => {
   const [categorytList, setCategorytList] = useState<TCategory[]>([]);
   const [globalCategorytList, setGlobalCategorytList] = useState<TCategory[]>([]);
   const [globalExtrasList, setGlobalExtrasList] = useState<any[]>([]);
-  const [storeAppName, setStoreAppName] = useState<string>("");
-  const [categoryId, setCategoryId] = useState<string>("");
+  const [storeAppName, setStoreAppName] = useState<string>(appName || "");
+  const [categoryId, setCategoryId] = useState<string>(categoryIdParam || "");
   const [selectedStore, setSelectedStore] = useState<Store>();
   useEffect(() => {
-    if (params.id === undefined) {
+    if (id === undefined) {
       setFormMode(formModes.addNew);
     } else {
-      if (params.storeAppName) {
-        setStoreAppName(params.storeAppName);
+      if (storeAppName) {
+        setStoreAppName(storeAppName);
       }
       
-      getProductApi(params.id, params.storeAppName || "").then((res: any) => {
+      getProductApi(id, storeAppName || "").then((res: any) => {
         console.log("res",res)
         setSelectedProduct(res);
         if (res.categoryId) {
@@ -89,8 +88,10 @@ const ProductPage = () => {
       }).then((categories: any) => {
         console.log("selectedStore", selectedStore)
         setGlobalCategorytList(categories);
-        const categoryExtras = categories.find((c: any) => c._id === selectedStore.categoryId);
-        setGlobalExtrasList(categoryExtras?.extras);
+        const categoryExtras = categories
+        .filter((c: any) => selectedStore.categoryIds?.includes(c._id))
+        .flatMap((c: any) => c.extras || []);
+      setGlobalExtrasList(categoryExtras);
       });
  
   }, [selectedStore]);
@@ -233,8 +234,8 @@ const ProductPage = () => {
 
   // Add a function to reload the product from the server
   const reloadProduct = () => {
-    if (params.id) {
-      getProductApi(params.id, params.storeAppName || "").then((res: any) => {
+    if (id) {
+      getProductApi(id, storeAppName || "").then((res: any) => {
         setSelectedProduct(res);
         if (res.categoryId) {
           setCategoryId(res.categoryId);

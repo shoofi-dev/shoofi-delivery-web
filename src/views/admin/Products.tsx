@@ -16,20 +16,19 @@ import CategoryDropdown from "components/admin/CategoryDropdown";
 const iconClass =
   "text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full";
 export default function ProductsList() {
-  const params = useParams<any>();
+  const {appName,categoryIdParam} = useParams<any>();
   const navigate = useNavigate();
 
   const [productsList, setProductsList] = useState<any[]>([]);
   const [isDeleteActive, setIsdeleteActive] = useState(false);
-  const [deleteList, setDeleteList] = useState<any>([]);
-  const [storeAppName, setStoreAppName] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [deleteList, setDeleteList] = useState<any[]>([]);
+  const [storeAppName, setStoreAppName] = useState(appName || "");
+  const [categoryId, setCategoryId] = useState(categoryIdParam || "");
   const [menu, setMenu] = useState<any[]>([]);
   const [selectedStore, setSelectedStore] = useState<Store>();
   const getProductsList = () => {
     if (!storeAppName) return;
     getProductsListApi({ "app-name": storeAppName }).then((res) => {
-      console.log("res", res);
       setMenu(res);
       if (res.length > 0 && !categoryId) {
         setCategoryId(res[0]._id);
@@ -51,20 +50,7 @@ export default function ProductsList() {
     setProductsList(category?.products || []);
   }, [categoryId, menu]);
 
-  const getCategoryName = () => {
-    if (params.id) {
-      switch (params.id) {
-        case "1":
-          return CategoryConsts[CategoryEnum.cheeseCake];
-        case "2":
-          return CategoryConsts[CategoryEnum.chockolateCate];
-        case "3":
-          return CategoryConsts[CategoryEnum.uniqueCake];
-        case "4":
-          return CategoryConsts[CategoryEnum.birthdayCake];
-      }
-    }
-  };
+
 
   const handleProductClick = (e: any, product: any) => {
     if (isDeleteActive) {
@@ -103,7 +89,7 @@ export default function ProductsList() {
   };
 
   const handleAddNewClick = () => {
-    navigate("/admin/product");
+    navigate(`/admin/product/${storeAppName}/${categoryId}`);
   };
 
   // Responsive product card
@@ -116,9 +102,9 @@ export default function ProductsList() {
       className={clsx(
         "transition duration-500 hover:scale-105 w-full max-w-xs mx-auto"
       )}
-      to={`/admin/product/${storeAppName}/${product._id}`}
+      to={`/admin/product/${storeAppName}/${categoryId}/${product._id}`}
     >
-      <div className="bg-white rounded-xl shadow-lg flex flex-col justify-between overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg flex flex-col justify-between overflow-hidden hover:shadow-xl border border-gray-100">
         <div className="flex-1 flex items-center justify-center bg-gray-50 aspect-[3/4]">
           <img
             alt={product.nameAR}

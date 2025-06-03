@@ -10,7 +10,7 @@ interface StoreDropdownProps {
 export interface Store {
   name_ar: string;
   appName: string;
-  categoryId?: string;
+  categoryIds?: string[];
 }
 
 const StoreDropdown: React.FC<StoreDropdownProps> = ({

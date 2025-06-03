@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { axiosInstance } from 'utils/http-interceptor';
 import { toast } from 'react-toastify';
+import { cdnUrl } from 'consts/shared';
 
 const DEFAULT_APP_NAME = process.env.REACT_APP_APP_NAME || '';
 
@@ -15,6 +16,7 @@ const StoreCategoryForm: React.FC = () => {
   const appNameHeader = appName || DEFAULT_APP_NAME;
 
   useEffect(() => {
+    console.log("isEditMode",isEditMode)
     if (isEditMode) {
       fetchCategory();
     }
@@ -23,17 +25,19 @@ const StoreCategoryForm: React.FC = () => {
   const fetchCategory = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get('/store-category/all', {
+      const res:any = await axiosInstance.get('/store-category/all', {
         headers: { 'app-name': appNameHeader },
       });
-      const cat = res.data.find((c: any) => (c._id?.$oid || c._id) === id);
+      const cat = res.find((c: any) => (c._id?.$oid || c._id) === id);
+      console.log("cat",cat)
       if (cat) {
         setForm({ nameAR: cat.nameAR, nameHE: cat.nameHE, img: null });
         if (cat.img && cat.img.length > 0) {
-          setImgPreview(`https://cdn.shoofi.app/${cat.img[0].uri}`);
+          setImgPreview(`${cdnUrl}${cat.img[0].uri}`);
         }
       }
     } catch (err) {
+      console.log("err",err)
       toast.error('Failed to fetch category');
     } finally {
       setLoading(false);
@@ -79,7 +83,7 @@ const StoreCategoryForm: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-lg">
+    <div className="bg-white rounded-xl shadow-lg p-8 max-w-lg mx-auto mt-8">
       <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'Edit' : 'Add'} Store Category</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -89,7 +93,7 @@ const StoreCategoryForm: React.FC = () => {
             name="nameAR"
             value={form.nameAR}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
@@ -100,7 +104,7 @@ const StoreCategoryForm: React.FC = () => {
             name="nameHE"
             value={form.nameHE}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>

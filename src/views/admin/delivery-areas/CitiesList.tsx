@@ -45,9 +45,9 @@ const CitiesList = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <h2 className="text-2xl font-bold mb-4">Cities</h2>
-      <button onClick={handleAdd} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">Add City</button>
+      <button onClick={handleAdd} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add City</button>
       {showForm && (
         <form onSubmit={handleSubmit} className="mb-4 flex items-center space-x-2">
           <input
@@ -66,17 +66,19 @@ const CitiesList = () => {
         <table className="min-w-full bg-white rounded shadow">
           <thead>
             <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">שם</th>
+              <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-center">פעולות</th>
             </tr>
           </thead>
           <tbody>
             {cities.map(city => (
-              <tr key={city._id} className="border-t">
-                <td className="px-4 py-2">{city.nameAR}</td>
-                <td className="px-4 py-2">
-                  <button onClick={() => handleEdit(city)} className="text-blue-500 mr-2">Edit</button>
-                  <button onClick={() => handleDelete(city._id)} className="text-red-500">Delete</button>
+              <tr key={city._id} className="border-t hover:bg-blue-50 transition">
+                <td className="px-4 py-2 text-right">{city.nameAR}</td>
+                <td className="px-4 py-2 text-center">
+                  <div className="flex justify-center gap-3">
+                    <button onClick={() => handleEdit(city)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">ערוך</button>
+                    <button onClick={() => handleDelete(city._id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">הסר</button>
+                  </div>
                 </td>
               </tr>
             ))}

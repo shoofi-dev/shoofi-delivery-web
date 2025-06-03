@@ -88,13 +88,13 @@ const ExtraEditModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
         <h2 className="text-xl font-bold mb-4">{extra ? "ערוך תוספת" : "הוסף תוספת"}</h2>
         <div className="mb-3">
           <label className="block font-bold mb-1">סוג תוספת</label>
           <select
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-3 py-2 w-full rtl-select"
             value={type}
             onChange={(e) => setType(e.target.value as ExtraType)}
           >
