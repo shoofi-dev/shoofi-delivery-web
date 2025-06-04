@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../../../utils/http-interceptor";
-import ExtrasManager, { Extra } from "../../../components/admin/ExtrasManager";
+import ExtrasManager from "../../../components/admin/ExtrasManager";
+import { Extra } from "../../../types/extra";
 import { cdnUrl } from "../../../consts/shared";
 
 const AddCategory = () => {

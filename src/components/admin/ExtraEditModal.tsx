@@ -1,24 +1,10 @@
 import React, { useState } from "react";
+import { Extra, Option, ExtraType, AreaOption } from "../../types/extra";
 
-const defaultOption = () => ({ id: "", name: "", price: 0 });
+const defaultOption = () => ({ id: "", nameAR: "", nameHE: "", price: 0 });
 const defaultAreaOption = () => ({ id: "", name: "", price: 0 });
 
-type ExtraType = "single" | "multi" | "counter" | "pizza-topping";
-type AreaOption = { id: string; name: string; price: number };
-type Option = { 
-  id: string; 
-  name: string; 
-  price?: number;
-  areaOptions?: AreaOption[];
-};
-type Extra = {
-  id: string;
-  type: ExtraType;
-  title: string;
-  options?: Option[];
-  maxCount?: number;
-  [key: string]: any;
-};
+
 
 const ExtraEditModal = ({ 
   extra, 
@@ -32,7 +18,8 @@ const ExtraEditModal = ({
   onCreateGlobalExtra?: (extra: Extra) => void; 
 }) => {
   const [type, setType] = useState<ExtraType>(extra?.type || "single");
-  const [title, setTitle] = useState(extra?.title || "");
+  const [nameAR, setNameAR] = useState(extra?.nameAR || "");
+  const [nameHE, setNameHE] = useState(extra?.nameHE || "");
   const [options, setOptions] = useState<Option[]>(extra?.options || [defaultOption()]);
   const [maxCount, setMaxCount] = useState<number>(extra?.maxCount || 1);
 
@@ -80,7 +67,8 @@ const ExtraEditModal = ({
     const newExtra = {
       id: extra?.id || Math.random().toString(36).substr(2, 9),
       type,
-      title,
+      nameAR,
+      nameHE,
       options,
       ...(type === "multi" ? { maxCount } : {}),
     };
@@ -89,7 +77,7 @@ const ExtraEditModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2">
         <h2 className="text-xl font-bold mb-4">{extra ? "ערוך תוספת" : "הוסף תוספת"}</h2>
         <div className="mb-3">
           <label className="block font-bold mb-1">סוג תוספת</label>
@@ -117,11 +105,19 @@ const ExtraEditModal = ({
           </div>
         )}
         <div className="mb-3">
-          <label className="block font-bold mb-1">שם תוספת</label>
+          <label className="block font-bold mb-1">שם תוספת (ערבית)</label>
           <input
             className="border rounded px-3 py-2 w-full"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={nameAR}
+            onChange={(e) => setNameAR(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="block font-bold mb-1">שם תוספת (עברית)</label>
+          <input
+            className="border rounded px-3 py-2 w-full"
+            value={nameHE}
+            onChange={(e) => setNameHE(e.target.value)}
           />
         </div>
         {/* Options */}
@@ -132,9 +128,15 @@ const ExtraEditModal = ({
               <div className="flex gap-2 mb-2">
                 <input
                   className="border rounded px-2 py-1 flex-1"
-                  placeholder="שם"
-                  value={opt.name}
-                  onChange={(e) => handleOptionChange(idx, "name", e.target.value)}
+                  placeholder="שם (ערבית)"
+                  value={opt.nameAR}
+                  onChange={(e) => handleOptionChange(idx, "nameAR", e.target.value)}
+                />
+                <input
+                  className="border rounded px-2 py-1 flex-1"
+                  placeholder="שם (עברית)"
+                  value={opt.nameHE}
+                  onChange={(e) => handleOptionChange(idx, "nameHE", e.target.value)}
                 />
                 {type !== "pizza-topping" && (
                   <input
@@ -171,6 +173,7 @@ const ExtraEditModal = ({
                   ))}
                 </div>
               )}
+              {/* <div className="font-medium mb-1">{opt.nameAR} / {opt.nameHE}</div> */}
             </div>
           ))}
           <button

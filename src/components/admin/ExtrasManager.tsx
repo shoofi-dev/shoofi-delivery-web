@@ -1,22 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExtraEditModal from "./ExtraEditModal";
-
-type ExtraType = "single" | "multi" | "counter" | "pizza-topping";
-type AreaOption = { id: string; name: string; price: number };
-type Option = { 
-  id: string; 
-  name: string; 
-  price?: number;
-  areaOptions?: AreaOption[];
-};
-export type Extra = {
-  id: string;
-  type: ExtraType;
-  title: string;
-  options?: Option[];
-  maxCount?: number;
-  [key: string]: any;
-};
+import { Extra, Option, ExtraType, AreaOption } from "../../types/extra";
 
 type ExtrasManagerProps = {
   value: Extra[];
@@ -35,7 +19,9 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingExtra, setEditingExtra] = useState<Extra | null>(null);
-
+  useEffect(() => {
+    setAssignedExtras(value || []);
+  }, [value]);
   // Add or update an extra for this product
   const handleSaveExtra = (extra: Extra) => {
     setAssignedExtras((prev) => {
@@ -73,7 +59,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
     if (opt.areaOptions) {
       return (
         <div className="pr-4">
-          <div className="font-medium mb-1">{opt.name}</div>
+          <div className="font-medium mb-1">{opt.nameAR}</div>
           <div className="grid grid-cols-2 gap-2 text-sm">
             {opt.areaOptions.map((area) => (
               <div key={area.id} className="flex justify-between">
@@ -87,12 +73,13 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
     }
     return (
       <div className="flex flex-row gap-2">
-        <div>{opt.name}</div>
+        <div>{opt.nameAR}</div>
         <div>{opt.price ? `- ₪${opt.price}` : ""}</div>
       </div>
     );
   };
 
+  console.log("showAddModal",showAddModal)
   return (
     <div className="bg-blueGray-50 rounded p-4 mb-8">
       <div className="flex justify-between items-center mb-4">
@@ -100,6 +87,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
         <button
           className="bg-blueGray-800 text-white px-4 py-2 rounded"
           onClick={() => setShowAddModal(true)}
+          type="button"
         >
           הוסף תוספת חדשה
         </button>
@@ -115,7 +103,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
         <div className="flex flex-wrap gap-2">
           {globalExtras?.filter(
               (e) =>
-                e.title.includes(search) &&
+                e.nameAR?.includes(search) && e.nameHE?.includes(search) &&
                 !assignedExtras.find((ae) => ae.id === e.id)
             )
             .map((e) => (
@@ -124,7 +112,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                 className="bg-blueGray-200 px-3 py-1 rounded"
                 onClick={() => handleAssignGlobal(e)}
               >
-                {e.title}
+                {e.nameAR}
               </button>
             ))}
         </div>
@@ -138,7 +126,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
           >
             <div className="flex justify-between items-center">
               <div>
-                <span className="font-semibold">{extra.title}</span>
+                <span className="font-semibold">{extra.nameAR}</span>
                 <span className="text-sm text-gray-500 mr-2">
                   ({extra.type === "pizza-topping" ? "תוספת פיצה" : 
                     extra.type === "single" ? "בחירה בודדת" :
