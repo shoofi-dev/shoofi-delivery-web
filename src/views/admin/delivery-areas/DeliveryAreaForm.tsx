@@ -119,7 +119,7 @@ const DeliveryAreaForm = () => {
   const renderPolygonPath = geometry?.coordinates?.[0]?.map((coord: number[]) => ({ lng: coord[0], lat: coord[1] })) || [];
 
   return (
-    <div className="p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <h2 className="text-2xl font-bold mb-4">{id ? "Edit" : "Add"} Delivery Area</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

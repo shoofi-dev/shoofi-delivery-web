@@ -19,7 +19,6 @@ const defaultOption = (type: ExtraType) => ({
   areaOptions: type === "pizza-topping" ? defaultPizzaOptions : undefined
 });
 
-const defaultAreaOption = () => ({ id: "", name: "", price: 0 });
 
 const ExtraEditModal = ({ 
   extra, 

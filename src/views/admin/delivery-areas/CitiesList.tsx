@@ -25,7 +25,7 @@ const CitiesList = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Delete this city?")) {
+    if (window.confirm("האם למחוק את העיר?")) {
       await axiosInstance.delete(`/delivery/city/${id}`);
       fetchCities();
     }
@@ -46,20 +46,23 @@ const CitiesList = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <h2 className="text-2xl font-bold mb-4">Cities</h2>
-      <button onClick={handleAdd} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add City</button>
+      <div className="flex justify-between items-center mb-4">
+      <h2 className="text-2xl font-bold mb-4">רשימת ערים</h2>
+      <button onClick={handleAdd} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">הוסף עיר</button>
+      
+      </div>
       {showForm && (
         <form onSubmit={handleSubmit} className="mb-4 flex items-center space-x-2">
           <input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
-            placeholder="City Name"
+            placeholder="שם העיר"
             className="border p-2 rounded"
             required
           />
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">{editId ? "Update" : "Add"}</button>
-          <button type="button" onClick={() => setShowForm(false)} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">{editId ? "עדכן" : "הוסף"}</button>
+          <button type="button" onClick={() => setShowForm(false)} className="bg-gray-300 px-4 py-2 rounded">ביטול</button>
         </form>
       )}
       <div className="overflow-x-auto">
@@ -72,7 +75,7 @@ const CitiesList = () => {
           </thead>
           <tbody>
             {cities.map(city => (
-              <tr key={city._id} className="border-t hover:bg-blue-50 transition">
+              <tr key={city._id} className="border-t hover:bg-blue-50 transition ">
                 <td className="px-4 py-2 text-right">{city.nameAR}</td>
                 <td className="px-4 py-2 text-center">
                   <div className="flex justify-center gap-3">

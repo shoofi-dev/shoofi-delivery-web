@@ -64,12 +64,12 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Delivery Company Employees</h1>
+        <h1 className="text-2xl font-bold">עובדי חברת משלוחים</h1>
         <button
           onClick={handleAdd}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Add Employee
+          הוסף עובד
         </button>
       </div>
 
@@ -77,20 +77,20 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                שם
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Phone
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                טלפון
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                תפקיד
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                סטטוס
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                פעולות
               </th>
             </tr>
           </thead>
@@ -104,7 +104,7 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
                   <div className="text-sm text-gray-500">{employee.phone}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{employee.role}</div>
+                  <div className="text-sm text-gray-500">{employee.role === 'driver' ? 'נהג' : employee.role === 'manager' ? 'מנהל' : 'מנהל מערכת'}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
@@ -114,7 +114,7 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
                         : 'bg-red-100 text-red-800'
                     }`}
                   >
-                    {employee.isActive ? 'Active' : 'Inactive'}
+                    {employee.isActive ? 'פעיל' : 'לא פעיל'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -122,13 +122,13 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
                     onClick={() => handleEdit(employee._id)}
                     className="text-indigo-600 hover:text-indigo-900 mr-4"
                   >
-                    Edit
+                    ערוך
                   </button>
                   <button
                     onClick={() => handleDelete(employee._id)}
                     className="text-red-600 hover:text-red-900"
                   >
-                    Delete
+                    מחק
                   </button>
                 </td>
               </tr>

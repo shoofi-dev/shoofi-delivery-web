@@ -388,7 +388,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center cursor-pointer">
+              {/* <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -408,7 +408,7 @@ export default function Sidebar() {
                   ></i>
                   <div>רשימת מוצרים</div>
                 </Link>
-              </li>
+              </li> */}
 
               <li className="items-center cursor-pointer">
                 <Link
@@ -432,7 +432,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center cursor-pointer">
+              {/* <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -452,7 +452,7 @@ export default function Sidebar() {
                   ></i>
                   <div>הוספת מוצר</div>
                 </Link>
-              </li>
+              </li> */}
 
               <li className="items-center cursor-pointer">
                 <Link
@@ -476,7 +476,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center cursor-pointer">
+              {/* <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
@@ -496,11 +496,11 @@ export default function Sidebar() {
                   ></i>
                   <div>רשימת שגיאות</div>
                 </Link>
-              </li>
+              </li> */}
 
               <hr className="my-4 md:min-w-full" />
               <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                Analytics
+                אנליטיקה
               </h6>
 
               <li className="items-center cursor-pointer">
@@ -524,8 +524,6 @@ export default function Sidebar() {
                   <div>הזמנות</div>
                 </Link>
               </li>
-
- 
 
               <li className="items-center cursor-pointer">
                 <Link
@@ -567,7 +565,7 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>Delivery Areas</div>
+                  <div>אזורי משלוח</div>
                 </Link>
               </li>
 
@@ -589,7 +587,7 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>Company Supported Areas</div>
+                  <div>אזורים נתמכים</div>
                 </Link>
               </li>
 
@@ -611,13 +609,13 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>Cities</div>
+                  <div>ערים</div>
                 </Link>
               </li>
 
       
 
-              <li className="items-center cursor-pointer">
+              {/* <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
@@ -637,7 +635,7 @@ export default function Sidebar() {
                   ></i>
                   <div>Store Categories</div>
                 </Link>
-              </li>
+              </li> */}
 
             </ul>
             {/* {sideBarList()} */}

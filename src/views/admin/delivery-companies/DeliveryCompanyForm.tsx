@@ -114,18 +114,18 @@ const DeliveryCompanyForm = () => {
 
   return (
     <form className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-8" onSubmit={handleSubmit}>
-      <h2 className="text-xl font-bold mb-4">{isEdit ? 'Edit' : 'Add'} Delivery Company</h2>
+      <h2 className="text-xl font-bold mb-4">{isEdit ? 'ערוך' : 'הוסף'} חברת משלוחים</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     
-        <input name="nameAR" value={form.nameAR} onChange={handleChange} placeholder="Name (AR)" className="border p-2 rounded" required />
-        <input name="nameHE" value={form.nameHE} onChange={handleChange} placeholder="Name (HE)" className="border p-2 rounded" required />
-        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" className="border p-2 rounded" />
-        <input name="email" value={form.email} onChange={handleChange} placeholder="Email" className="border p-2 rounded" />
-        <input name="start" value={form.start} onChange={handleChange} placeholder="Start Time (e.g. 08:00)" className="border p-2 rounded" required />
-        <input name="end" value={form.end} onChange={handleChange} placeholder="End Time (e.g. 22:00)" className="border p-2 rounded" required />
+        <input name="nameAR" value={form.nameAR} onChange={handleChange} placeholder="שם בערבית" className="border p-2 rounded" required />
+        <input name="nameHE" value={form.nameHE} onChange={handleChange} placeholder="שם בעברית" className="border p-2 rounded" required />
+        <input name="phone" value={form.phone} onChange={handleChange} placeholder="טלפון" className="border p-2 rounded" />
+        <input name="email" value={form.email} onChange={handleChange} placeholder="אימייל" className="border p-2 rounded" />
+        <input name="start" value={form.start} onChange={handleChange} placeholder="שעת התחלה (למשל 08:00)" className="border p-2 rounded" required />
+        <input name="end" value={form.end} onChange={handleChange} placeholder="שעת סיום (למשל 22:00)" className="border p-2 rounded" required />
         <div className="col-span-2">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Supported Cities
+            ערים נתמכות
           </label>
           <div className="border rounded p-4 max-h-60 overflow-y-auto">
             <label className="flex items-center space-x-2 mb-2 pb-2 border-b">
@@ -136,7 +136,7 @@ const DeliveryCompanyForm = () => {
                 onChange={handleMultiSelect}
                 className="form-checkbox h-5 w-5 text-blue-600"
               />
-              <span className="font-semibold">Select All</span>
+              <span className="font-semibold">בחר הכל</span>
             </label>
             <div className="space-y-2">
               {cities.map((city) => (
@@ -153,27 +153,27 @@ const DeliveryCompanyForm = () => {
               ))}
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-1">Select the cities where this company operates</p>
+          <p className="text-sm text-gray-500 mt-1">בחר את הערים שבהן החברה פועלת</p>
         </div>
         <label className="flex items-center space-x-2">
           <input type="checkbox" name="isStoreClose" checked={form.isStoreClose} onChange={handleChange} />
-          <span>Is Store Close</span>
+          <span>חנות סגורה</span>
         </label>
         <label className="flex items-center space-x-2">
           <input type="checkbox" name="isAlwaysOpen" checked={form.isAlwaysOpen} onChange={handleChange} />
-          <span>Is Always Open</span>
+          <span>פתוח תמיד</span>
         </label>
         <label className="flex items-center space-x-2">
           <input type="checkbox" name="status" checked={form.status} onChange={handleChange} />
-          <span>Status (Active)</span>
+          <span>סטטוס (פעיל)</span>
         </label>
         <div>
-          <label>Image:</label>
+          <label>תמונה:</label>
           <input type="file" accept="image/*" onChange={handleImage} />
-          {imagePreview && <img src={imagePreview} alt="Preview" className="h-16 mt-2" />}
+          {imagePreview && <img src={imagePreview} alt="תצוגה מקדימה" className="h-16 mt-2" />}
         </div>
       </div>
-      <button type="submit" className="mt-6 bg-blue-500 text-white px-6 py-2 rounded">{isEdit ? 'Update' : 'Add'} Company</button>
+      <button type="submit" className="mt-6 bg-blue-500 text-white px-6 py-2 rounded">{isEdit ? 'עדכן' : 'הוסף'} חברה</button>
     </form>
   );
 };

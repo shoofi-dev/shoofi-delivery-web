@@ -36,9 +36,9 @@ const CitySelect: React.FC<CitySelectProps> = ({ value, onChange, className }) =
     <select
       value={value}
       onChange={e => onChange(e.target.value)}
-      className={className || "border p-2 rounded"}
+      className={className || "border p-2 rounded rtl-select"}
     >
-      <option value="">Select City</option>
+      <option value="">בחר עיר</option>
       {cities.map(city => (
         <option key={city._id} value={city._id}>
           {city.nameAR} / {city.nameHE}

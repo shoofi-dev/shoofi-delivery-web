@@ -30,7 +30,7 @@ const DeliveryListAnalytics = () => {
       console.log("res", res)
       setDeliveries(res);
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Failed to fetch deliveries");
+      setError(e?.response?.data?.message || "שגיאה בטעינת המשלוחים");
     } finally {
       setLoading(false);
     }
@@ -47,29 +47,29 @@ const DeliveryListAnalytics = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <h2 className="text-2xl font-bold mb-4">רשימת משלוחים (אנליטיקה)</h2>
       <form className="flex flex-wrap gap-4 mb-6 items-end" onSubmit={handleFilter}>
         <div>
-          <label className="block mb-1">Store ID</label>
+          <label className="block mb-1">מזהה חנות</label>
           <input
             className="border rounded px-3 py-2"
             value={storeId}
             onChange={e => setStoreId(e.target.value)}
-            placeholder="Store ID"
+            placeholder="מזהה חנות"
           />
         </div>
         <div>
-          <label className="block mb-1">Status</label>
+          <label className="block mb-1">סטטוס</label>
           <input
             className="border rounded px-3 py-2"
             value={status}
             onChange={e => setStatus(e.target.value)}
-            placeholder="Status"
+            placeholder="סטטוס"
           />
         </div>
         <div>
-          <label className="block mb-1">Start Date</label>
+          <label className="block mb-1">תאריך התחלה</label>
           <input
             type="date"
             className="border rounded px-3 py-2"
@@ -78,7 +78,7 @@ const DeliveryListAnalytics = () => {
           />
         </div>
         <div>
-          <label className="block mb-1">End Date</label>
+          <label className="block mb-1">תאריך סיום</label>
           <input
             type="date"
             className="border rounded px-3 py-2"

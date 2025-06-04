@@ -48,8 +48,8 @@ const CitiesForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!geometry) return alert("Please draw a polygon for the city");
-    if (!nameAR || !nameHE) return alert("Please fill in both names");
+    if (!geometry) return alert("אנא צייר את גבולות העיר");
+    if (!nameAR || !nameHE) return alert("אנא מלא את שני השדות");
     if (id) {
       await axiosInstance.post(`/delivery/city/update/${id}`, { nameAR, nameHE, geometry });
     } else {
@@ -80,11 +80,11 @@ const CitiesForm = () => {
   const renderPolygonPath = geometry?.coordinates?.[0]?.map((coord: number[]) => ({ lng: coord[0], lat: coord[1] })) || [];
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">{id ? "Edit" : "Add"} City</h2>
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 className="text-2xl font-bold mb-4">{id ? 'ערוך' : 'הוסף'} עיר</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Name (AR)</label>
+          <label className="block text-sm font-medium text-gray-700">שם (ערבית)</label>
           <input
             type="text"
             value={nameAR}
@@ -94,7 +94,7 @@ const CitiesForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Name (HE)</label>
+          <label className="block text-sm font-medium text-gray-700">שם (עברית)</label>
           <input
             type="text"
             value={nameHE}
@@ -104,7 +104,7 @@ const CitiesForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Draw City Polygon</label>
+          <label className="block text-sm font-medium text-gray-700">צייר גבולות העיר</label>
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -139,7 +139,7 @@ const CitiesForm = () => {
             </GoogleMap>
           </div>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded ">שמור</button>
       </form>
     </div>
   );

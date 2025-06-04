@@ -78,13 +78,13 @@ export default function StoresList() {
   return (
     <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded p-6">
       <div className="flex justify-between items-center mb-4 w-full">
-        <h2 className="text-2xl font-bold">Stores</h2>
+        <h2 className="text-2xl font-bold">רשימת חנויות</h2>
         <div className="relative  px-4  text-right">
           <Link
             to="/admin/stores/add"
             className="bg-blue-500 text-white active:bg-blue-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           >
-            Add Store
+            הוסף חנות
           </Link>
         </div>
       </div>

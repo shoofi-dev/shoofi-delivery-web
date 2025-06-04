@@ -83,11 +83,11 @@ const StoreCategoryForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8 max-w-lg mx-auto mt-8">
-      <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'Edit' : 'Add'} Store Category</h1>
+    <div className="bg-white rounded-xl shadow-lg p-8 mx-auto mt-8">
+      <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'ערוך' : 'הוסף'} קטגוריה</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block mb-2 font-semibold">Name (Arabic)</label>
+          <label className="block mb-2 font-semibold">שם (ערבית)</label>
           <input
             type="text"
             name="nameAR"
@@ -98,7 +98,7 @@ const StoreCategoryForm: React.FC = () => {
           />
         </div>
         <div>
-          <label className="block mb-2 font-semibold">Name (Hebrew)</label>
+          <label className="block mb-2 font-semibold">שם (עברית)</label>
           <input
             type="text"
             name="nameHE"
@@ -109,26 +109,26 @@ const StoreCategoryForm: React.FC = () => {
           />
         </div>
         <div>
-          <label className="block mb-2 font-semibold">Image</label>
+          <label className="block mb-2 font-semibold">תמונה</label>
           <input type="file" accept="image/*" onChange={handleImage} />
           {imgPreview && (
             <img src={imgPreview} alt="Preview" className="mt-2 h-24 w-24 object-cover rounded" />
           )}
         </div>
-        <div className="flex justify-end space-x-4">
+        <div className="flex justify-end space-x-4 gap-4">
           <button
             type="button"
             onClick={() => navigate(appName ? `/admin/store-categories/${appName}` : '/admin/store-categories')}
             className="px-4 py-2 border rounded hover:bg-gray-100"
           >
-            Cancel
+            ביטול
           </button>
           <button
             type="submit"
             disabled={loading}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
           >
-            {loading ? 'Saving...' : 'Save'}
+            {loading ? 'שמיר...' : 'שמיר'}
           </button>
         </div>
       </form>

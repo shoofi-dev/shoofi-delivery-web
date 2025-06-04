@@ -75,13 +75,13 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">
-        {id ? 'Edit Employee' : 'Add Employee'}
+        {id ? 'ערוך עובד' : 'הוסף עובד'}
       </h1>
 
       <form onSubmit={handleSubmit} className="max-w-lg">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
-            Full Name
+            שם מלא
           </label>
           <input
             type="text"
@@ -96,7 +96,7 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
-            Phone
+            טלפון
           </label>
           <input
             type="tel"
@@ -111,7 +111,7 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
-            Role
+            תפקיד
           </label>
           <select
             id="role"
@@ -121,10 +121,10 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
           >
-            <option value="">Select a role</option>
-            <option value="driver">Driver</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
+            <option value="">בחר תפקיד</option>
+            <option value="driver">נהג</option>
+            <option value="manager">מנהל</option>
+            <option value="admin">מנהל מערכת</option>
           </select>
         </div>
 
@@ -137,7 +137,7 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
               onChange={handleChange}
               className="mr-2"
             />
-            <span className="text-gray-700 text-sm font-bold">Active</span>
+            <span className="text-gray-700 text-sm font-bold">פעיל</span>
           </label>
         </div>
 
@@ -147,14 +147,14 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             disabled={loading}
           >
-            {loading ? 'Saving...' : 'Save'}
+            {loading ? 'שומר...' : 'שמור'}
           </button>
           <button
             type="button"
             onClick={() => navigate(`/admin/delivery-companies/${companyId}/employees`)}
             className="text-gray-600 hover:text-gray-800"
           >
-            Cancel
+            ביטול
           </button>
         </div>
       </form>

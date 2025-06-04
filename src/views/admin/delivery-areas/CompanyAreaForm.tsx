@@ -81,11 +81,11 @@ const CompanyAreaForm = () => {
   );
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">{id ? "Edit" : "Add"} Company Area</h2>
+    <div className=" mx-auto p-6 bg-white rounded shadow mt-8">
+      <h2 className="text-2xl font-bold mb-4">{id ? "ערוך" : "הוסף"} אזור לחברה</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Area</label>
+          <label className="block text-sm font-medium text-gray-700">אזור</label>
           <select
             name="areaId"
             value={formData.areaId}
@@ -93,7 +93,7 @@ const CompanyAreaForm = () => {
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             required
           >
-            <option value="">Select Area</option>
+            <option value="">בחר אזור</option>
             {availableAreas.map(area => (
               <option key={area._id} value={area._id}>
                 {area.name}
@@ -102,7 +102,7 @@ const CompanyAreaForm = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Price</label>
+          <label className="block text-sm font-medium text-gray-700">מחיר</label>
           <input
             type="number"
             name="price"
@@ -115,7 +115,7 @@ const CompanyAreaForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">ETA (minutes)</label>
+          <label className="block text-sm font-medium text-gray-700">זמן משלוח (דקות)</label>
           <input
             type="number"
             name="eta"
@@ -126,7 +126,7 @@ const CompanyAreaForm = () => {
             min="0"
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">שמור</button>
       </form>
     </div>
   );
