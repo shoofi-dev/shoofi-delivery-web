@@ -27,8 +27,8 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get<Employee[]>(`/delivery/company/${companyId}/employees`);
-      setEmployees(response.data);
+      const response: any = await axiosInstance.get(`/delivery/company/${companyId}/employees`);
+      setEmployees(response);
       setError(null);
     } catch (err) {
       setError('Failed to fetch employees');
@@ -62,7 +62,7 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">עובדי חברת משלוחים</h1>
         <button

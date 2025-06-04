@@ -4,21 +4,42 @@ import { format } from "date-fns";
 
 const today = format(new Date(), "yyyy-MM-dd");
 
+interface DeliveryCompany {
+  _id: string;
+  name: string;
+  nameAR: string;
+  nameHE: string;
+}
+
 const DeliveryListAnalytics = () => {
   const [deliveries, setDeliveries] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [storeId, setStoreId] = useState("");
+  const [companies, setCompanies] = useState<DeliveryCompany[]>([]);
+  const [selectedCompanyId, setSelectedCompanyId] = useState("");
   const [status, setStatus] = useState("");
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
+  const fetchCompanies = async () => {
+    try {
+      const res: any = await axiosInstance.get<DeliveryCompany[]>("/delivery/companies");
+      setCompanies(res);
+    } catch (e: any) {
+      setError(e?.response?.data?.message || "שגיאה בטעינת חברות המשלוחים");
+    }
+  };
 
   const fetchDeliveries = async () => {
     setLoading(true);
     setError("");
     try {
       const res: any = await axiosInstance.post("/analytics/deliveries", {
-        storeId: storeId || undefined,
+        companyId: selectedCompanyId || undefined,
         status: status || undefined,
         startDate: startDate || undefined,
         endDate: endDate || undefined,
@@ -27,7 +48,6 @@ const DeliveryListAnalytics = () => {
           "app-name": "delivery-company",
         },
       });
-      console.log("res", res)
       setDeliveries(res);
     } catch (e: any) {
       setError(e?.response?.data?.message || "שגיאה בטעינת המשלוחים");
@@ -51,13 +71,19 @@ const DeliveryListAnalytics = () => {
       <h2 className="text-2xl font-bold mb-4">רשימת משלוחים (אנליטיקה)</h2>
       <form className="flex flex-wrap gap-4 mb-6 items-end" onSubmit={handleFilter}>
         <div>
-          <label className="block mb-1">מזהה חנות</label>
-          <input
-            className="border rounded px-3 py-2"
-            value={storeId}
-            onChange={e => setStoreId(e.target.value)}
-            placeholder="מזהה חנות"
-          />
+          <label className="block mb-1">חברת משלוחים</label>
+          <select
+            className="border rounded px-3 py-2 w-64 rtl-select"
+            value={selectedCompanyId}
+            onChange={e => setSelectedCompanyId(e.target.value)}
+          >
+            <option value="">כל החברות</option>
+            {companies.map(company => (
+              <option key={company._id} value={company._id}>
+                {company.nameHE}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block mb-1">סטטוס</label>
@@ -98,14 +124,13 @@ const DeliveryListAnalytics = () => {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded shadow">
           <thead>
-            <tr>
-              {/* <th className="px-4 py-2 border-b">ID</th> */}
-              <th className="px-4 py-2 border-b">חנות</th>
-              <th className="px-4 py-2 border-b">חברת משלוחים</th>
-              <th className="px-4 py-2 border-b">סטטוס</th>
-              <th className="px-4 py-2 border-b">נוצר בתאריך</th>
-              <th className="px-4 py-2 border-b">שעת אספקה</th>
-              <th className="px-4 py-2 border-b">לקוח</th>
+            <tr className="bg-gray-100">
+              <th className="px-4 py-2 border-b text-center">חנות</th>
+              <th className="px-4 py-2 border-b text-center">חברת משלוחים</th>
+              <th className="px-4 py-2 border-b text-center">סטטוס</th>
+              <th className="px-4 py-2 border-b text-center">נוצר בתאריך</th>
+              <th className="px-4 py-2 border-b text-center">שעת אספקה</th>
+              <th className="px-4 py-2 border-b text-center">לקוח</th>
             </tr>
           </thead>
           <tbody>
@@ -114,18 +139,24 @@ const DeliveryListAnalytics = () => {
             ) : deliveries.length === 0 ? (
               <tr><td colSpan={7} className="text-center py-8">אין נתונים</td></tr>
             ) : (
-              deliveries.map((d) => (
-                <tr key={d._id} className="hover:bg-blueGray-50">
-                  {/* <td className="px-4 py-2 border-b">{d._id}</td> */}
-                  <td className="px-4 py-2 border-b">{d.storeName}</td>
-                  <td className="px-4 py-2 border-b">{d.companyName}</td>
-                  <td className="px-4 py-2 border-b">{d.status}</td>
-                  <td className="px-4 py-2 border-b">{d.created ? format(new Date(d.created), 'MM-dd HH:mm') : ''}</td>
-                  <td className="px-4 py-2 border-b">{d.deliveryDeltaMinutes}</td>
-                  <td className="px-4 py-2 border-b">{d.fullName || d.customerId}</td>
-
-                </tr>
-              ))
+              deliveries.map((d) => {
+                const isOldPending = d.status === "1" && d.created && 
+                  (new Date().getTime() - new Date(d.created).getTime()) > 2 * 60 * 1000;
+                
+                const isLateDelivery = d.status === "2" && d.deliveryDeltaMinutes && 
+                  d.deliveryDeltaMinutes > 2;
+                
+                return (
+                  <tr key={d._id} className={`hover:bg-blue-50 ${isOldPending || isLateDelivery ? 'bg-red-600 text-white' : ''}`}>
+                    <td className="px-4 py-2 border-b text-center">{d.storeName}</td>
+                    <td className="px-4 py-2 border-b text-center">{d.companyName}</td>
+                    <td className="px-4 py-2 border-b text-center">{d.status}</td>
+                    <td className="px-4 py-2 border-b text-center">{d.created ? format(new Date(d.created), 'MM-dd HH:mm') : ''}</td>
+                    <td className="px-4 py-2 border-b text-center">{d.deliveryDeltaMinutes}</td>
+                    <td className="px-4 py-2 border-b text-center">{d.fullName || d.customerId}</td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

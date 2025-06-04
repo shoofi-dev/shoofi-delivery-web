@@ -113,7 +113,7 @@ const DeliveryCompanyForm = () => {
   };
 
   return (
-    <form className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-8" onSubmit={handleSubmit}>
+    <form className="bg-white rounded-xl shadow-lg p-6 mb-8" onSubmit={handleSubmit}>
       <h2 className="text-xl font-bold mb-4">{isEdit ? 'ערוך' : 'הוסף'} חברת משלוחים</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     
@@ -134,7 +134,7 @@ const DeliveryCompanyForm = () => {
                 value="all"
                 checked={form.supportedCities?.length === cities.length}
                 onChange={handleMultiSelect}
-                className="form-checkbox h-5 w-5 text-blue-600"
+                className="form-checkbox h-5 w-5 text-blue-600 ml-2"
               />
               <span className="font-semibold">בחר הכל</span>
             </label>
@@ -146,7 +146,7 @@ const DeliveryCompanyForm = () => {
                     value={city._id}
                     checked={form.supportedCities?.includes(city._id)}
                     onChange={handleMultiSelect}
-                    className="form-checkbox h-5 w-5 text-blue-600"
+                    className="form-checkbox h-5 w-5 text-blue-600 ml-2"
                   />
                   <span>{city.nameAR} / {city.nameHE}</span>
                 </label>
@@ -156,15 +156,15 @@ const DeliveryCompanyForm = () => {
           <p className="text-sm text-gray-500 mt-1">בחר את הערים שבהן החברה פועלת</p>
         </div>
         <label className="flex items-center space-x-2">
-          <input type="checkbox" name="isStoreClose" checked={form.isStoreClose} onChange={handleChange} />
+          <input type="checkbox" name="isStoreClose" checked={form.isStoreClose} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600 ml-2" />
           <span>חנות סגורה</span>
         </label>
         <label className="flex items-center space-x-2">
-          <input type="checkbox" name="isAlwaysOpen" checked={form.isAlwaysOpen} onChange={handleChange} />
+          <input type="checkbox" name="isAlwaysOpen" checked={form.isAlwaysOpen} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600 ml-2" />
           <span>פתוח תמיד</span>
         </label>
         <label className="flex items-center space-x-2">
-          <input type="checkbox" name="status" checked={form.status} onChange={handleChange} />
+          <input type="checkbox" name="status" checked={form.status} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600 ml-2" />
           <span>סטטוס (פעיל)</span>
         </label>
         <div>

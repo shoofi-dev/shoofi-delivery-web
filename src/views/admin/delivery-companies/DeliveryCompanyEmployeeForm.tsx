@@ -73,7 +73,7 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <h1 className="text-2xl font-bold mb-6">
         {id ? 'ערוך עובד' : 'הוסף עובד'}
       </h1>
@@ -118,7 +118,7 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
             name="role"
             value={form.role}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline rtl-select"
             required
           >
             <option value="">בחר תפקיד</option>
@@ -135,13 +135,13 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
               name="isActive"
               checked={form.isActive}
               onChange={handleChange}
-              className="mr-2"
+              className=" ml-2 form-checkbox h-5 w-5 text-blue-600"
             />
             <span className="text-gray-700 text-sm font-bold">פעיל</span>
           </label>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4 mt-12">
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -152,7 +152,7 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate(`/admin/delivery-companies/${companyId}/employees`)}
-            className="text-gray-600 hover:text-gray-800"
+            className=" text-gray-600 hover:text-gray-800"
           >
             ביטול
           </button>
