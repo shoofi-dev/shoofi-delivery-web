@@ -7,6 +7,14 @@ export type Option = {
   price?: number;
   areaOptions?: AreaOption[];
 };
+
+export type ExtraGroup = {
+  id: string;
+  nameAR: string;
+  nameHE: string;
+  extras: Extra[];
+};
+
 export type Extra = {
   id: string;
   type: ExtraType;
@@ -14,6 +22,12 @@ export type Extra = {
   nameHE: string;
   options?: Option[];
   maxCount?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  defaultValue?: number;
+  groupId?: string;
+  isGroupHeader?: boolean;
   [key: string]: any;
 };
 
