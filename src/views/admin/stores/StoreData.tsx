@@ -31,6 +31,8 @@ interface StoreDataForm {
   orderNowEndTime: string;
   orderLaterEndTime: string;
   minTimeToOrder: number;
+  phone: string;
+  address: string;
 }
 
 const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, storeLogo }) => {
@@ -56,6 +58,8 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
     orderNowEndTime: '23:00',
     orderLaterEndTime: '23:59',
     minTimeToOrder: 60,
+    phone: '',
+    address: '',
   });
 
   useEffect(() => {
@@ -86,7 +90,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -141,7 +145,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
           onClick={() => setShowForm(true)}
           className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
         >
-          Create Store Settings
+          צור הגדרות חנות
         </button>
       </div>
     );
@@ -149,12 +153,12 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'Edit Store Data' : 'Add Store Data'}</h1>
+      <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'ערוך נתוני חנות' : 'הוסף נתוני חנות'}</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Support Options */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Support Options</h2>
+            <h2 className="text-xl font-semibold">אפשרויות תמיכה</h2>
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -162,9 +166,9 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="delivery_support"
                 checked={formData.delivery_support}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="delivery_support">Delivery Support</label>
+              <label htmlFor="delivery_support">תמיכה במשלוחים</label>
             </div>
             <div className="flex items-center space-x-2">
               <input
@@ -173,15 +177,15 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="takeaway_support"
                 checked={formData.takeaway_support}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="takeaway_support">Takeaway Support</label>
+              <label htmlFor="takeaway_support">תמיכה באיסוף עצמי</label>
             </div>
           </div>
 
           {/* Payment Options */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Payment Options</h2>
+            <h2 className="text-xl font-semibold">אפשרויות תשלום</h2>
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -189,9 +193,9 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="cash_support"
                 checked={formData.cash_support}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="cash_support">Cash Support</label>
+              <label htmlFor="cash_support">תשלום במזומן</label>
             </div>
             <div className="flex items-center space-x-2">
               <input
@@ -200,17 +204,17 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="creditcard_support"
                 checked={formData.creditcard_support}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="creditcard_support">Credit Card Support</label>
+              <label htmlFor="creditcard_support">תשלום בכרטיס אשראי</label>
             </div>
           </div>
 
           {/* Operating Hours */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Operating Hours</h2>
+            <h2 className="text-xl font-semibold">שעות פעילות</h2>
             <div>
-              <label htmlFor="day" className="block mb-2">Day</label>
+              <label htmlFor="day" className="block mb-2">יום</label>
               <select
                 id="day"
                 name="day"
@@ -218,14 +222,14 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               >
-                {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+                {['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'].map(day => (
                   <option key={day} value={day}>{day}</option>
                 ))}
               </select>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="start" className="block mb-2">Start Time</label>
+                <label htmlFor="start" className="block mb-2">שעת פתיחה</label>
                 <input
                   type="time"
                   id="start"
@@ -236,7 +240,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 />
               </div>
               <div>
-                <label htmlFor="end" className="block mb-2">End Time</label>
+                <label htmlFor="end" className="block mb-2">שעת סגירה</label>
                 <input
                   type="time"
                   id="end"
@@ -251,7 +255,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
 
           {/* Store Status */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Store Status</h2>
+            <h2 className="text-xl font-semibold">סטטוס חנות</h2>
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -259,9 +263,9 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="isOpen"
                 checked={formData.isOpen}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="isOpen">Is Open</label>
+              <label htmlFor="isOpen">חנות פתוחה</label>
             </div>
             <div className="flex items-center space-x-2">
               <input
@@ -270,9 +274,9 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="isStoreClose"
                 checked={formData.isStoreClose}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="isStoreClose">Is Store Closed</label>
+              <label htmlFor="isStoreClose">חנות סגורה</label>
             </div>
             <div className="flex items-center space-x-2">
               <input
@@ -281,17 +285,46 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="isAlwaysOpen"
                 checked={formData.isAlwaysOpen}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="isAlwaysOpen">Is Always Open</label>
+              <label htmlFor="isAlwaysOpen">חנות פתוחה תמיד</label>
+            </div>
+          </div>
+
+          {/* Store Information */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">מידע על החנות</h2>
+            <div>
+              <label htmlFor="phone" className="block mb-2">מספר טלפון</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                placeholder="הזן מספר טלפון"
+              />
+            </div>
+            <div>
+              <label htmlFor="address" className="block mb-2">כתובת</label>
+              <textarea
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                rows={3}
+                placeholder="הזן כתובת חנות"
+              />
             </div>
           </div>
 
           {/* Order Settings */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Order Settings</h2>
+            <h2 className="text-xl font-semibold">הגדרות הזמנה</h2>
             <div>
-              <label htmlFor="delivery_price" className="block mb-2">Delivery Price</label>
+              <label htmlFor="delivery_price" className="block mb-2">מחיר משלוח</label>
               <input
                 type="number"
                 id="delivery_price"
@@ -302,7 +335,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
               />
             </div>
             <div>
-              <label htmlFor="order_company_delta_minutes" className="block mb-2">Order Company Delta Minutes</label>
+              <label htmlFor="order_company_delta_minutes" className="block mb-2">זמן הכנה (דקות)</label>
               <input
                 type="number"
                 id="order_company_delta_minutes"
@@ -316,7 +349,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
 
           {/* Order Time Settings */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Order Time Settings</h2>
+            <h2 className="text-xl font-semibold">הגדרות זמן הזמנה</h2>
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -324,12 +357,12 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
                 name="isOrderLaterSupport"
                 checked={formData.isOrderLaterSupport}
                 onChange={handleChange}
-                className="form-checkbox h-5 w-5"
+                className="form-checkbox h-5 w-5 ml-2"
               />
-              <label htmlFor="isOrderLaterSupport">Order Later Support</label>
+              <label htmlFor="isOrderLaterSupport">תמיכה בהזמנה מראש</label>
             </div>
             <div>
-              <label htmlFor="orderNowEndTime" className="block mb-2">Order Now End Time</label>
+              <label htmlFor="orderNowEndTime" className="block mb-2">שעת סיום הזמנה מיידית</label>
               <input
                 type="time"
                 id="orderNowEndTime"
@@ -340,7 +373,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
               />
             </div>
             <div>
-              <label htmlFor="orderLaterEndTime" className="block mb-2">Order Later End Time</label>
+              <label htmlFor="orderLaterEndTime" className="block mb-2">שעת סיום הזמנה מראש</label>
               <input
                 type="time"
                 id="orderLaterEndTime"
@@ -351,7 +384,7 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
               />
             </div>
             <div>
-              <label htmlFor="minTimeToOrder" className="block mb-2">Minimum Time to Order (minutes)</label>
+              <label htmlFor="minTimeToOrder" className="block mb-2">זמן מינימום להזמנה (דקות)</label>
               <input
                 type="number"
                 id="minTimeToOrder"
@@ -368,16 +401,16 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
           <button
             type="button"
             onClick={() => navigate('/admin/stores')}
-            className="px-4 py-2 border rounded hover:bg-gray-100"
+            className="px-4 py-2 border rounded hover:bg-gray-100 ml-4"
           >
-            Cancel
+            ביטול
           </button>
           <button
             type="submit"
             disabled={loading}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
           >
-            {loading ? 'Saving...' : 'Save'}
+            {loading ? 'שומר...' : 'שמור'}
           </button>
         </div>
       </form>
