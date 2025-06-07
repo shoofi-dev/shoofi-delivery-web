@@ -67,11 +67,11 @@ const OrderCard = ({ order }: TProps) => {
               {order?.order?.items?.map((product: any) => (
                 <tr className="border-b border-blueGray-300">
                   <td className={productTDClass}>
-                  <img
+                  {product?.img?.[0]?.uri && <img
                     alt="Placeholder"
                     className="block  max-w-50 max-h-80"
-                    src={`${cdnUrl}${product.img[0].uri}`}
-                  />
+                    src={`${cdnUrl}${product?.img?.[0]?.uri}`}
+                  />}
                   </td>
                   <td className={productTDClass}>
                     <span className="ml-3 font-bold text-blueGray-600">
