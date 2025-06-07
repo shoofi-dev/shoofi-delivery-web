@@ -1,4 +1,4 @@
-export type TProduct = {
+export interface TProduct {
     _id?: string;
     id?: string;
     categoryId: string;
@@ -22,4 +22,5 @@ export type TProduct = {
     hasDiscount?: boolean;
     discountQuantity?: string;
     discountPrice?: string;
-};
+    supportedCategoryIds?: string[];
+}

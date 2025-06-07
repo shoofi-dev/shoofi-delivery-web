@@ -31,6 +31,8 @@ export default function StoreForm() {
   });
   const [logo, setLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<any>();
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [coverImagePreview, setCoverImagePreview] = useState<any>();
 
   useEffect(() => {
     fetchCategories();
@@ -76,6 +78,9 @@ export default function StoreForm() {
       if (store.storeLogo) {
         setLogoPreview(cdnUrl + store.storeLogo.uri);
       }
+      if (store.coverImage) {
+        setCoverImagePreview(cdnUrl + store.coverImage.uri);
+      }
     } catch (error) {
       console.error("Error fetching store:", error);
       toast.error("Failed to fetch store details");
@@ -95,6 +100,14 @@ export default function StoreForm() {
       const file = e.target.files[0];
       setLogo(file);
       setLogoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setCoverImage(file);
+      setCoverImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -143,7 +156,10 @@ export default function StoreForm() {
       formDataToSend.append("categoryIds", JSON.stringify(formData.categoryIds));
       formDataToSend.append("supportedCities", JSON.stringify(formData.supportedCities));
       if (logo) {
-        formDataToSend.append("img", logo);
+        formDataToSend.append("logo", logo);
+      }
+      if (coverImage) {
+        formDataToSend.append("coverImage", coverImage);
       }
 
       if (id) {
@@ -162,7 +178,7 @@ export default function StoreForm() {
       setLoading(false);
     }
   };
-  console.log("cities",cities)
+
   return (
     <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
       <div className="rounded-t mb-0 px-4 py-3 border-0">
@@ -314,6 +330,26 @@ export default function StoreForm() {
                 )}
               </div>
             </div>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  תמונת כיסוי
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverImageChange}
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+                {coverImagePreview && (
+                  <img
+                    src={coverImagePreview}
+                    alt="Cover Image Preview"
+                    className="mt-2 h-32 w-full object-cover rounded"
+                  />
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end space-x-4 gap-4">
@@ -344,7 +380,7 @@ export default function StoreForm() {
               name_he={formData.name_he}
               appName={formData.appName}
               storeLogo={logoPreview}
-            
+              coverImage={coverImagePreview}
             />
           </div>
         </div>}

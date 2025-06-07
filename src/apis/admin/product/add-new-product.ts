@@ -11,8 +11,8 @@ export const addOrUpdateProduct = (product: TProduct, storeAppName: string, isEd
   // Image
   product.img && formData.append("img", product.img);
 
-  // Category
-  product.categoryId && formData.append("categoryId", product.categoryId);
+  // Categories
+  product.supportedCategoryIds && formData.append("supportedCategoryIds", JSON.stringify(product.supportedCategoryIds));
 
   // Descriptions
   formData.append("descriptionAR", product.descriptionAR || "");
@@ -24,7 +24,7 @@ export const addOrUpdateProduct = (product: TProduct, storeAppName: string, isEd
   formData.append("isInStore", product.isInStore?.toString() || "false");
 
   // Extras and Others
-  product.extras && formData.append("extras", JSON.stringify(product.extras));
+  product.extras && formData.append("extras", JSON.stringify(Array.isArray(product.extras) ? product.extras : [product.extras]));
   product.others && formData.append("others", JSON.stringify(product.others));
 
   // Price

@@ -4,11 +4,12 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from 'utils/http-interceptor';
 
 interface StoreDataProps {
-  logo?: File | null;
-  name_ar?: string;
-  name_he?: string;
-  appName?: string;
-  storeLogo?: string;
+  logo: File | null;
+  name_ar: string;
+  name_he: string;
+  appName: string;
+  storeLogo: string;
+  coverImage: string;
 }
 
 interface StoreDataForm {
@@ -35,7 +36,14 @@ interface StoreDataForm {
   address: string;
 }
 
-const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, storeLogo }) => {
+const StoreData: React.FC<StoreDataProps> = ({
+  logo,
+  name_ar,
+  name_he,
+  appName,
+  storeLogo,
+  coverImage
+}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -414,6 +422,42 @@ const StoreData: React.FC<StoreDataProps> = ({ logo, name_ar, name_he, appName, 
           </button>
         </div>
       </form>
+
+      <div className="space-y-4 mt-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">פרטי חנות</h3>
+            <p><strong>מזהה:</strong> {appName}</p>
+            <p><strong>שם (ערבית):</strong> {name_ar}</p>
+            <p><strong>שם (עברית):</strong> {name_he}</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">תמונות</h3>
+            <div className="space-y-4">
+              <div>
+                <p className="mb-2"><strong>לוגו:</strong></p>
+                {storeLogo && (
+                  <img
+                    src={storeLogo}
+                    alt="Store Logo"
+                    className="h-20 w-20 object-contain border rounded"
+                  />
+                )}
+              </div>
+              <div>
+                <p className="mb-2"><strong>תמונת כיסוי:</strong></p>
+                {coverImage && (
+                  <img
+                    src={coverImage}
+                    alt="Cover Image"
+                    className="h-32 w-full object-cover rounded"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -116,7 +116,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
   };
 
   // Group extras by groupId
-  const groupedExtras = assignedExtras.reduce((acc, extra) => {
+  const groupedExtras = assignedExtras?.reduce((acc, extra) => {
     if (extra.groupId) {
       if (!acc[extra.groupId]) {
         acc[extra.groupId] = [];

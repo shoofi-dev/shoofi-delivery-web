@@ -7,6 +7,7 @@ import { axiosInstance } from "../../utils/http-interceptor";
 import CategoryDropdown from "../../components/admin/CategoryDropdown";
 import ProductInfoForm from "../../components/admin/ProductInfoForm";
 import ExtrasManager from "../../components/admin/ExtrasManager";
+import { MultiSelect } from 'react-multi-select-component';
 
 /*consts*/
 import { CategoryEnum, CategoryConsts } from "shared/constants";
@@ -47,26 +48,9 @@ const ProductPage = () => {
   const [storeAppName, setStoreAppName] = useState<string>(appName || "");
   const [categoryId, setCategoryId] = useState<string>(categoryIdParam || "");
   const [selectedStore, setSelectedStore] = useState<Store>();
-  useEffect(() => {
-    if (id === undefined) {
-      setFormMode(formModes.addNew);
-    } else {
-      if (storeAppName) {
-        setStoreAppName(storeAppName);
-      }
-      
-      getProductApi(id, storeAppName || "").then((res: any) => {
-        console.log("res",res)
-        setSelectedProduct(res);
-        if (res.categoryId) {
-        console.log("res.categoryId",res.categoryId)
-          setCategoryId(res.categoryId);
-        }
-        setFormMode(formModes.preview);
-      });
-    }
-  }, []);
+  const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
 
+  // Load categories when store changes
   useEffect(() => {
     if (storeAppName) {
       axiosInstance.get("/admin/categories", {
@@ -78,6 +62,43 @@ const ProductPage = () => {
       setCategorytList([]);
     }
   }, [storeAppName]);
+
+  // Set selected categories when product or categories change
+  useEffect(() => {
+    if (selectedProduct?.supportedCategoryIds && categorytList.length > 0) {
+      const selectedCats = categorytList
+        .filter((cat: any) => selectedProduct.supportedCategoryIds.includes(cat._id.toString()))
+        .map((cat: any) => ({ label: cat.nameHE, value: cat._id }));
+      setSelectedCategories(selectedCats);
+    }
+  }, [selectedProduct, categorytList]);
+
+  useEffect(() => {
+    if (id === undefined) {
+      setFormMode(formModes.addNew);
+      // Set default category from route params if available
+      if (categoryIdParam && categorytList.length > 0) {
+        const defaultCategory = categorytList.find(cat => cat._id.toString() === categoryIdParam.toString());
+        if (defaultCategory) {
+          setSelectedCategories([{ label: defaultCategory.nameHE, value: defaultCategory._id }]);
+          setSelectedProduct((prev: any) => ({
+            ...prev,
+            supportedCategoryIds: [defaultCategory._id]
+          }));
+        }
+      }
+    } else {
+      if (storeAppName) {
+        setStoreAppName(storeAppName);
+      }
+      
+      getProductApi(id, storeAppName || "").then((res: any) => {
+        console.log("res",res)
+        setSelectedProduct(res);
+        setFormMode(formModes.preview);
+      });
+    }
+  }, [categorytList, categoryIdParam]);
 
   useEffect(() => {
     console.log("selectedStore", selectedStore)
@@ -133,14 +154,16 @@ const ProductPage = () => {
   };
 
   const handlAddClick = () => {
-    console.log("selectedProduct", imgFile)
     if (selectedProduct && getImgSrc() !== "") {
       setIsLoading(true);
-      const updatedData = { ...selectedProduct, img: imgFile };
+      const updatedData = { 
+        ...selectedProduct, 
+        img: imgFile,
+        supportedCategoryIds: selectedCategories.map(cat => cat.value)
+      };
       setSelectedProduct(updatedData);
       addOrUpdateProduct(updatedData, storeAppName, formMode === formModes.edit)
         .then((res: any) => {
-          // After update, reload product from backend
           if (formMode === formModes.edit && selectedProduct._id) {
             getProductApi(selectedProduct._id, storeAppName).then((fresh) => {
               setSelectedProduct(fresh);
@@ -185,9 +208,12 @@ const ProductPage = () => {
     setStoreAppName(store.appName);
   };
 
-  const handleCategoryChange = (event: any) => {
-    setCategoryId(event);
-    setSelectedProduct({ ...selectedProduct, categoryId: event });
+  const handleCategoryChange = (selected: any[]) => {
+    setSelectedCategories(selected);
+    setSelectedProduct((prev: any) => ({
+      ...prev,
+      supportedCategoryIds: selected.map(cat => cat.value)
+    }));
   };
 
   const getInputClass = () => {
@@ -237,8 +263,11 @@ const ProductPage = () => {
     if (id) {
       getProductApi(id, storeAppName || "").then((res: any) => {
         setSelectedProduct(res);
-        if (res.categoryId) {
-          setCategoryId(res.categoryId);
+        if (res.supportedCategoryIds) {
+          const selectedCats = categorytList
+            .filter(cat => res.supportedCategoryIds.includes(cat._id))
+            .map(cat => ({ label: cat.nameHE, value: cat._id }));
+          setSelectedCategories(selectedCats);
         }
         setFormMode(formModes.preview);
       });
@@ -254,12 +283,19 @@ const ProductPage = () => {
           <StoreDropdown value={storeAppName} onChange={handleStoreChange} label="בחר חנות" />
           {storeAppName && (
             <div className="w-full">
-              <CategoryDropdown
-                value={categoryId || selectedProduct?.categoryId || ""}
-                onChange={handleCategoryChange}
-                label="בחר קטגוריה"
-                categories={categorytList}
-              />
+              <div className="mb-4">
+                <label className="block text-lg uppercase text-blueGray-600 font-bold mb-2">
+                  בחר קטגוריות
+                </label>
+                <MultiSelect
+                  options={categorytList.map(cat => ({ label: cat.nameHE, value: cat._id }))}
+                  value={selectedCategories}
+                  onChange={handleCategoryChange}
+                  labelledBy="בחר קטגוריות"
+                  className="w-full"
+                  disabled={isDisabled}
+                />
+              </div>
             </div>
           )}
           {/* Edit button in preview mode */}
@@ -283,14 +319,13 @@ const ProductPage = () => {
             </button>
           )}
         </div>
-        {storeAppName && (categoryId || selectedProduct?.categoryId) ? (
+        {storeAppName && selectedCategories.length > 0 ? (
           <div className="flex-auto px-4 lg:px-10 py-10 pt-5">
             <div className="relative">
-              {/* Extras Manager Section */}
               <ExtrasManager
                 value={selectedProduct?.extras || []}
                 onChange={(extras) => setSelectedProduct({ ...selectedProduct, extras })}
-                globalExtras={globalExtrasList as any} // TODO: fetch from backend
+                globalExtras={globalExtrasList as any}
               />
               <ProductInfoForm
                 selectedProduct={selectedProduct}
@@ -307,7 +342,7 @@ const ProductPage = () => {
             </div>
           </div>
         ) : storeAppName ? (
-          <div className="flex justify-center items-center py-10 text-lg text-gray-500">בחר קטגוריה כדי להוסיף או לערוך מוצר</div>
+          <div className="flex justify-center items-center py-10 text-lg text-gray-500">בחר קטגוריות כדי להוסיף או לערוך מוצר</div>
         ) : (
           <div className="flex justify-center items-center py-10 text-lg text-gray-500">בחר חנות כדי להוסיף או לערוך מוצר</div>
         )}
