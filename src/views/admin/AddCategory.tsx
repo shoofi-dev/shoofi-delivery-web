@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { axiosInstance } from "../../../utils/http-interceptor";
-import ExtrasManager from "../../../components/admin/ExtrasManager";
-import { Extra } from "../../../types/extra";
-import { cdnUrl } from "../../../consts/shared";
+import { axiosInstance } from "../../utils/http-interceptor";
+import ExtrasManager from "../../components/admin/ExtrasManager";
+import { Extra } from "../../types/extra";
+import { cdnUrl } from "../../consts/shared";
 
 interface GeneralCategory {
   _id: string;
@@ -22,7 +22,7 @@ const AddCategory = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [generalCategories, setGeneralCategories] = useState<GeneralCategory[]>([]);
-  const [selectedGeneralCategory, setSelectedGeneralCategory] = useState<string>("");
+  const [selectedGeneralCategories, setSelectedGeneralCategories] = useState<string[]>([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -45,7 +45,7 @@ const AddCategory = () => {
         setNameHE(cat.nameHE);
         setOrder(cat.order);
         setExtras(cat.extras || []);
-        setSelectedGeneralCategory(cat.generalCategoryId || "");
+        setSelectedGeneralCategories(cat.supportedGeneralCategoryIds || []);
         if (cat.image?.uri) {
           setImagePreview(cdnUrl + cat.image.uri);
         }
@@ -60,6 +60,16 @@ const AddCategory = () => {
     }
   };
 
+  const handleGeneralCategoryChange = (categoryId: string) => {
+    setSelectedGeneralCategories(prev => {
+      if (prev.includes(categoryId)) {
+        return prev.filter(id => id !== categoryId);
+      } else {
+        return [...prev, categoryId];
+      }
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -71,7 +81,7 @@ const AddCategory = () => {
       formData.append("nameHE", nameHE);
       formData.append("order", order);
       formData.append("extras", JSON.stringify(extras));
-      formData.append("generalCategoryId", selectedGeneralCategory);
+      formData.append("supportedGeneralCategoryIds", JSON.stringify(selectedGeneralCategories));
       if (image) {
         formData.append("img", image);
       }
@@ -95,20 +105,23 @@ const AddCategory = () => {
       <h2 className="text-2xl font-bold mb-4">{id ? "עריכת קטגוריה" : "הוספת קטגוריה חדשה"}</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="block mb-1">קטגוריה כללית</label>
-          <select
-            className="border rounded px-3 py-2 w-full"
-            value={selectedGeneralCategory}
-            onChange={(e) => setSelectedGeneralCategory(e.target.value)}
-            required
-          >
-            <option value="">בחר קטגוריה כללית</option>
+          <label className="block mb-1">קטגוריות כלליות</label>
+          <div className="border rounded p-3 max-h-48 overflow-y-auto">
             {generalCategories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.nameHE}
-              </option>
+              <div key={category._id} className="flex items-center gap-2 py-1">
+                <input
+                  type="checkbox"
+                  id={category._id}
+                  checked={selectedGeneralCategories.includes(category._id)}
+                  onChange={() => handleGeneralCategoryChange(category._id)}
+                  className="h-4 w-4"
+                />
+                <label htmlFor={category._id} className="cursor-pointer">
+                  {category.nameHE}
+                </label>
+              </div>
             ))}
-          </select>
+          </div>
         </div>
         <div>
           <label className="block mb-1">שם קטגוריה (ערבית)</label>

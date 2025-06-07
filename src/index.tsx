@@ -52,7 +52,7 @@ import OrdersAnalytics from "views/admin/analytics/OrdersAnalytics";
 import DeliveryAnalytics from "views/admin/analytics/DeliveryAnalytics";
 import CustomerAnalytics from "views/admin/analytics/CustomerAnalytics";
 import DeliveryListAnalytics from "views/admin/analytics/DeliveryListAnalytics";
-import AddCategory from "views/admin/analytics/AddCategory";
+import AddCategory from "views/admin/AddCategory";
 import DeliveryCompaniesList from "views/admin/delivery-companies/DeliveryCompaniesList";
 import DeliveryCompanyForm from "views/admin/delivery-companies/DeliveryCompanyForm";
 import DeliveryCompanyEmployeesList from "views/admin/delivery-companies/DeliveryCompanyEmployeesList";
