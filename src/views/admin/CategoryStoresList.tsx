@@ -33,9 +33,9 @@ const CategoryStoresList = () => {
           <tbody>
             {stores.map((store: any) => (
               <tr key={store._id} className="border-t hover:bg-blue-50 transition">
-                <td className="px-4 py-2">{store.name || store.storeName}</td>
-                <td className="px-4 py-2">{store.address || ''}</td>
-                <td className="px-4 py-2">{store.phone || ''}</td>
+                <td className="px-4 py-2">{store.store.name_he || store.storeData.storeName}</td>
+                <td className="px-4 py-2">{store.storeData.address || ''}</td>
+                <td className="px-4 py-2">{store.storeData.phone || ''}</td>
                 <td className="px-4 py-2">
                   <button onClick={() => handleEdit(store._id)} className="text-blue-500 mr-2">Edit</button>
                 </td>

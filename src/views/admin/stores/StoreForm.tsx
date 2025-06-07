@@ -169,7 +169,7 @@ export default function StoreForm() {
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1">
             <h3 className="font-semibold text-base text-blueGray-700">
-              {id ? "Edit Store" : "Add New Store"}
+              {id ? "עריכת חנות" : "הוספת חנות"}
             </h3>
           </div>
         </div>
@@ -180,7 +180,7 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  App Name
+                  מזהה חנות
                 </label>
                 <input
                   type="text"
@@ -195,7 +195,7 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Name (Arabic)
+                  שם (ערבית)
                 </label>
                 <input
                   type="text"
@@ -210,7 +210,7 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Name (Hebrew)
+                  שם (עברית)
                 </label>
                 <input
                   type="text"
@@ -225,7 +225,7 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Business Visibility
+                  מוצג ללקוחות
                 </label>
                 <div className="flex items-center mt-2">
                   <input
@@ -233,16 +233,16 @@ export default function StoreForm() {
                     name="business_visible"
                     checked={formData.business_visible}
                     onChange={(e) => setFormData(prev => ({ ...prev, business_visible: e.target.checked }))}
-                    className="form-checkbox h-4 w-4 text-blue-600"
+                    className="form-checkbox h-4 w-4 text-blue-600 ml-2"
                   />
-                  <span className="ml-2 text-sm">Visible to customers</span>
+                  <span className="ml-2 text-sm">מוצג ללקוחות</span>
                 </div>
               </div>
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Categories
+                  קטגוריות
                 </label>
                 <div className="border-0 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
                   <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
@@ -252,9 +252,9 @@ export default function StoreForm() {
                           type="checkbox"
                           checked={formData.categoryIds.includes(category._id)}
                           onChange={() => handleCategoryChange(category._id)}
-                          className="form-checkbox h-4 w-4 text-blue-600"
+                          className="form-checkbox h-4 w-4 text-blue-600 ml-2"
                         />
-                        <span className="ml-2 text-sm">{category.name}</span>
+                        <span className="ml-2 text-sm">{category.nameHE}</span>
                       </label>
                     ))}
                   </div>
@@ -264,7 +264,7 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Supported Cities
+                  הערים שתומכות בחנות
                 </label>
                 <div className="border-0 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
                   <div className="mb-2">
@@ -273,9 +273,9 @@ export default function StoreForm() {
                         type="checkbox"
                         checked={formData.supportedCities.length === cities.length}
                         onChange={handleSelectAll}
-                        className="form-checkbox h-4 w-4 text-blue-600"
+                        className="form-checkbox h-4 w-4 text-blue-600 ml-2"
                       />
-                      <span className="ml-2 text-sm">Select All</span>
+                      <span className="ml-2 text-sm">בחר הכל</span>
                     </label>
                   </div>
                   <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
@@ -285,7 +285,7 @@ export default function StoreForm() {
                           type="checkbox"
                           checked={formData.supportedCities.includes(city._id)}
                           onChange={() => handleCityChange(city._id)}
-                          className="form-checkbox h-4 w-4 text-blue-600"
+                          className="form-checkbox h-4 w-4 text-blue-600 ml-2"
                         />
                         <span className="ml-2 text-sm">{city.nameAR}</span>
                       </label>
@@ -297,7 +297,7 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Store Logo
+                  לוגו חנות
                 </label>
                 <input
                   type="file"
@@ -322,14 +322,14 @@ export default function StoreForm() {
               onClick={() => navigate('/admin/stores')}
               className="px-4 py-2 border rounded hover:bg-gray-100"
             >
-              Cancel
+              ביטול
             </button>
             <button
               type="submit"
               disabled={loading}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
             >
-              {loading ? 'Saving...' : 'Save'}
+              {loading ? 'שמירה...' : 'שמירה'}
             </button>
           </div>
         </form>
@@ -337,7 +337,7 @@ export default function StoreForm() {
         {/* Store Data Section */}
         {formData.appName && id && <div className="mt-8">
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-6">Store Settings</h2>
+            <h2 className="text-2xl font-bold mb-6">הגדרות חנות</h2>
             <StoreData 
               logo={logo}
               name_ar={formData.name_ar}

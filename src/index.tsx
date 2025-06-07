@@ -69,6 +69,8 @@ import StoresList from "views/admin/stores/StoresList";
 import StoreForm from "views/admin/stores/StoreForm";
 import StoreCategoriesList from "views/admin/store-categories/StoreCategoriesList";
 import StoreCategoryForm from "views/admin/store-categories/StoreCategoryForm";
+import GeneralCategoryForm from "views/admin/general-categories/GeneralCategoryForm";
+import GeneralCategoriesList from "views/admin/general-categories/GeneralCategoriesList";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
 
@@ -93,6 +95,7 @@ const AppWithGoogleMaps = () => {
           <Route path="/admin" element={<Admin />}>
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/categories" element={<CategoriesList />} />
+            <Route path="/admin/categories/general/:generalCategoryId" element={<CategoriesList />} />
             <Route path="/admin/categories/:id" element={<ProductsList />} />
             <Route path="/admin/products" element={<ProductsList />} />
             <Route path="/admin/products/:id" element={<ProductsList />} />
@@ -141,6 +144,9 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/store-categories/:appNameParam" element={<StoreCategoriesList />} />
             <Route path="/admin/store-categories/:appName/add" element={<StoreCategoryForm />} />
             <Route path="/admin/store-categories/:appName/edit/:id" element={<StoreCategoryForm />} />
+            <Route path="/admin/general-categories" element={<GeneralCategoriesList />} />
+            <Route path="/admin/general-categories/add" element={<GeneralCategoryForm />} />
+            <Route path="/admin/general-categories/edit/:id" element={<GeneralCategoryForm />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />
           </Route>
           <Route path="auth" element={<Auth />}>

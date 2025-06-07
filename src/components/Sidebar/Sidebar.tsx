@@ -348,6 +348,27 @@ export default function Sidebar() {
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/general-categories") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/general-categories"
+                >
+                  <i
+                    className={
+                      "fas fa-list mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/general-categories") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>רשימת קטיגוריות כלליות</div>
+                </Link>
+              </li>
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/categories") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")

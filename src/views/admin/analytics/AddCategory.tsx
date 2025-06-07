@@ -5,8 +5,13 @@ import ExtrasManager from "../../../components/admin/ExtrasManager";
 import { Extra } from "../../../types/extra";
 import { cdnUrl } from "../../../consts/shared";
 
+interface GeneralCategory {
+  _id: string;
+  nameAR: string;
+  nameHE: string;
+}
+
 const AddCategory = () => {
-  const [name, setName] = useState("");
   const [nameAR, setNameAR] = useState("");
   const [nameHE, setNameHE] = useState("");
   const [order, setOrder] = useState("");
@@ -16,18 +21,31 @@ const AddCategory = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [generalCategories, setGeneralCategories] = useState<GeneralCategory[]>([]);
+  const [selectedGeneralCategory, setSelectedGeneralCategory] = useState<string>("");
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
+    // Fetch general categories
+    const fetchGeneralCategories = async () => {
+      try {
+        const res: any = await axiosInstance.get("/category/general/all");
+        setGeneralCategories(res);
+      } catch (error) {
+        console.error("Failed to fetch general categories:", error);
+      }
+    };
+    fetchGeneralCategories();
+
     if (id) {
       axiosInstance.get(`/shoofiAdmin/category/${id}`).then((res: any) => {
         const cat = res;
-        setName(cat.name);
         setNameAR(cat.nameAR);
         setNameHE(cat.nameHE);
         setOrder(cat.order);
         setExtras(cat.extras || []);
+        setSelectedGeneralCategory(cat.generalCategoryId || "");
         if (cat.image?.uri) {
           setImagePreview(cdnUrl + cat.image.uri);
         }
@@ -49,11 +67,11 @@ const AddCategory = () => {
     setSuccess("");
     try {
       const formData = new FormData();
-      formData.append("name", name);
       formData.append("nameAR", nameAR);
       formData.append("nameHE", nameHE);
       formData.append("order", order);
       formData.append("extras", JSON.stringify(extras));
+      formData.append("generalCategoryId", selectedGeneralCategory);
       if (image) {
         formData.append("img", image);
       }
@@ -77,13 +95,20 @@ const AddCategory = () => {
       <h2 className="text-2xl font-bold mb-4">{id ? "עריכת קטגוריה" : "הוספת קטגוריה חדשה"}</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="block mb-1">שם קטגוריה (אנגלית)</label>
-          <input
+          <label className="block mb-1">קטגוריה כללית</label>
+          <select
             className="border rounded px-3 py-2 w-full"
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={selectedGeneralCategory}
+            onChange={(e) => setSelectedGeneralCategory(e.target.value)}
             required
-          />
+          >
+            <option value="">בחר קטגוריה כללית</option>
+            {generalCategories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.nameHE}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block mb-1">שם קטגוריה (ערבית)</label>
