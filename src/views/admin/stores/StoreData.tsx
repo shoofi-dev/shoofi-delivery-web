@@ -9,7 +9,7 @@ interface StoreDataProps {
   name_he: string;
   appName: string;
   storeLogo: string;
-  coverImage: string;
+  cover_sliders: string[];
 }
 
 interface StoreDataForm {
@@ -25,7 +25,6 @@ interface StoreDataForm {
   isOpen: boolean;
   isStoreClose: boolean;
   isAlwaysOpen: boolean;
-  cover_sliders: string[];
   delivery_price: number;
   order_company_delta_minutes: number;
   isOrderLaterSupport: boolean;
@@ -42,7 +41,7 @@ const StoreData: React.FC<StoreDataProps> = ({
   name_he,
   appName,
   storeLogo,
-  coverImage
+  cover_sliders
 }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -59,7 +58,6 @@ const StoreData: React.FC<StoreDataProps> = ({
     isOpen: true,
     isStoreClose: false,
     isAlwaysOpen: true,
-    cover_sliders: [],
     delivery_price: 20,
     order_company_delta_minutes: 0,
     isOrderLaterSupport: false,
@@ -80,7 +78,10 @@ const StoreData: React.FC<StoreDataProps> = ({
       const response: any = await axiosInstance.get(`/store/get/${appName}`);
       console.log("response", response);
       if(response){
-        setFormData(response);
+        setFormData({
+          ...response,
+          cover_sliders: response.cover_sliders || []
+        });
         setShowForm(true);
         setIsEditMode(true);
       }else{
@@ -125,7 +126,8 @@ const StoreData: React.FC<StoreDataProps> = ({
         appName,
         name_ar,
         name_he,
-        storeLogo
+        storeLogo,
+        cover_sliders: cover_sliders || []
       };
 
       if (isEditMode) {
@@ -445,14 +447,17 @@ const StoreData: React.FC<StoreDataProps> = ({
                 )}
               </div>
               <div>
-                <p className="mb-2"><strong>תמונת כיסוי:</strong></p>
-                {coverImage && (
-                  <img
-                    src={coverImage}
-                    alt="Cover Image"
-                    className="h-32 w-full object-cover rounded"
-                  />
-                )}
+                <p className="mb-2"><strong>תמונות כיסוי:</strong></p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {cover_sliders.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`Cover Image ${index + 1}`}
+                      className="h-32 w-full object-cover rounded"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>

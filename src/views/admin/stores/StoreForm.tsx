@@ -31,8 +31,9 @@ export default function StoreForm() {
   });
   const [logo, setLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<any>();
-  const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverImagePreview, setCoverImagePreview] = useState<any>();
+  const [coverFiles, setCoverFiles] = useState<File[]>([]);
+  const [coverPreviews, setCoverPreviews] = useState<string[]>([]);
+  const [existingCoverSliders, setExistingCoverSliders] = useState<string[]>([]);
 
   useEffect(() => {
     fetchCategories();
@@ -78,8 +79,9 @@ export default function StoreForm() {
       if (store.storeLogo) {
         setLogoPreview(cdnUrl + store.storeLogo.uri);
       }
-      if (store.coverImage) {
-        setCoverImagePreview(cdnUrl + store.coverImage.uri);
+      if (store.cover_sliders && store.cover_sliders.length > 0) {
+        const coverUrls = store.cover_sliders.map((slider: any) => cdnUrl + slider.uri);
+        setExistingCoverSliders(coverUrls);
       }
     } catch (error) {
       console.error("Error fetching store:", error);
@@ -103,11 +105,23 @@ export default function StoreForm() {
     }
   };
 
-  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setCoverImage(file);
-      setCoverImagePreview(URL.createObjectURL(file));
+  const handleCoverImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setCoverFiles(prev => [...prev, ...newFiles]);
+      
+      // Create previews for new files
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+      setCoverPreviews(prev => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeCoverImage = (index: number, isExisting: boolean = false) => {
+    if (isExisting) {
+      setExistingCoverSliders(prev => prev.filter((_, i) => i !== index));
+    } else {
+      setCoverFiles(prev => prev.filter((_, i) => i !== index));
+      setCoverPreviews(prev => prev.filter((_, i) => i !== index));
     }
   };
 
@@ -155,12 +169,20 @@ export default function StoreForm() {
       formDataToSend.append("business_visible", formData.business_visible.toString());
       formDataToSend.append("categoryIds", JSON.stringify(formData.categoryIds));
       formDataToSend.append("supportedCities", JSON.stringify(formData.supportedCities));
+      
       if (logo) {
         formDataToSend.append("logo", logo);
       }
-      if (coverImage) {
-        formDataToSend.append("coverImage", coverImage);
-      }
+
+      // Append new cover images
+      coverFiles.forEach((file) => {
+        formDataToSend.append("cover_sliders", file);
+      });
+
+      // Append existing cover slider URLs
+      existingCoverSliders.forEach((url) => {
+        formDataToSend.append("existing_cover_sliders", url);
+      });
 
       if (id) {
         await axiosInstance.post(`/shoofiAdmin/store/update/${id}`, formDataToSend);
@@ -333,21 +355,49 @@ export default function StoreForm() {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  תמונת כיסוי
+                  תמונות כיסוי
                 </label>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleCoverImageChange}
+                  multiple
+                  onChange={handleCoverImagesChange}
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 />
-                {coverImagePreview && (
-                  <img
-                    src={coverImagePreview}
-                    alt="Cover Image Preview"
-                    className="mt-2 h-32 w-full object-cover rounded"
-                  />
-                )}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                  {coverPreviews.map((preview, index) => (
+                    <div key={`new-${index}`} className="relative">
+                      <img
+                        src={preview}
+                        alt={`Cover ${index + 1}`}
+                        className="h-32 w-full object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeCoverImage(index)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      >
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </div>
+                  ))}
+                  {existingCoverSliders.map((url, index) => (
+                    <div key={`existing-${index}`} className="relative">
+                      <img
+                        src={url}
+                        alt={`Existing Cover ${index + 1}`}
+                        className="h-32 w-full object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeCoverImage(index, true)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      >
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -380,7 +430,7 @@ export default function StoreForm() {
               name_he={formData.name_he}
               appName={formData.appName}
               storeLogo={logoPreview}
-              coverImage={coverImagePreview}
+              cover_sliders={existingCoverSliders}
             />
           </div>
         </div>}
