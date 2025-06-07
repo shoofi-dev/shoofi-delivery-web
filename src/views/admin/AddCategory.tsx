@@ -4,6 +4,8 @@ import { axiosInstance } from "../../utils/http-interceptor";
 import ExtrasManager from "../../components/admin/ExtrasManager";
 import { Extra } from "../../types/extra";
 import { cdnUrl } from "../../consts/shared";
+import { toast } from 'react-toastify';
+import Loader from 'components/Loader/loader';
 
 interface GeneralCategory {
   _id: string;
@@ -23,6 +25,7 @@ const AddCategory = () => {
   const [success, setSuccess] = useState("");
   const [generalCategories, setGeneralCategories] = useState<GeneralCategory[]>([]);
   const [selectedGeneralCategories, setSelectedGeneralCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -30,15 +33,20 @@ const AddCategory = () => {
     // Fetch general categories
     const fetchGeneralCategories = async () => {
       try {
+        setIsLoading(true);
         const res: any = await axiosInstance.get("/category/general/all");
         setGeneralCategories(res);
       } catch (error) {
         console.error("Failed to fetch general categories:", error);
+        toast.error('שגיאה בטעינת קטגוריות כלליות');
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchGeneralCategories();
 
     if (id) {
+      setIsLoading(true);
       axiosInstance.get(`/shoofiAdmin/category/${id}`).then((res: any) => {
         const cat = res;
         setNameAR(cat.nameAR);
@@ -49,6 +57,10 @@ const AddCategory = () => {
         if (cat.image?.uri) {
           setImagePreview(cdnUrl + cat.image.uri);
         }
+      }).catch(() => {
+        toast.error('שגיאה בטעינת פרטי הקטגוריה');
+      }).finally(() => {
+        setIsLoading(false);
       });
     }
   }, [id]);
@@ -91,91 +103,96 @@ const AddCategory = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setSuccess(id ? "קטגוריה עודכנה בהצלחה!" : "קטגוריה נוספה בהצלחה!");
+      toast.success(id ? "קטגוריה עודכנה בהצלחה!" : "קטגוריה נוספה בהצלחה!");
       setTimeout(() => navigate("/admin/categories"), 1200);
     } catch (e: any) {
-      setError(e?.response?.data?.message || (id ? "שגיאה בעדכון קטגוריה" : "שגיאה בהוספת קטגוריה"));
+      const errorMessage = e?.response?.data?.message || (id ? "שגיאה בעדכון קטגוריה" : "שגיאה בהוספת קטגוריה");
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow mt-8">
-      <h2 className="text-2xl font-bold mb-4">{id ? "עריכת קטגוריה" : "הוספת קטגוריה חדשה"}</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div>
-          <label className="block mb-1">קטגוריות כלליות</label>
-          <div className="border rounded p-3 max-h-48 overflow-y-auto">
-            {generalCategories.map((category) => (
-              <div key={category._id} className="flex items-center gap-2 py-1">
-                <input
-                  type="checkbox"
-                  id={category._id}
-                  checked={selectedGeneralCategories.includes(category._id)}
-                  onChange={() => handleGeneralCategoryChange(category._id)}
-                  className="h-4 w-4"
-                />
-                <label htmlFor={category._id} className="cursor-pointer">
-                  {category.nameHE}
-                </label>
-              </div>
-            ))}
+    <>
+      {isLoading && <Loader />}
+      <div className="max-w-xl mx-auto p-6 bg-white rounded shadow mt-8">
+        <h2 className="text-2xl font-bold mb-4">{id ? "עריכת קטגוריה" : "הוספת קטגוריה חדשה"}</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="block mb-1">קטגוריות כלליות</label>
+            <div className="border rounded p-3 max-h-48 overflow-y-auto">
+              {generalCategories.map((category) => (
+                <div key={category._id} className="flex items-center gap-2 py-1">
+                  <input
+                    type="checkbox"
+                    id={category._id}
+                    checked={selectedGeneralCategories.includes(category._id)}
+                    onChange={() => handleGeneralCategoryChange(category._id)}
+                    className="h-4 w-4"
+                  />
+                  <label htmlFor={category._id} className="cursor-pointer">
+                    {category.nameHE}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <label className="block mb-1">שם קטגוריה (ערבית)</label>
-          <input
-            className="border rounded px-3 py-2 w-full"
-            value={nameAR}
-            onChange={e => setNameAR(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">שם קטגוריה (עברית)</label>
-          <input
-            className="border rounded px-3 py-2 w-full"
-            value={nameHE}
-            onChange={e => setNameHE(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">סדר</label>
-          <input
-            className="border rounded px-3 py-2 w-full"
-            type="number"
-            value={order}
-            onChange={e => setOrder(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">תוספות</label>
-          <ExtrasManager
-            value={extras}
-            onChange={setExtras}
-            globalExtras={[]}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">תמונה</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          {imagePreview && (
-            <img src={imagePreview} alt="Preview" className="mt-2 w-40 h-24 object-cover rounded" />
-          )}
-        </div>
-        <button
-          type="submit"
-          className="bg-blueGray-800 text-white px-4 py-2 rounded shadow mt-2"
-          disabled={loading}
-        >
-          {loading ? (id ? "שומר..." : "שומר...") : (id ? "עדכן קטגוריה" : "שמור קטגוריה")}
-        </button>
-        {error && <div className="text-red-600 mt-2">{error}</div>}
-        {success && <div className="text-green-600 mt-2">{success}</div>}
-      </form>
-    </div>
+          <div>
+            <label className="block mb-1">שם קטגוריה (ערבית)</label>
+            <input
+              className="border rounded px-3 py-2 w-full"
+              value={nameAR}
+              onChange={e => setNameAR(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-1">שם קטגוריה (עברית)</label>
+            <input
+              className="border rounded px-3 py-2 w-full"
+              value={nameHE}
+              onChange={e => setNameHE(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-1">סדר</label>
+            <input
+              className="border rounded px-3 py-2 w-full"
+              type="number"
+              value={order}
+              onChange={e => setOrder(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block mb-1">תוספות</label>
+            <ExtrasManager
+              value={extras}
+              onChange={setExtras}
+              globalExtras={[]}
+            />
+          </div>
+          <div>
+            <label className="block mb-1">תמונה</label>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            {imagePreview && (
+              <img src={imagePreview} alt="Preview" className="mt-2 w-40 h-24 object-cover rounded" />
+            )}
+          </div>
+          <button
+            type="submit"
+            className="bg-blueGray-800 text-white px-4 py-2 rounded shadow mt-2"
+            disabled={loading}
+          >
+            {loading ? (id ? "שומר..." : "שומר...") : (id ? "עדכן קטגוריה" : "שמור קטגוריה")}
+          </button>
+          {error && <div className="text-red-600 mt-2">{error}</div>}
+          {success && <div className="text-green-600 mt-2">{success}</div>}
+        </form>
+      </div>
+    </>
   );
 };
 

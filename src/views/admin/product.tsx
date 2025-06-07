@@ -8,6 +8,8 @@ import CategoryDropdown from "../../components/admin/CategoryDropdown";
 import ProductInfoForm from "../../components/admin/ProductInfoForm";
 import ExtrasManager from "../../components/admin/ExtrasManager";
 import { MultiSelect } from 'react-multi-select-component';
+import { toast } from 'react-toastify';
+import Loader from 'components/Loader/loader';
 
 /*consts*/
 import { CategoryEnum, CategoryConsts } from "shared/constants";
@@ -169,12 +171,19 @@ const ProductPage = () => {
               setSelectedProduct(fresh);
               setFormMode(formModes.preview);
               setIsLoading(false);
+              toast.success('המוצר עודכן בהצלחה');
+              navigate(-1);
             });
           } else {
             setIsLoading(false);
+            toast.success('המוצר נוצר בהצלחה');
+            navigate(-1);
           }
         })
-        .catch(() => setIsLoading(false));
+        .catch((error) => {
+          setIsLoading(false);
+          toast.error('אירעה שגיאה. אנא נסה שוב');
+        });
     }
   };
 
@@ -278,6 +287,7 @@ const ProductPage = () => {
 
   return (
     <>
+      {isLoading && <Loader />}
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
         <div className="rounded-t bg-white mb-0 px-6 py-6 w-full flex items-center gap-4">
           <StoreDropdown value={storeAppName} onChange={handleStoreChange} label="בחר חנות" />

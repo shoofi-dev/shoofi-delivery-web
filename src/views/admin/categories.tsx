@@ -102,7 +102,7 @@ export default function CategoriesList() {
       <div className="mb-6">
         <label className="block mb-2 text-sm font-medium text-gray-700">קטגוריה כללית</label>
         <select
-          className="border rounded px-3 py-2 w-full max-w-xs"
+          className="border rounded px-3 py-2 w-full max-w-xs rtl-select"
           value={selectedGeneralCategory}
           onChange={(e) => setSelectedGeneralCategory(e.target.value)}
         >
@@ -122,7 +122,7 @@ export default function CategoriesList() {
               <tr>
                 <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">שם (ערבית)</th>
                 <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">שם (עברית)</th>
-                <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">קטגוריה כללית</th>
+                <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">קטגוריות כלליות</th>
                 <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">תמונה</th>
                 <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-center">פעולות</th>
               </tr>
@@ -132,8 +132,10 @@ export default function CategoriesList() {
                 <tr key={category._id} className="border-t hover:bg-blue-50 transition cursor-pointer" onClick={() => handleRowClick(category._id)}>
                   <td className="px-4 py-2 text-right">{category.nameAR}</td>
                   <td className="px-4 py-2 text-right">{category.nameHE}</td>
-                  <td className="px-4 py-2 text-right">
-                    {generalCategories.find(gc => gc._id === category.generalCategoryId)?.nameHE || '-'}
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {category.supportedGeneralCategoryIds?.map((gcId: string) => 
+                      generalCategories.find(gc => gc._id === gcId)?.nameHE
+                    ).filter(Boolean).join(', ') || '-'}
                   </td>
                   <td className="px-4 py-2 text-right">       {category.image  && (
                       <img
