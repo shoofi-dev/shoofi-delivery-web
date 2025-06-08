@@ -52,7 +52,7 @@ const OrderCard = ({ order }: TProps) => {
               <div>{order.total}</div>
             </div>
             <div className={orderLabelClass}>
-              <div>סכום לתשלום</div>
+              <div>תאריך הזמנה</div>
               <div>{moment(order.orderDate).format('DD/MM/YY')}</div>
             </div>
           </div>

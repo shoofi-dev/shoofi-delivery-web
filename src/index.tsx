@@ -168,7 +168,7 @@ const AppWithGoogleMaps = () => {
           <Route path="/employe-payments" element={<EmployePayments />} />
           <Route path="/butcherl/video-1" element={<FullScreenVideo1 />} />
           <Route path="/butcherl/video-2" element={<FullScreenVideo2 />} />
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Admin />} />
         </Routes>
       </StoreContext.Provider>
     </BrowserRouter>

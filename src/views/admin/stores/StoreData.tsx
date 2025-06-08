@@ -33,7 +33,18 @@ interface StoreDataForm {
   minTimeToOrder: number;
   phone: string;
   address: string;
+  openDays: { [key: string]: boolean };
 }
+
+const weekDays = [
+  { key: 'sunday', label: 'ראשון' },
+  { key: 'monday', label: 'שני' },
+  { key: 'tuesday', label: 'שלישי' },
+  { key: 'wednesday', label: 'רביעי' },
+  { key: 'thursday', label: 'חמישי' },
+  { key: 'friday', label: 'שישי' },
+  { key: 'saturday', label: 'שבת' },
+];
 
 const StoreData: React.FC<StoreDataProps> = ({
   logo,
@@ -47,18 +58,18 @@ const StoreData: React.FC<StoreDataProps> = ({
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState<StoreDataForm>({
+  const [formData, setFormData] = useState<StoreDataForm & { openDays: { [key: string]: boolean } }>({
     delivery_support: true,
     takeaway_support: true,
     cash_support: true,
-    creditcard_support: false,
+    creditcard_support: true,
     day: 'Sunday',
     start: '10:00',
     end: '00:00',
     isOpen: true,
     isStoreClose: false,
     isAlwaysOpen: true,
-    delivery_price: 20,
+    delivery_price: 0,
     order_company_delta_minutes: 0,
     isOrderLaterSupport: false,
     orderNowEndTime: '23:00',
@@ -66,6 +77,15 @@ const StoreData: React.FC<StoreDataProps> = ({
     minTimeToOrder: 60,
     phone: '',
     address: '',
+    openDays: {
+      sunday: true,
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: true,
+    },
   });
 
   useEffect(() => {
@@ -80,6 +100,15 @@ const StoreData: React.FC<StoreDataProps> = ({
       if(response){
         setFormData({
           ...response,
+          openDays: response.openDays || {
+            sunday: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+          },
           cover_sliders: response.cover_sliders || []
         });
         setShowForm(true);
@@ -112,6 +141,16 @@ const StoreData: React.FC<StoreDataProps> = ({
     setFormData(prev => ({
       ...prev,
       [name]: Number(value)
+    }));
+  };
+
+  const handleOpenDayChange = (dayKey: string) => {
+    setFormData(prev => ({
+      ...prev,
+      openDays: {
+        ...prev.openDays,
+        [dayKey]: !prev.openDays[dayKey]
+      }
     }));
   };
 
@@ -223,19 +262,21 @@ const StoreData: React.FC<StoreDataProps> = ({
           {/* Operating Hours */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">שעות פעילות</h2>
-            <div>
-              <label htmlFor="day" className="block mb-2">יום</label>
-              <select
-                id="day"
-                name="day"
-                value={formData.day}
-                onChange={handleChange}
-                className="w-full p-2 border rounded"
-              >
-                {['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'].map(day => (
-                  <option key={day} value={day}>{day}</option>
+            <div className="space-y-2">
+              <label className="block mb-2 font-semibold">ימים פתוחים</label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {weekDays.map(day => (
+                  <label key={day.key} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.openDays[day.key]}
+                      onChange={() => handleOpenDayChange(day.key)}
+                      className="form-checkbox h-5 w-5 ml-2"
+                    />
+                    {day.label}
+                  </label>
                 ))}
-              </select>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -277,7 +318,7 @@ const StoreData: React.FC<StoreDataProps> = ({
               />
               <label htmlFor="isOpen">חנות פתוחה</label>
             </div>
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 id="isStoreClose"
@@ -287,8 +328,8 @@ const StoreData: React.FC<StoreDataProps> = ({
                 className="form-checkbox h-5 w-5 ml-2"
               />
               <label htmlFor="isStoreClose">חנות סגורה</label>
-            </div>
-            <div className="flex items-center space-x-2">
+            </div> */}
+            {/* <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 id="isAlwaysOpen"
@@ -298,7 +339,7 @@ const StoreData: React.FC<StoreDataProps> = ({
                 className="form-checkbox h-5 w-5 ml-2"
               />
               <label htmlFor="isAlwaysOpen">חנות פתוחה תמיד</label>
-            </div>
+            </div> */}
           </div>
 
           {/* Store Information */}
@@ -333,7 +374,7 @@ const StoreData: React.FC<StoreDataProps> = ({
           {/* Order Settings */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">הגדרות הזמנה</h2>
-            <div>
+            {/* <div>
               <label htmlFor="delivery_price" className="block mb-2">מחיר משלוח</label>
               <input
                 type="number"
@@ -343,9 +384,9 @@ const StoreData: React.FC<StoreDataProps> = ({
                 onChange={handleNumberChange}
                 className="w-full p-2 border rounded"
               />
-            </div>
+            </div> */}
             <div>
-              <label htmlFor="order_company_delta_minutes" className="block mb-2">זמן הכנה (דקות)</label>
+              <label htmlFor="order_company_delta_minutes" className="block mb-2">זמן הכנה משוער(דקות)</label>
               <input
                 type="number"
                 id="order_company_delta_minutes"

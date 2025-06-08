@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "utils/http-interceptor";
 import CitySelect from "components/admin/CitySelect";
+import clsx from "clsx";
 
 interface City {
   _id: string;
@@ -25,7 +26,7 @@ const DeliveryAreasList = () => {
   const handleAdd = () => navigate(`/admin/delivery-areas/add/${selectedCityId}`);
   const handleEdit = (id: string) => navigate(`/admin/delivery-areas/edit/${id}/${selectedCityId}`);
   const handleDelete = async (id: string) => {
-    if (window.confirm("Delete this area?")) {
+    if (window.confirm("האם אתה בטוח שברצונך למחוק את האזור?")) {
       await axiosInstance.delete(`/delivery/area/${id}`);
       setAreas(areas.filter(a => a._id !== id));
     }
@@ -34,19 +35,19 @@ const DeliveryAreasList = () => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Delivery Areas</h2>
+        <h2 className="text-2xl font-bold">אזורי משלוח</h2>
       </div>
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center justify-between mb-4">
         <CitySelect
           value={selectedCityId}
           onChange={setSelectedCityId}
         />
         <button 
           onClick={handleAdd} 
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className={clsx('bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600', !selectedCityId && 'opacity-50 cursor-not-allowed')}
           disabled={!selectedCityId}
         >
-          Add Area
+          הוסף אזור
         </button>
       </div>
       <div className="overflow-x-auto">

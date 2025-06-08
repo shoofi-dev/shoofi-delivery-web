@@ -6,6 +6,8 @@ import "../../styles.css";
 
 
 export default function DeliveryArea() {
+  const [mapCenter, setMapCenter] = useState({ lat: 32.23530210603023, lng: 34.951724518379834 });
+
   // Store Polygon path in state
   const [path, setPath] = useState([
     { lat: 32.244116, lng: 34.964393 },
@@ -68,7 +70,7 @@ export default function DeliveryArea() {
       >
         <GoogleMap
           mapContainerClassName="App-map"
-          center={{ lat: 32.233583, lng: 34.951661 }}
+          center={mapCenter}
           zoom={15}
         >
           <Polygon

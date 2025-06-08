@@ -86,25 +86,7 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-          <div>
-            <label className={inputLabelClass} htmlFor="hasDiscount">
-              אפשר הנחת כמות
-            </label>
-            <div className="flex items-center gap-2 mb-4">
-              <input
-                name="hasDiscount"
-                type="checkbox"
-                checked={!!selectedProduct?.hasDiscount}
-                onChange={handleInputChange}
-                disabled={isDisabled}
-                className="form-checkbox h-5 w-5 text-blue-600"
-              />
-              <span className="text-gray-700">כן</span>
-            </div>
-          </div>
-    
-        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           <div>
             <label className={inputLabelClass} htmlFor="descriptionAR">

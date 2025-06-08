@@ -17,7 +17,7 @@ const sideBarList = () => {
                     "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/dashboard") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/dashboard"
                 >
@@ -39,7 +39,7 @@ const sideBarList = () => {
                     "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/settings") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/settings"
                 >
@@ -61,7 +61,7 @@ const sideBarList = () => {
                     "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/tables") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/tables"
                 >
@@ -83,7 +83,7 @@ const sideBarList = () => {
                     "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/maps") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/maps"
                 >
@@ -101,14 +101,14 @@ const sideBarList = () => {
             </ul>
 
             <hr className="my-4 md:min-w-full" />
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+            <h6 className="md:min-w-full text-blueGray-900 text-lg uppercase font-bold block pt-1 pb-4 no-underline">
               Auth Layout Pages
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
               <li className="items-center cursor-pointer">
                 <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-xs uppercase py-3 font-bold block"
                   to="/auth/login"
                 >
                   <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
@@ -117,7 +117,7 @@ const sideBarList = () => {
               </li>
 
               <li className="items-center cursor-pointer ">
-                <div className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
+                <div className="text-blueGray-700 hover:text-blueGray-900 text-xs uppercase py-3 font-bold block">
                   <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
                   Login
                 </div>
@@ -125,7 +125,7 @@ const sideBarList = () => {
 
               <li className="items-center cursor-pointer">
                 <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-xs uppercase py-3 font-bold block"
                   to="/auth/register"
                 >
                   <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
@@ -135,14 +135,14 @@ const sideBarList = () => {
             </ul>
 
             <hr className="my-4 md:min-w-full" />
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+            <h6 className="md:min-w-full text-blueGray-900 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               No Layout Pages
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
               <li className="items-center cursor-pointer">
                 <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-xs uppercase py-3 font-bold block"
                   to="/landing"
                 >
                   <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
@@ -152,7 +152,7 @@ const sideBarList = () => {
 
               <li className="items-center cursor-pointer">
                 <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-xs uppercase py-3 font-bold block"
                   to="/profile"
                 >
                   <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}
@@ -162,7 +162,7 @@ const sideBarList = () => {
             </ul>
 
             <hr className="my-4 md:min-w-full" />
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+            <h6 className="md:min-w-full text-blueGray-900 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               Documentation
             </h6>
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
@@ -170,7 +170,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/react/colors/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fas fa-paint-brush mr-2 text-blueGray-300 text-base"></i>
                   Styles
@@ -181,7 +181,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fab fa-css3-alt mr-2 text-blueGray-300 text-base"></i>
                   CSS Components
@@ -192,7 +192,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/angular/overview/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fab fa-angular mr-2 text-blueGray-300 text-base"></i>
                   Angular
@@ -203,7 +203,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fab fa-js-square mr-2 text-blueGray-300 text-base"></i>
                   Javascript
@@ -214,7 +214,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fab fa-react mr-2 text-blueGray-300 text-base"></i>
                   NextJS
@@ -225,7 +225,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fab fa-react mr-2 text-blueGray-300 text-base"></i>
                   React
@@ -236,7 +236,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/svelte/overview/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fas fa-link mr-2 text-blueGray-300 text-base"></i>
                   Svelte
@@ -247,7 +247,7 @@ const sideBarList = () => {
                 <a
                   href="https://www.creative-tim.com/learning-lab/tailwind/vue/overview/notus"
                   target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
+                  className="text-blueGray-700 hover:text-blueGray-900 text-sm block mb-4 no-underline font-semibold"
                 >
                   <i className="fab fa-vuejs mr-2 text-blueGray-300 text-base"></i>
                   VueJS
@@ -282,10 +282,10 @@ export default function Sidebar() {
           </button>
           {/* Brand */}
           <Link
-            className="md:block md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+            className="md:block md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0 "
             to="/"
           >
-            <img className="h-12 m-auto" src="/icon.png" />
+            <img className="w-8/12  h-12 mx-auto" src="/icon4.png" />
           </Link>
           {/* Collapse */}
           <div
@@ -323,13 +323,16 @@ export default function Sidebar() {
             <hr className="my-4 md:min-w-full" />
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+            <h6 className="md:min-w-full text-blueGray-900 text-lg uppercase font-bold block pt-1 pb-4 no-underline">
+               ניהול חנויות ומוצרים
+              </h6>
             <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/stores") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/stores"
                 >
@@ -350,7 +353,7 @@ export default function Sidebar() {
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/general-categories") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/general-categories"
                 >
@@ -371,7 +374,7 @@ export default function Sidebar() {
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/categories") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/categories"
                 >
@@ -393,7 +396,7 @@ export default function Sidebar() {
                     "flex items-center text-md  uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/orders") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/orders"
                 >
@@ -415,7 +418,7 @@ export default function Sidebar() {
                     "flex items-center text-md  uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/products") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/products"
                 >
@@ -431,27 +434,6 @@ export default function Sidebar() {
                 </Link>
               </li> */}
 
-              <li className="items-center cursor-pointer">
-                <Link
-                  className={
-                    "flex items-center text-md  uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/delivery-companies") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/delivery-companies"
-                >
-                  <i
-                    className={
-                      "fas fa-truck mx-2 text-lg " +
-                      (window.location.href.indexOf("/admin/delivery-companies") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>
-                  <div>חברות משלוחים</div>
-                </Link>
-              </li>
 
               {/* <li className="items-center cursor-pointer">
                 <Link
@@ -459,7 +441,7 @@ export default function Sidebar() {
                     "flex items-center text-md  uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/product/add") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/product/add"
                 >
@@ -475,27 +457,7 @@ export default function Sidebar() {
                 </Link>
               </li> */}
 
-              <li className="items-center cursor-pointer">
-                <Link
-                  className={
-                    "flex items-center text-md uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/analytics/deliveries-list") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/analytics/deliveries-list"
-                >
-                  <i
-                    className={
-                      "fas fa-list-alt mx-2 text-lg " +
-                      (window.location.href.indexOf("/admin/analytics/deliveries-list") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>
-                  <div>רשימת משלוחים</div>
-                </Link>
-              </li>
+
 
               {/* <li className="items-center cursor-pointer">
                 <Link
@@ -503,7 +465,7 @@ export default function Sidebar() {
                     "flex items-center text-md  uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/errors") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/errors"
                 >
@@ -520,17 +482,17 @@ export default function Sidebar() {
               </li> */}
 
               <hr className="my-4 md:min-w-full" />
-              <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                אנליטיקה
+              <h6 className="md:min-w-full text-blueGray-900 text-lg uppercase font-bold block pt-1 pb-4 no-underline">
+                משלוחים
               </h6>
 
-              <li className="items-center cursor-pointer">
+              {/* <li className="items-center cursor-pointer">
                 <Link
                   className={
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/analytics/orders") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/analytics/orders"
                 >
@@ -544,29 +506,9 @@ export default function Sidebar() {
                   ></i>
                   <div>הזמנות</div>
                 </Link>
-              </li>
+              </li> */}
 
-              <li className="items-center cursor-pointer">
-                <Link
-                  className={
-                    "flex items-center text-md uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/analytics/customers") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/analytics/customers"
-                >
-                  <i
-                    className={
-                      "fas fa-users mx-2 text-lg " +
-                      (window.location.href.indexOf("/admin/analytics/customers") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>
-                  <div>לקוחות</div>
-                </Link>
-              </li>
+    
 
               <li className="items-center cursor-pointer">
                 <Link
@@ -574,7 +516,7 @@ export default function Sidebar() {
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/delivery-areas") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/delivery-areas"
                 >
@@ -596,7 +538,7 @@ export default function Sidebar() {
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/delivery-company-areas") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/delivery-company-areas"
                 >
@@ -618,7 +560,7 @@ export default function Sidebar() {
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/cities") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/cities"
                 >
@@ -630,11 +572,79 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>ערים</div>
+                  <div>ערים נתמכות</div>
                 </Link>
               </li>
 
-      
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md  uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/delivery-companies") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/delivery-companies"
+                >
+                  <i
+                    className={
+                      "fas fa-truck mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/delivery-companies") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>חברות משלוחים</div>
+                </Link>
+              </li>
+
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/analytics/deliveries-list") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/analytics/deliveries-list"
+                >
+                  <i
+                    className={
+                      "fas fa-list-alt mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/analytics/deliveries-list") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>רשימת משלוחים</div>
+                </Link>
+              </li>
+
+              <hr className="my-4 md:min-w-full" />
+              <h6 className="md:min-w-full text-blueGray-900 text-lg uppercase font-bold block pt-1 pb-4 no-underline">
+                ניהול לקוחות
+              </h6>
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/analytics/customers") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/analytics/customers"
+                >
+                  <i
+                    className={
+                      "fas fa-users mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/analytics/customers") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>לקוחות</div>
+                </Link>
+              </li>
 
               {/* <li className="items-center cursor-pointer">
                 <Link
@@ -642,7 +652,7 @@ export default function Sidebar() {
                     "flex items-center text-md uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/store-categories") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                      : "text-blueGray-700 hover:text-blueGray-900")
                   }
                   to="/admin/store-categories"
                 >

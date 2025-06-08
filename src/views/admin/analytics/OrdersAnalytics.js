@@ -109,8 +109,7 @@ export default function OrdersAnalytics() {
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1">
             <h3 className="text-2xl font-bold text-blueGray-700 mb-4">
-              Orders Analytics
-            </h3>
+            ניתוח הזמנות            </h3>
           </div>
         </div>
       </div>
@@ -120,6 +119,7 @@ export default function OrdersAnalytics() {
           startDate={startDate}
           endDate={endDate}
           onDateChange={handleDateChange}
+
         />
 
         {loading ? (

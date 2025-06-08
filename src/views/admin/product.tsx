@@ -304,6 +304,33 @@ const ProductPage = () => {
                   labelledBy="בחר קטגוריות"
                   className="w-full"
                   disabled={isDisabled}
+                  overrideStrings={{
+                    allItemsAreSelected: "כל הפריטים נבחרו",
+                    selectAll: "בחר הכל",
+                    selectSomeItems: "בחר פריטים",
+                    clearSelected: "נקה בחירה",
+                    search: "חפש",
+                    noOptions: "אין תוצאות",
+                    create: "יצירת פריט",
+                    createItem: "יצירת פריט",
+                  }}
+                  ItemRenderer={({ checked, option, onClick, disabled }: { checked: boolean; option: any; onClick: () => void; disabled: boolean }) => (
+                    <div
+                      className={`item-renderer ${disabled ? "disabled" : ""}`}
+                      onClick={onClick}
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        readOnly
+                        disabled={disabled}
+                      />
+                      <div className="flex items-center gap-2 mr-2">
+                        <span>{option.label}</span>
+                      </div>
+                    </div>
+                  )}
                 />
               </div>
             </div>

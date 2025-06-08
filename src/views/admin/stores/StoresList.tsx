@@ -7,7 +7,8 @@ import { axiosInstance } from "utils/http-interceptor";
 
 interface Store {
   _id: string;
-  storeName: string;
+  name_ar: string;
+  name_he: string;
   storeLogo: any;
   appName: string;
   categoryId: string;
@@ -121,13 +122,13 @@ export default function StoresList() {
                   {store.storeLogo && (
                     <img
                       src={cdnUrl + store.storeLogo.uri}
-                      alt={store.storeName}
+                      alt={store.name_he}
                       className="h-12 w-12 object-contain"
                     />
                   )}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  {store.storeName}
+                  {store.name_he}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                   {store.appName}

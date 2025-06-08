@@ -5,7 +5,7 @@ export default function DateRangePicker({ startDate, endDate, onDateChange }) {
     <div className="flex flex-wrap items-center gap-4 mb-4">
       <div className="flex items-center">
         <label className="block text-sm font-medium text-gray-700 mr-2">
-          From:
+        תאריך התחלה:
         </label>
         <input
           type="date"
@@ -16,7 +16,7 @@ export default function DateRangePicker({ startDate, endDate, onDateChange }) {
       </div>
       <div className="flex items-center">
         <label className="block text-sm font-medium text-gray-700 mr-2">
-          To:
+          תאריך סיום:
         </label>
         <input
           type="date"

@@ -12,6 +12,7 @@ const CitiesForm = () => {
   const [nameHE, setNameHE] = useState("");
   const [geometry, setGeometry] = useState<any>(null); // GeoJSON Polygon
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 32.23530210603023, lng: 34.951724518379834 });
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
@@ -62,7 +63,17 @@ const CitiesForm = () => {
     const geoJson = getGeoJsonFromPolygon(polygonObj);
     setGeometry(geoJson);
     polygonObj.setMap(null); // Remove drawn polygon
-  }, []);
+    const bounds = new google.maps.LatLngBounds();
+    const path = polygonObj.getPath();
+    for (let i = 0; i < path.getLength(); i++) {
+      bounds.extend(path.getAt(i));
+    }
+    map?.fitBounds(bounds);
+    setMapCenter({
+      lat: bounds.getCenter().lat(),
+      lng: bounds.getCenter().lng()
+    });
+  }, [map]);
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
@@ -108,7 +119,7 @@ const CitiesForm = () => {
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
-              center={{ lat: 31.7683, lng: 35.2137 }}
+              center={mapCenter}
               zoom={10}
               onLoad={onMapLoad}
             >
