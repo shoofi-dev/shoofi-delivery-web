@@ -120,13 +120,13 @@ const DeliveryCompanyEmployeesList: React.FC = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
                     onClick={() => handleEdit(employee._id)}
-                    className="text-indigo-600 hover:text-indigo-900 mr-4"
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                   >
                     ערוך
                   </button>
                   <button
                     onClick={() => handleDelete(employee._id)}
-                    className="text-red-600 hover:text-red-900"
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2"
                   >
                     מחק
                   </button>

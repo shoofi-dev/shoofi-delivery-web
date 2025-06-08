@@ -363,6 +363,7 @@ const ProductPage = () => {
                 value={selectedProduct?.extras || []}
                 onChange={(extras) => setSelectedProduct({ ...selectedProduct, extras })}
                 globalExtras={globalExtrasList as any}
+                disabled={formMode === formModes.preview}
               />
               <ProductInfoForm
                 selectedProduct={selectedProduct}

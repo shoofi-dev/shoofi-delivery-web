@@ -65,7 +65,7 @@ const CompanyAreasList = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">בחר עיר</label>
           <select
-            className="border p-2 rounded w-full md:w-64"
+            className="border p-2 rounded w-full md:w-64 rtl-select"
             value={selectedCityId}
             onChange={e => setSelectedCityId(e.target.value)}
           >
@@ -80,7 +80,7 @@ const CompanyAreasList = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">בחר חברה</label>
           <select
-            className="border p-2 rounded w-full md:w-64"
+            className="border p-2 rounded w-full md:w-64 rtl-select"
             value={selectedCompany}
             onChange={e => setSelectedCompany(e.target.value)}
             disabled={!selectedCityId}

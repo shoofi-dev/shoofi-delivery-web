@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "utils/http-interceptor";
 import { GoogleMap, useLoadScript, DrawingManager, Polygon } from "@react-google-maps/api";
@@ -13,6 +13,7 @@ const CitiesForm = () => {
   const [geometry, setGeometry] = useState<any>(null); // GeoJSON Polygon
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [mapCenter, setMapCenter] = useState({ lat: 32.23530210603023, lng: 34.951724518379834 });
+  const geometryRef = useRef<any>(null);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
@@ -25,9 +26,26 @@ const CitiesForm = () => {
         setNameAR(res.nameAR || "");
         setNameHE(res.nameHE || "");
         setGeometry(res.geometry || null);
+        if (res.geometry?.coordinates?.[0]) {
+          // Calculate center of polygon
+          const coords = res.geometry.coordinates[0];
+          const bounds = new google.maps.LatLngBounds();
+          coords.forEach((coord: number[]) => {
+            bounds.extend({ lat: coord[1], lng: coord[0] });
+          });
+          setMapCenter({
+            lat: bounds.getCenter().lat(),
+            lng: bounds.getCenter().lng()
+          });
+        }
       });
     }
   }, [id]);
+
+  // When geometry changes, update the ref
+  useEffect(() => {
+    geometryRef.current = geometry;
+  }, [geometry]);
 
   // Convert Google Maps Polygon to GeoJSON Polygon
   const getGeoJsonFromPolygon = (polygonObj: google.maps.Polygon) => {
@@ -49,20 +67,25 @@ const CitiesForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!geometry) return alert("אנא צייר את גבולות העיר");
+    const latestGeometry = geometryRef.current;
+    if (!latestGeometry) return alert("אנא צייר את גבולות העיר");
     if (!nameAR || !nameHE) return alert("אנא מלא את שני השדות");
+    console.log('Submitting geometry:', latestGeometry);
     if (id) {
-      await axiosInstance.post(`/delivery/city/update/${id}`, { nameAR, nameHE, geometry });
+      await axiosInstance.post(`/delivery/city/update/${id}`, { nameAR, nameHE, geometry: latestGeometry });
     } else {
-      await axiosInstance.post("/delivery/city/add", { nameAR, nameHE, geometry });
+      await axiosInstance.post("/delivery/city/add", { nameAR, nameHE, geometry: latestGeometry });
     }
     navigate("/admin/cities");
   };
 
   const onPolygonComplete = useCallback((polygonObj: google.maps.Polygon) => {
     const geoJson = getGeoJsonFromPolygon(polygonObj);
+    console.log('onPolygonComplete', geoJson);
+
     setGeometry(geoJson);
-    polygonObj.setMap(null); // Remove drawn polygon
+    geometryRef.current = geoJson; // update ref immediately
+    polygonObj.setMap(null);
     const bounds = new google.maps.LatLngBounds();
     const path = polygonObj.getPath();
     for (let i = 0; i < path.getLength(); i++) {
@@ -120,7 +143,7 @@ const CitiesForm = () => {
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
               center={mapCenter}
-              zoom={10}
+              zoom={13.5}
               onLoad={onMapLoad}
             >
               {geometry && renderPolygonPath.length > 0 && (

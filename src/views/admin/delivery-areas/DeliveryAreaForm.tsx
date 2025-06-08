@@ -120,10 +120,10 @@ const DeliveryAreaForm = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <h2 className="text-2xl font-bold mb-4">{id ? "Edit" : "Add"} Delivery Area</h2>
+      <h2 className="text-2xl font-bold mb-4">{id ? "עריכת" : "הוספת"} אזור משלוח</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <label className="block text-sm font-medium text-gray-700">שם</label>
           <input
             type="text"
             value={name}
@@ -133,18 +133,18 @@ const DeliveryAreaForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">City</label>
+          <label className="block text-sm font-medium text-gray-700">עיר</label>
           <div className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-50">
             {city ? `${city.nameAR} / ${city.nameHE}` : 'Loading...'}
           </div>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Draw Polygon</label>
+          <label className="block text-sm font-medium text-gray-700">צייר גבולות האזור</label>
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
               center={mapCenter}
-              zoom={12}
+              zoom={13.5}
               onLoad={onMapLoad}
             >
               {geometry && renderPolygonPath.length > 0 && (
@@ -174,7 +174,7 @@ const DeliveryAreaForm = () => {
             </GoogleMap>
           </div>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">שמור</button>
       </form>
     </div>
   );

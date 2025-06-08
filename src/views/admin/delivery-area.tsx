@@ -71,7 +71,7 @@ export default function DeliveryArea() {
         <GoogleMap
           mapContainerClassName="App-map"
           center={mapCenter}
-          zoom={15}
+          zoom={13.5}
         >
           <Polygon
             // Make the Polygon editable / draggable

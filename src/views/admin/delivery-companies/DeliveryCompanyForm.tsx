@@ -155,14 +155,14 @@ const DeliveryCompanyForm = () => {
           </div>
           <p className="text-sm text-gray-500 mt-1">בחר את הערים שבהן החברה פועלת</p>
         </div>
-        <label className="flex items-center space-x-2">
+        {/* <label className="flex items-center space-x-2">
           <input type="checkbox" name="isStoreClose" checked={form.isStoreClose} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600 ml-2" />
           <span>חנות סגורה</span>
         </label>
         <label className="flex items-center space-x-2">
           <input type="checkbox" name="isAlwaysOpen" checked={form.isAlwaysOpen} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600 ml-2" />
           <span>פתוח תמיד</span>
-        </label>
+        </label> */}
         <label className="flex items-center space-x-2">
           <input type="checkbox" name="status" checked={form.status} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600 ml-2" />
           <span>סטטוס (פעיל)</span>

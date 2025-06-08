@@ -8,6 +8,7 @@ type ExtrasManagerProps = {
   onChange: (extras: Extra[]) => void;
   globalExtras: Extra[];
   onCreateGlobalExtra?: (extra: Extra) => void;
+  disabled?: boolean;
 };
 
 const ExtrasManager: React.FC<ExtrasManagerProps> = ({
@@ -15,6 +16,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
   onChange,
   globalExtras,
   onCreateGlobalExtra,
+  disabled = false,
 }) => {
   const [assignedExtras, setAssignedExtras] = useState<Extra[]>(value || []);
   const [search, setSearch] = useState("");
@@ -150,6 +152,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             className="bg-blueGray-800 text-white px-4 py-2 rounded"
             onClick={() => setShowGroupModal(true)}
             type="button"
+            disabled={disabled}
           >
             צור קבוצה
           </button>
@@ -157,6 +160,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             className="bg-blueGray-800 text-white px-4 py-2 rounded"
             onClick={() => setShowAddModal(true)}
             type="button"
+            disabled={disabled}
           >
             הוסף תוספת חדשה
           </button>
@@ -170,6 +174,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
           placeholder="חפש תוספת קיימת..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          disabled={disabled}
         />
         <div className="flex flex-wrap gap-2">
           {globalExtras
@@ -184,6 +189,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                 key={e.id}
                 className="bg-blueGray-200 px-3 py-1 rounded"
                 onClick={() => handleAssignGlobal(e)}
+                disabled={disabled}
               >
                 {e.nameAR}
               </button>

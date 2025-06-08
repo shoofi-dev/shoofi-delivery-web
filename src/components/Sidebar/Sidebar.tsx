@@ -550,7 +550,7 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>אזורים נתמכים</div>
+                  <div>אזורים נתמכים(לפי חברה)</div>
                 </Link>
               </li>
 
