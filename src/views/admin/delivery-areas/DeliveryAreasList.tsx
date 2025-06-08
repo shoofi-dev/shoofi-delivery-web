@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "utils/http-interceptor";
 import CitySelect from "components/admin/CitySelect";
 import clsx from "clsx";
+import CityAreasMapModal from "./CityAreasMapModal";
 
 interface City {
   _id: string;
@@ -11,15 +12,20 @@ interface City {
 }
 
 const DeliveryAreasList = () => {
-  const [areas, setAreas] = useState<Array<{ _id: string; name: string }>>([]);
+  const [areas, setAreas] = useState<Array<{ _id: string; name: string; geometry: any }>>([]);
   const [selectedCityId, setSelectedCityId] = useState<string>("");
+  const [selectedCityName, setSelectedCityName] = useState<string>("");
+  const [showMapModal, setShowMapModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedCityId) {
       axiosInstance.get(`/delivery/areas/by-city/${selectedCityId}`).then((res: any) => setAreas(res));
+      // Fetch city name for modal title
+      axiosInstance.get(`/delivery/city/${selectedCityId}`).then((res: any) => setSelectedCityName(res.nameHE || ""));
     } else {
       setAreas([]);
+      setSelectedCityName("");
     }
   }, [selectedCityId]);
 
@@ -42,13 +48,22 @@ const DeliveryAreasList = () => {
           value={selectedCityId}
           onChange={setSelectedCityId}
         />
-        <button 
-          onClick={handleAdd} 
-          className={clsx('bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600', !selectedCityId && 'opacity-50 cursor-not-allowed')}
-          disabled={!selectedCityId}
-        >
-          הוסף אזור
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleAdd}
+            className={clsx('bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600', !selectedCityId && 'opacity-50 cursor-not-allowed')}
+            disabled={!selectedCityId}
+          >
+            הוסף אזור
+          </button>
+          <button
+            onClick={() => setShowMapModal(true)}
+            className={clsx('bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600', !selectedCityId && 'opacity-50 cursor-not-allowed')}
+            disabled={!selectedCityId}
+          >
+            הצג אזורים על מפה
+          </button>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded shadow">
@@ -73,6 +88,12 @@ const DeliveryAreasList = () => {
           </tbody>
         </table>
       </div>
+      <CityAreasMapModal
+        open={showMapModal}
+        onClose={() => setShowMapModal(false)}
+        areas={areas}
+        cityName={selectedCityName}
+      />
     </div>
   );
 };

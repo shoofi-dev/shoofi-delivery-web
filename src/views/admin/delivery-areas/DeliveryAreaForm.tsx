@@ -18,7 +18,7 @@ const DeliveryAreaForm = () => {
   const [city, setCity] = useState<City | null>(null);
   const [geometry, setGeometry] = useState<any>(null); // GeoJSON Polygon
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [mapCenter, setMapCenter] = useState({ lat: 32.23530210603023, lng: 34.951724518379834 });
+  const [mapCenter, setMapCenter] = useState({ lat: 32.11453261988036, lng: 34.97186886900658  });
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,

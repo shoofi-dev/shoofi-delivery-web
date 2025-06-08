@@ -217,7 +217,7 @@ export default function StoreForm() {
           <div className="flex flex-wrap">
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   מזהה חנות
                 </label>
                 <input
@@ -232,7 +232,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   שם (ערבית)
                 </label>
                 <input
@@ -247,7 +247,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   שם (עברית)
                 </label>
                 <input
@@ -262,7 +262,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   מוצג ללקוחות
                 </label>
                 <div className="flex items-center mt-2">
@@ -279,7 +279,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   קטגוריות
                 </label>
                 <div className="border-0 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
@@ -301,7 +301,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   הערים שתומכות בחנות
                 </label>
                 <div className="border-0 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
@@ -334,7 +334,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   לוגו חנות
                 </label>
                 <input
@@ -354,7 +354,7 @@ export default function StoreForm() {
             </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   תמונות כיסוי
                 </label>
                 <input

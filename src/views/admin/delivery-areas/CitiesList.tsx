@@ -69,8 +69,8 @@ const CitiesList = () => {
         <table className="min-w-full bg-white rounded shadow">
           <thead>
             <tr>
-              <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">שם</th>
-              <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-center">פעולות</th>
+              <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-lg font-semibold border-b text-right">שם</th>
+              <th className="px-4 py-2 bg-blueGray-50 text-blueGray-500 uppercase text-lg font-semibold border-b text-center">פעולות</th>
             </tr>
           </thead>
           <tbody>

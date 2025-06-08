@@ -88,16 +88,16 @@ const StoreCategoriesList: React.FC = () => {
           <table className="min-w-full bg-white rounded shadow">
             <thead>
               <tr>
-                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">
+                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-lg font-semibold border-b text-right">
                   תמונה
                 </th>
-                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">
+                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-lg font-semibold border-b text-right">
                   שם (ערבית)
                 </th>
-                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-right">
+                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-lg font-semibold border-b text-right">
                   שם (עברית)
                 </th>
-                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-xs font-semibold border-b text-center">
+                <th className="py-2 px-4 bg-blueGray-50 text-blueGray-500 uppercase text-lg font-semibold border-b text-center">
                   פעולות
                 </th>
               </tr>
