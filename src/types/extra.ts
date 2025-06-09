@@ -12,6 +12,7 @@ export type ExtraGroup = {
   id: string;
   nameAR: string;
   nameHE: string;
+  order?: number;
   extras: Extra[];
 };
 

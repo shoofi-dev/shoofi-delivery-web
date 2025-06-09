@@ -43,6 +43,7 @@ const ExtraEditModal = ({
   const [type, setType] = useState<ExtraType>(extra?.type || "single");
   const [nameAR, setNameAR] = useState(extra?.nameAR || "");
   const [nameHE, setNameHE] = useState(extra?.nameHE || "");
+  const [order, setOrder] = useState(extra?.order || 0);
   const [options, setOptions] = useState<Option[]>(
     extra?.options || [defaultOption(type)]
   );
@@ -119,6 +120,7 @@ const ExtraEditModal = ({
       type,
       nameAR,
       nameHE,
+      order,
       options,
       ...(type === "multi" ? { maxCount } : {}),
       ...(type === "counter" ? { min, max, step, defaultValue } : {}),
@@ -193,6 +195,14 @@ const ExtraEditModal = ({
             </div>
           </>
         )}
+        <div className="mb-3">
+          <label className="block font-bold mb-1">סדר</label>
+          <input
+            className="border rounded px-3 py-2 w-full"
+            value={order}
+            onChange={(e) => setOrder(Number(e.target.value))}
+          />
+        </div>
         {/* Options - only show if not counter type */}
         {type !== "counter" && (
           <div className="mb-3">

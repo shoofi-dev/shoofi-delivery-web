@@ -54,6 +54,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
         nameAR: group.nameAR,
         nameHE: group.nameHE,
         groupId: group.id,
+        order: group.order,
         options: [],
         isGroupHeader: true, // Mark this as a group header
       };
@@ -66,8 +67,10 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
       // If editing existing group, update all extras in the group
       setAssignedExtras((prev) => {
         const updated = prev.map((extra) => {
-          if (extra.groupId === group.id) {
-            return { ...extra, nameAR: group.nameAR, nameHE: group.nameHE };
+          console.log("extra", extra)
+          console.log("group", group)
+          if (extra.groupId === group.id && extra.isGroupHeader) {
+            return { ...extra, nameAR: group.nameAR, nameHE: group.nameHE, order: group.order };
           }
           return extra;
         });
@@ -199,7 +202,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
 
       {/* List grouped extras */}
       <div>
-        {Object.entries(groupedExtras).map(([groupId, extras]) => (
+        {Object.entries(groupedExtras).sort((a, b) => a[1][0].order - b[1][0].order).map(([groupId, extras]) => (
           <div key={groupId} className="mb-6">
             {groupId !== "ungrouped" ? (
               <div className="border rounded-lg overflow-hidden">
@@ -207,13 +210,13 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                   <h4 className="text-lg font-semibold">{extras[0].nameAR}</h4>
                   <button
                     className="text-blue-600"
-                    onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0].nameAR, nameHE: extras[0].nameHE, extras })}
-                  >
+                    onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0].nameAR, nameHE: extras[0].nameHE, extras, order: extras[0].order })}
+                  > 
                     ערוך קבוצה
                   </button>
                 </div>
                 <div className="bg-white p-4 space-y-3">
-                  {extras.filter(extra => !extra.isGroupHeader).map((extra) => (
+                  {extras.filter(extra => !extra.isGroupHeader).sort((a, b) => a.order - b.order).map((extra) => (
                     <div
                       key={extra.id}
                       className="bg-gray-50 rounded shadow-sm p-3 flex flex-col gap-2"
@@ -259,7 +262,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
               </div>
             ) : (
               <div className="space-y-3">
-                {extras.map((extra) => (
+                {extras.sort((a, b) => a.order - b.order).map((extra) => (
                   <div
                     key={extra.id}
                     className="bg-white rounded shadow p-3 flex flex-col gap-2"

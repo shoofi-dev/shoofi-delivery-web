@@ -22,7 +22,7 @@ export const addOrUpdateProduct = (product: TProduct, storeAppName: string, isEd
 
   // isInStore
   formData.append("isInStore", product.isInStore?.toString() || "false");
-
+  
   // Extras and Others
   product.extras && formData.append("extras", JSON.stringify(Array.isArray(product.extras) ? product.extras : [product.extras]));
   product.others && formData.append("others", JSON.stringify(product.others));

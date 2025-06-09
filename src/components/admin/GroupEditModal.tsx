@@ -10,12 +10,13 @@ interface GroupEditModalProps {
 const GroupEditModal = ({ group, onSave, onClose }: GroupEditModalProps) => {
   const [nameAR, setNameAR] = useState(group?.nameAR || "");
   const [nameHE, setNameHE] = useState(group?.nameHE || "");
-
+  const [order, setOrder] = useState(group?.order || 0);
   const handleSave = () => {
     onSave({
       id: group?.id || Math.random().toString(36).substr(2, 9),
       nameAR,
       nameHE,
+      order,
       extras: group?.extras || []
     });
   };
@@ -38,6 +39,14 @@ const GroupEditModal = ({ group, onSave, onClose }: GroupEditModalProps) => {
             className="border rounded px-3 py-2 w-full"
             value={nameHE}
             onChange={(e) => setNameHE(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="block font-bold mb-1">סדר</label>
+          <input
+            className="border rounded px-3 py-2 w-full"
+            value={order}
+            onChange={(e) => setOrder(Number(e.target.value))}
           />
         </div>
         <div className="flex justify-end gap-2 mt-4">
