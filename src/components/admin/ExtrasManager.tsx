@@ -207,7 +207,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             {groupId !== "ungrouped" ? (
               <div className="border rounded-lg overflow-hidden">
                 <div className="bg-blueGray-100 px-4 py-3 flex justify-between items-center border-b">
-                  <h4 className="text-lg font-semibold">{extras[0].nameAR}</h4>
+                  <h4 className="text-lg font-semibold">{extras[0].order} - {extras[0].nameAR}</h4>
                   <button
                     className="text-blue-600"
                     onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0].nameAR, nameHE: extras[0].nameHE, extras, order: extras[0].order })}
@@ -223,7 +223,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                     >
                       <div className="flex justify-between items-center">
                         <div>
-                          <span className="font-semibold">{extra.nameAR}</span>
+                          <span className="font-semibold">{extra.order} - {extra.nameAR}</span>
                           <span className="text-sm text-gray-500 mr-2">
                             ({extra.type === "pizza-topping"
                               ? "תוספת פיצה"
@@ -269,7 +269,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                   >
                     <div className="flex justify-between items-center">
                       <div>
-                        <span className="font-semibold">{extra.nameAR}</span>
+                        <span className="font-semibold">{extra.order} - {extra.nameAR}</span>
                         <span className="text-sm text-gray-500 mr-2">
                           ({extra.type === "pizza-topping"
                             ? "תוספת פיצה"
