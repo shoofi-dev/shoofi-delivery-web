@@ -365,7 +365,7 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>רשימת קטיגוריות כלליות</div>
+                  <div>קטגוריות כלליות</div>
                 </Link>
               </li>
               <li className="items-center cursor-pointer">
@@ -386,7 +386,7 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>
-                  <div>רשימת קטיגוריות</div>
+                  <div>תת קטגוריות</div>
                 </Link>
               </li>
 
