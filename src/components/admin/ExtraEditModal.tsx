@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Extra, Option, ExtraType, AreaOption, ExtraGroup } from "../../types/extra";
+import {
+  Extra,
+  Option,
+  ExtraType,
+  AreaOption,
+  ExtraGroup,
+} from "../../types/extra";
 
 const defaultPizzaOptions = [
   { id: "full", name: "full-pizza", price: 0 },
@@ -8,29 +14,28 @@ const defaultPizzaOptions = [
   { id: "quarter1", name: "first-quarter", price: 0 },
   { id: "quarter2", name: "second-quarter", price: 0 },
   { id: "quarter3", name: "third-quarter", price: 0 },
-  { id: "quarter4", name: "fourth-quarter", price: 0 }
+  { id: "quarter4", name: "fourth-quarter", price: 0 },
 ];
 
-const defaultOption = (type: ExtraType) => ({ 
-  id: "", 
-  nameAR: "", 
-  nameHE: "", 
+const defaultOption = (type: ExtraType) => ({
+  id: "",
+  nameAR: "",
+  nameHE: "",
   price: 0,
-  areaOptions: type === "pizza-topping" ? defaultPizzaOptions : undefined
+  areaOptions: type === "pizza-topping" ? defaultPizzaOptions : undefined,
 });
 
-
-const ExtraEditModal = ({ 
-  extra, 
-  onSave, 
-  onClose, 
+const ExtraEditModal = ({
+  extra,
+  onSave,
+  onClose,
   onCreateGlobalExtra,
   groupId,
-  groups = []
-}: { 
-  extra?: Extra | null; 
-  onSave: (extra: Extra) => void; 
-  onClose: () => void; 
+  groups = [],
+}: {
+  extra?: Extra | null;
+  onSave: (extra: Extra) => void;
+  onClose: () => void;
   onCreateGlobalExtra?: (extra: Extra) => void;
   groupId?: string;
   groups?: ExtraGroup[];
@@ -38,33 +43,57 @@ const ExtraEditModal = ({
   const [type, setType] = useState<ExtraType>(extra?.type || "single");
   const [nameAR, setNameAR] = useState(extra?.nameAR || "");
   const [nameHE, setNameHE] = useState(extra?.nameHE || "");
-  const [options, setOptions] = useState<Option[]>(extra?.options || [defaultOption(type)]);
+  const [options, setOptions] = useState<Option[]>(
+    extra?.options || [defaultOption(type)]
+  );
   const [maxCount, setMaxCount] = useState<number>(extra?.maxCount || 1);
   const [min, setMin] = useState<number>(extra?.min ?? 0);
   const [max, setMax] = useState<number>(extra?.max ?? 10);
   const [step, setStep] = useState<number>(extra?.step ?? 1);
-  const [defaultValue, setDefaultValue] = useState<number>(extra?.defaultValue ?? min);
-  const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>(extra?.groupId || groupId);
+  const [defaultValue, setDefaultValue] = useState<number>(
+    extra?.defaultValue ?? min
+  );
+  const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>(
+    extra?.groupId || groupId
+  );
 
   // Update options when type changes
   React.useEffect(() => {
-    if (type === "pizza-topping" && (!options.length || !options[0].areaOptions)) {
+    if (
+      type === "pizza-topping" &&
+      (!options.length || !options[0].areaOptions)
+    ) {
       setOptions([defaultOption(type)]);
     }
   }, [type]);
 
-  const handleOptionChange = (idx: number, field: string, value: string | number) => {
+  const handleOptionChange = (
+    idx: number,
+    field: string,
+    value: string | number
+  ) => {
     setOptions((opts) =>
-      opts.map((opt, i) => (i === idx ? { ...opt, [field]: field === "price" ? Number(value) : value } : opt))
+      opts.map((opt, i) =>
+        i === idx
+          ? { ...opt, [field]: field === "price" ? Number(value) : value }
+          : opt
+      )
     );
   };
 
-  const handleAreaOptionChange = (optionIdx: number, areaIdx: number, field: string, value: string | number) => {
+  const handleAreaOptionChange = (
+    optionIdx: number,
+    areaIdx: number,
+    field: string,
+    value: string | number
+  ) => {
     setOptions((opts) =>
       opts.map((opt, i) => {
         if (i === optionIdx && opt.areaOptions) {
-          const updatedAreaOptions = opt.areaOptions.map((area, j) => 
-            j === areaIdx ? { ...area, [field]: field === "price" ? Number(value) : value } : area
+          const updatedAreaOptions = opt.areaOptions.map((area, j) =>
+            j === areaIdx
+              ? { ...area, [field]: field === "price" ? Number(value) : value }
+              : area
           );
           return { ...opt, areaOptions: updatedAreaOptions };
         }
@@ -74,9 +103,9 @@ const ExtraEditModal = ({
   };
 
   const handleAddOption = () => {
-    const newOption = { 
-      ...defaultOption(type), 
-      id: Math.random().toString(36).substr(2, 9)
+    const newOption = {
+      ...defaultOption(type),
+      id: Math.random().toString(36).substr(2, 9),
     };
     setOptions((opts) => [...opts, newOption]);
   };
@@ -101,7 +130,9 @@ const ExtraEditModal = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2">
-        <h2 className="text-xl font-bold mb-4">{extra ? "ערוך תוספת" : "הוסף תוספת"}</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {extra ? "ערוך תוספת" : "הוסף תוספת"}
+        </h2>
         <div className="mb-3">
           <label className="block font-bold mb-1">קבוצה</label>
           <select
@@ -138,26 +169,30 @@ const ExtraEditModal = ({
               type="number"
               min={1}
               value={maxCount}
-              onChange={e => setMaxCount(Number(e.target.value))}
+              onChange={(e) => setMaxCount(Number(e.target.value))}
             />
           </div>
         )}
-        <div className="mb-3">
-          <label className="block font-bold mb-1">שם תוספת (ערבית)</label>
-          <input
-            className="border rounded px-3 py-2 w-full"
-            value={nameAR}
-            onChange={(e) => setNameAR(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="block font-bold mb-1">שם תוספת (עברית)</label>
-          <input
-            className="border rounded px-3 py-2 w-full"
-            value={nameHE}
-            onChange={(e) => setNameHE(e.target.value)}
-          />
-        </div>
+        {type === "counter" && (
+          <>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">שם תוספת (ערבית)</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                value={nameAR}
+                onChange={(e) => setNameAR(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">שם תוספת (עברית)</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                value={nameHE}
+                onChange={(e) => setNameHE(e.target.value)}
+              />
+            </div>
+          </>
+        )}
         {/* Options - only show if not counter type */}
         {type !== "counter" && (
           <div className="mb-3">
@@ -169,13 +204,17 @@ const ExtraEditModal = ({
                     className="border rounded px-2 py-1 flex-1"
                     placeholder="שם (ערבית)"
                     value={opt.nameAR}
-                    onChange={(e) => handleOptionChange(idx, "nameAR", e.target.value)}
+                    onChange={(e) =>
+                      handleOptionChange(idx, "nameAR", e.target.value)
+                    }
                   />
                   <input
                     className="border rounded px-2 py-1 flex-1"
                     placeholder="שם (עברית)"
                     value={opt.nameHE}
-                    onChange={(e) => handleOptionChange(idx, "nameHE", e.target.value)}
+                    onChange={(e) =>
+                      handleOptionChange(idx, "nameHE", e.target.value)
+                    }
                   />
                   {type !== "pizza-topping" && (
                     <input
@@ -183,7 +222,9 @@ const ExtraEditModal = ({
                       placeholder="מחיר"
                       type="number"
                       value={opt.price}
-                      onChange={(e) => handleOptionChange(idx, "price", e.target.value)}
+                      onChange={(e) =>
+                        handleOptionChange(idx, "price", e.target.value)
+                      }
                     />
                   )}
                   {type !== "pizza-topping" && (
@@ -199,7 +240,9 @@ const ExtraEditModal = ({
                 {/* Area Options for Pizza Toppings */}
                 {type === "pizza-topping" && opt.areaOptions && (
                   <div className="mt-2 pl-4 border-l-2 border-gray-200">
-                    <label className="block font-semibold mb-2">מחירים לפי אזורים</label>
+                    <label className="block font-semibold mb-2">
+                      מחירים לפי אזורים
+                    </label>
                     {opt.areaOptions.map((area, areaIdx) => (
                       <div key={areaIdx} className="flex gap-2 mb-2">
                         <span className="w-32">{area.name}</span>
@@ -208,7 +251,14 @@ const ExtraEditModal = ({
                           placeholder="מחיר"
                           type="number"
                           value={area.price}
-                          onChange={(e) => handleAreaOptionChange(idx, areaIdx, "price", e.target.value)}
+                          onChange={(e) =>
+                            handleAreaOptionChange(
+                              idx,
+                              areaIdx,
+                              "price",
+                              e.target.value
+                            )
+                          }
                         />
                       </div>
                     ))}
@@ -235,7 +285,7 @@ const ExtraEditModal = ({
                 className="border rounded px-3 py-2 w-full"
                 type="number"
                 value={min}
-                onChange={e => setMin(Number(e.target.value))}
+                onChange={(e) => setMin(Number(e.target.value))}
               />
             </div>
             <div className="mb-3">
@@ -244,7 +294,7 @@ const ExtraEditModal = ({
                 className="border rounded px-3 py-2 w-full"
                 type="number"
                 value={max}
-                onChange={e => setMax(Number(e.target.value))}
+                onChange={(e) => setMax(Number(e.target.value))}
               />
             </div>
             <div className="mb-3">
@@ -253,7 +303,7 @@ const ExtraEditModal = ({
                 className="border rounded px-3 py-2 w-full"
                 type="number"
                 value={step}
-                onChange={e => setStep(Number(e.target.value))}
+                onChange={(e) => setStep(Number(e.target.value))}
               />
             </div>
             <div className="mb-3">
@@ -262,7 +312,7 @@ const ExtraEditModal = ({
                 className="border rounded px-3 py-2 w-full"
                 type="number"
                 value={defaultValue}
-                onChange={e => setDefaultValue(Number(e.target.value))}
+                onChange={(e) => setDefaultValue(Number(e.target.value))}
               />
             </div>
           </>
@@ -271,7 +321,10 @@ const ExtraEditModal = ({
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
             ביטול
           </button>
-          <button className="bg-blueGray-800 text-white px-4 py-2 rounded" onClick={handleSave}>
+          <button
+            className="bg-blueGray-800 text-white px-4 py-2 rounded"
+            onClick={handleSave}
+          >
             שמור
           </button>
         </div>
