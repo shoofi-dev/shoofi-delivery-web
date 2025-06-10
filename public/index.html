@@ -46,6 +46,13 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Shoofi</title>
+    <script>
+      // Handle path parameter from 404 redirect
+      const path = new URLSearchParams(window.location.search).get('path');
+      if (path) {
+        window.history.replaceState(null, '', path);
+      }
+    </script>
   </head>
   <body dir="rtl" class="text-blueGray-700 antialiased bg-blueGray-800">
     <noscript>You need to enable JavaScript to run this app.</noscript>
