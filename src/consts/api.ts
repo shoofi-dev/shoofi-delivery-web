@@ -1,6 +1,6 @@
-// export const BASE_URL = "https://shoofi-api-95miq.ondigitalocean.app/api/";
+export const BASE_URL = "https://shoofi-api-95miq.ondigitalocean.app/api/";
 //DEV
-  export const BASE_URL = "http://localhost:1111/api/";
+  // export const BASE_URL = "http://localhost:1111/api/";
 
 export const MENU_API = {
     CONTROLLER: "config",
