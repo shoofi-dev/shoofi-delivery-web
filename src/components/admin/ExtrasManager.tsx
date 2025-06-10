@@ -202,28 +202,28 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
 
       {/* List grouped extras */}
       <div>
-        {Object.entries(groupedExtras).sort((a, b) => a[1][0].order - b[1][0].order).map(([groupId, extras]) => (
+        {Object.entries(groupedExtras).sort((a, b) => (a[1][0]?.order ?? 0) - (b[1][0]?.order ?? 0)).map(([groupId, extras]) => (
           <div key={groupId} className="mb-6">
             {groupId !== "ungrouped" ? (
               <div className="border rounded-lg overflow-hidden">
                 <div className="bg-blueGray-100 px-4 py-3 flex justify-between items-center border-b">
-                  <h4 className="text-lg font-semibold">{extras[0].order} - {extras[0].nameAR}</h4>
+                  <h4 className="text-lg font-semibold">{extras[0]?.order ?? 0} - {extras[0]?.nameAR}</h4>
                   <button
                     className="text-blue-600"
-                    onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0].nameAR, nameHE: extras[0].nameHE, extras, order: extras[0].order })}
+                    onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0]?.nameAR ?? '', nameHE: extras[0]?.nameHE ?? '', extras, order: extras[0]?.order ?? 0 })}
                   > 
                     ערוך קבוצה
                   </button>
                 </div>
                 <div className="bg-white p-4 space-y-3">
-                  {extras.filter(extra => !extra.isGroupHeader).sort((a, b) => a.order - b.order).map((extra) => (
+                  {extras.filter(extra => !extra.isGroupHeader).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((extra) => (
                     <div
                       key={extra.id}
                       className="bg-gray-50 rounded shadow-sm p-3 flex flex-col gap-2"
                     >
                       <div className="flex justify-between items-center">
                         <div>
-                          <span className="font-semibold">{extra.order} - {extra.nameAR}</span>
+                          <span className="font-semibold">{extra.order ?? 0} - {extra.nameAR}</span>
                           <span className="text-sm text-gray-500 mr-2">
                             ({extra.type === "pizza-topping"
                               ? "תוספת פיצה"
@@ -231,6 +231,8 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                               ? "בחירה בודדת"
                               : extra.type === "multi"
                               ? "בחירה מרובה"
+                              : extra.type === "weight"
+                              ? "משקל"
                               : "מונה"})
                           </span>
                         </div>
@@ -256,20 +258,29 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                           ))}
                         </ul>
                       )}
+                      {extra.type === "weight" && (
+                        <div className="pr-4 text-sm text-gray-600">
+                          <div>משקל מינימלי: {extra.min}</div>
+                          <div>משקל מקסימלי: {extra.max}</div>
+                          <div>משקל ברירת מחדל: {extra.defaultValue}</div>
+                          <div>קפיצה: {extra.step}</div>
+                          <div>מחיר: {extra.price} ₪</div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
             ) : (
               <div className="space-y-3">
-                {extras.sort((a, b) => a.order - b.order).map((extra) => (
+                {extras.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((extra) => (
                   <div
                     key={extra.id}
                     className="bg-white rounded shadow p-3 flex flex-col gap-2"
                   >
                     <div className="flex justify-between items-center">
                       <div>
-                        <span className="font-semibold">{extra.order} - {extra.nameAR}</span>
+                        <span className="font-semibold">{extra.order ?? 0} - {extra.nameAR}</span>
                         <span className="text-sm text-gray-500 mr-2">
                           ({extra.type === "pizza-topping"
                             ? "תוספת פיצה"
@@ -277,6 +288,8 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                             ? "בחירה בודדת"
                             : extra.type === "multi"
                             ? "בחירה מרובה"
+                            : extra.type === "weight"
+                            ? "משקל"
                             : "מונה"})
                         </span>
                       </div>
@@ -301,6 +314,15 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                           <li key={opt.id}>{renderOption(opt)}</li>
                         ))}
                       </ul>
+                    )}
+                    {extra.type === "weight" && (
+                      <div className="pr-4 text-sm text-gray-600">
+                        <div>משקל מינימלי: {extra.min}</div>
+                        <div>משקל מקסימלי: {extra.max}</div>
+                        <div>משקל ברירת מחדל: {extra.defaultValue}</div>
+                        <div>קפיצה: {extra.step}</div>
+                        <div>מחיר: {extra.price} ₪</div>
+                      </div>
                     )}
                   </div>
                 ))}

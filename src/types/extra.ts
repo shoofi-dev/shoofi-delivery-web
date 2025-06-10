@@ -1,4 +1,4 @@
-export type ExtraType = "single" | "multi" | "counter" | "pizza-topping";
+export type ExtraType = "single" | "multi" | "counter" | "pizza-topping" | "weight";
 export type AreaOption = { id: string; name: string; price: number };
 export type Option = { 
   id: string; 
@@ -21,14 +21,17 @@ export type Extra = {
   type: ExtraType;
   nameAR: string;
   nameHE: string;
-  options?: Option[];
-  maxCount?: number;
+  required?: boolean;
   min?: number;
   max?: number;
+  maxCount?: number;
+  options?: Option[];
+  price?: number;
   step?: number;
   defaultValue?: number;
   groupId?: string;
   isGroupHeader?: boolean;
+  order?: number;
   [key: string]: any;
 };
 

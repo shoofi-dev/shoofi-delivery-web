@@ -54,6 +54,7 @@ const ExtraEditModal = ({
   const [defaultValue, setDefaultValue] = useState<number>(
     extra?.defaultValue ?? min
   );
+  const [price, setPrice] = useState<number>(extra?.price ?? 0);
   const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>(
     extra?.groupId || groupId
   );
@@ -123,7 +124,8 @@ const ExtraEditModal = ({
       order,
       options,
       ...(type === "multi" ? { maxCount } : {}),
-      ...(type === "counter" ? { min, max, step, defaultValue } : {}),
+      ...(type === "counter" ? { min, max, step, defaultValue, price } : {}),
+      ...(type === "weight" ? { min, max, step, defaultValue, price } : {}),
       ...(selectedGroupId ? { groupId: selectedGroupId } : {}),
     };
     onSave(newExtra);
@@ -160,6 +162,7 @@ const ExtraEditModal = ({
             <option value="single">בחירה בודדת</option>
             <option value="multi">בחירה מרובה</option>
             <option value="counter">מונה</option>
+            <option value="weight">משקל</option>
             <option value="pizza-topping">תוספת פיצה</option>
           </select>
         </div>
@@ -175,7 +178,7 @@ const ExtraEditModal = ({
             />
           </div>
         )}
-        {type === "counter" && (
+        {(type === "weight" || type === "counter") && (
           <>
             <div className="mb-3">
               <label className="block font-bold mb-1">שם תוספת (ערבית)</label>
@@ -195,6 +198,99 @@ const ExtraEditModal = ({
             </div>
           </>
         )}
+        {type === "counter" && (
+          <>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">ערך מינימלי</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                value={min}
+                onChange={(e) => setMin(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">ערך מקסימלי</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                value={max}
+                onChange={(e) => setMax(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">שלב (Step)</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                value={step}
+                onChange={(e) => setStep(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">ערך ברירת מחדל</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                value={defaultValue}
+                onChange={(e) => setDefaultValue(Number(e.target.value))}
+              />
+            </div>
+          </>
+        )}
+        {type === "weight" && (
+          <>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">משקל מינימלי</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                step="0.1"
+                value={min}
+                onChange={(e) => setMin(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">משקל מקסימלי</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                step="0.1"
+                value={max}
+                onChange={(e) => setMax(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">קפיצה</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                step="0.1"
+                value={step}
+                onChange={(e) => setStep(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">משקל ברירת מחדל</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                step="0.1"
+                value={defaultValue}
+                onChange={(e) => setDefaultValue(Number(e.target.value))}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block font-bold mb-1">מחיר</label>
+              <input
+                className="border rounded px-3 py-2 w-full"
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+              />
+            </div>
+          </>
+        )}
         <div className="mb-3">
           <label className="block font-bold mb-1">סדר</label>
           <input
@@ -204,7 +300,7 @@ const ExtraEditModal = ({
           />
         </div>
         {/* Options - only show if not counter type */}
-        {type !== "counter" && (
+        {type !== "counter" && type !== "weight" && (
           <div className="mb-3">
             <label className="block font-bold mb-1">אפשרויות</label>
             {options.map((opt, idx) => (
@@ -286,46 +382,6 @@ const ExtraEditModal = ({
               </button>
             )}
           </div>
-        )}
-        {type === "counter" && (
-          <>
-            <div className="mb-3">
-              <label className="block font-bold mb-1">ערך מינימלי</label>
-              <input
-                className="border rounded px-3 py-2 w-full"
-                type="number"
-                value={min}
-                onChange={(e) => setMin(Number(e.target.value))}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="block font-bold mb-1">ערך מקסימלי</label>
-              <input
-                className="border rounded px-3 py-2 w-full"
-                type="number"
-                value={max}
-                onChange={(e) => setMax(Number(e.target.value))}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="block font-bold mb-1">שלב (Step)</label>
-              <input
-                className="border rounded px-3 py-2 w-full"
-                type="number"
-                value={step}
-                onChange={(e) => setStep(Number(e.target.value))}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="block font-bold mb-1">ערך ברירת מחדל</label>
-              <input
-                className="border rounded px-3 py-2 w-full"
-                type="number"
-                value={defaultValue}
-                onChange={(e) => setDefaultValue(Number(e.target.value))}
-              />
-            </div>
-          </>
         )}
         <div className="flex justify-end gap-2 mt-4">
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
