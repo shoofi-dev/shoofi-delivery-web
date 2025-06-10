@@ -71,6 +71,8 @@ import StoreCategoriesList from "views/admin/store-categories/StoreCategoriesLis
 import StoreCategoryForm from "views/admin/store-categories/StoreCategoryForm";
 import GeneralCategoryForm from "views/admin/general-categories/GeneralCategoryForm";
 import GeneralCategoriesList from "views/admin/general-categories/GeneralCategoriesList";
+import AdsList from "views/admin/ads/AdsList";
+import AddEditAd from "views/admin/ads/add/AddEditAd";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
 
@@ -147,6 +149,9 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/general-categories" element={<GeneralCategoriesList />} />
             <Route path="/admin/general-categories/add" element={<GeneralCategoryForm />} />
             <Route path="/admin/general-categories/edit/:id" element={<GeneralCategoryForm />} />
+            <Route path="/admin/ads" element={<AdsList />} />
+            <Route path="/admin/ads/add" element={<AddEditAd />} />
+            <Route path="/admin/ads/edit/:id" element={<AddEditAd />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />
           </Route>
           <Route path="auth" element={<Auth />}>

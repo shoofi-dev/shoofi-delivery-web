@@ -394,6 +394,28 @@ export default function Sidebar() {
                 <Link
                   className={
                     "flex items-center text-md  uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/ads") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/ads"
+                >
+                  <i
+                    className={
+                      "fas fa-bullhorn mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/ads") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>ניהול מודעות</div>
+                </Link>
+              </li>
+
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md  uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/orders") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-900")

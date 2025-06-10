@@ -96,6 +96,14 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
     }
   };
 
+  const handleDeleteGroup = (groupId: string) => {
+    setAssignedExtras((prev) => {
+      const updated = prev.filter((e) => e.groupId !== groupId);
+      onChange(updated);
+      return updated;
+    });
+  };
+
   const renderOption = (opt: Option) => {
     if (opt.areaOptions) {
       return (
@@ -208,12 +216,21 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
               <div className="border rounded-lg overflow-hidden">
                 <div className="bg-blueGray-100 px-4 py-3 flex justify-between items-center border-b">
                   <h4 className="text-lg font-semibold">{extras[0]?.order ?? 0} - {extras[0]?.nameAR}</h4>
-                  <button
-                    className="text-blue-600"
-                    onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0]?.nameAR ?? '', nameHE: extras[0]?.nameHE ?? '', extras, order: extras[0]?.order ?? 0 })}
-                  > 
-                    ערוך קבוצה
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      className="text-blue-600"
+                      onClick={() => setEditingGroup({ id: groupId, nameAR: extras[0]?.nameAR ?? '', nameHE: extras[0]?.nameHE ?? '', extras, order: extras[0]?.order ?? 0 })}
+                    > 
+                      ערוך קבוצה
+                    </button>
+                    <button
+                      className="text-red-600"
+                      onClick={() => handleDeleteGroup(groupId)}
+                      type="button"
+                    >
+                      מחק קבוצה
+                    </button>
+                  </div>
                 </div>
                 <div className="bg-white p-4 space-y-3">
                   {extras.filter(extra => !extra.isGroupHeader).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((extra) => (
