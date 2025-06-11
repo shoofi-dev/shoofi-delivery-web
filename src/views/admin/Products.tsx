@@ -109,7 +109,7 @@ export default function ProductsList() {
           <img
             alt={product.nameAR}
             className="object-contain w-full h-full"
-            src={`${cdnUrl}${product.img[0].uri}`}
+            src={`${cdnUrl}${product?.img?.[0]?.uri}`}
           />
         </div>
         <div className="p-4 text-center">

@@ -156,7 +156,7 @@ const ProductPage = () => {
   };
 
   const handlAddClick = () => {
-    if (selectedProduct && getImgSrc() !== "") {
+    if (selectedProduct) {
       setIsLoading(true);
       const updatedData = { 
         ...selectedProduct, 
