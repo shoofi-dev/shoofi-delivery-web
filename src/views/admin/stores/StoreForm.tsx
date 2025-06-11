@@ -15,6 +15,9 @@ interface StoreFormData {
   supportedCities: string[];
 }
 
+// Add this regex for validation
+const appNameRegex = /^[a-z]+(-[a-z]+)*$/;
+
 export default function StoreForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -34,6 +37,7 @@ export default function StoreForm() {
   const [coverFiles, setCoverFiles] = useState<File[]>([]);
   const [coverPreviews, setCoverPreviews] = useState<string[]>([]);
   const [existingCoverSliders, setExistingCoverSliders] = useState<string[]>([]);
+  const [appNameError, setAppNameError] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -157,7 +161,21 @@ export default function StoreForm() {
     }));
   };
 
+  const handleAppNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === "" || appNameRegex.test(value)) {
+      setAppNameError("");
+    } else {
+      setAppNameError("שם חייב להכיל אותיות באנגלית קטנות ומקפים בלבד (למשל: kbc, k-b-c, store-name)");
+    }
+    handleChange(e);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
+    if (appNameError) {
+      e.preventDefault();
+      return;
+    }
     e.preventDefault();
     setLoading(true);
 
@@ -224,10 +242,13 @@ export default function StoreForm() {
                   type="text"
                   name="appName"
                   value={formData.appName}
-                  onChange={handleChange}
+                  onChange={handleAppNameChange}
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   required
                 />
+                {appNameError && (
+                  <div className="text-red-600 text-sm mt-1">{appNameError}</div>
+                )}
               </div>
             </div>
             <div className="w-full lg:w-6/12 px-4">
