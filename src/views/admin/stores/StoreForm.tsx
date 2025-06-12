@@ -81,10 +81,10 @@ export default function StoreForm() {
         supportedCities: store.supportedCities,
       });
       if (store.storeLogo) {
-        setLogoPreview(cdnUrl + store.storeLogo.uri);
+        setLogoPreview( store.storeLogo.uri);
       }
       if (store.cover_sliders && store.cover_sliders.length > 0) {
-        const coverUrls = store.cover_sliders.map((slider: any) => cdnUrl + slider.uri);
+        const coverUrls = store.cover_sliders.map((slider: any) => slider.uri);
         setExistingCoverSliders(coverUrls);
       }
     } catch (error) {
@@ -171,12 +171,12 @@ export default function StoreForm() {
     handleChange(e);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     if (appNameError) {
-      e.preventDefault();
+      e?.preventDefault();
       return;
     }
-    e.preventDefault();
+    e?.preventDefault();
     setLoading(true);
 
     try {
@@ -209,8 +209,8 @@ export default function StoreForm() {
         await axiosInstance.post("/shoofiAdmin/store/add", formDataToSend);
         toast.success("Store added successfully");
       }
-
-      navigate("/admin/stores");
+      await fetchStore();
+       navigate("/admin/stores");
     } catch (error) {
       console.error("Error saving store:", error);
       toast.error("Failed to save store");
@@ -366,11 +366,12 @@ export default function StoreForm() {
                 />
                 {logoPreview && (
                   <img
-                    src={logoPreview}
-                    alt="Logo Preview"
+                  src={logoPreview && logoPreview.startsWith("blob:") ? logoPreview : cdnUrl + logoPreview}
+                  alt="Logo Preview"
                     className="mt-2 h-20 w-20 object-contain"
                   />
                 )}
+               
               </div>
             </div>
             <div className="w-full lg:w-6/12 px-4">
@@ -389,7 +390,7 @@ export default function StoreForm() {
                   {coverPreviews.map((preview, index) => (
                     <div key={`new-${index}`} className="relative">
                       <img
-                        src={preview}
+                        src={ preview}
                         alt={`Cover ${index + 1}`}
                         className="h-32 w-full object-cover rounded"
                       />
@@ -405,7 +406,7 @@ export default function StoreForm() {
                   {existingCoverSliders.map((url, index) => (
                     <div key={`existing-${index}`} className="relative">
                       <img
-                        src={url}
+                        src={cdnUrl + url}
                         alt={`Existing Cover ${index + 1}`}
                         className="h-32 w-full object-cover rounded"
                       />
@@ -422,8 +423,7 @@ export default function StoreForm() {
               </div>
             </div>
           </div>
-
-          <div className="flex justify-end space-x-4 gap-4">
+          {!id && <div className="flex justify-end space-x-4 gap-4">
             <button
               type="button"
               onClick={() => navigate('/admin/stores')}
@@ -438,7 +438,7 @@ export default function StoreForm() {
             >
               {loading ? 'שמירה...' : 'שמירה'}
             </button>
-          </div>
+          </div>}
         </form>
 
         {/* Store Data Section */}
@@ -451,7 +451,8 @@ export default function StoreForm() {
               name_he={formData.name_he}
               appName={formData.appName}
               storeLogo={logoPreview}
-              cover_sliders={existingCoverSliders}
+              cover_sliders={[...existingCoverSliders, ...coverPreviews]}
+              handleStoreFormSubmit={handleSubmit}
             />
           </div>
         </div>}

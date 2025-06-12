@@ -11,6 +11,7 @@ interface ProductInfoFormProps {
   getImgSrc: () => string;
   handleFileChange: (event: any) => void;
   handlAddClick: () => void;
+  loading: boolean;
 }
 
 const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
@@ -24,6 +25,7 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
   getImgSrc,
   handleFileChange,
   handlAddClick,
+  loading,
 }) => {
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-8">
@@ -180,10 +182,20 @@ const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
           <button
             type="button"
             onClick={handlAddClick}
-            disabled={isDisabled}
+            disabled={isDisabled || loading}
             className="bg-blueGray-800 hover:bg-blueGray-700 text-white active:bg-blue-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
           >
-            שמור מוצר
+            {loading ? (
+              <span className="flex items-center ">
+                <svg className="animate-spin h-5 w-5 mr-2 text-white ml-2" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                טוען...
+              </span>
+            ) : (
+              "שמור מוצר"
+            )}
           </button>
         </div>
       </form>

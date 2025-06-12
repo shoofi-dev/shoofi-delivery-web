@@ -376,6 +376,7 @@ const ProductPage = () => {
                 getImgSrc={getImgSrc}
                 handleFileChange={handleFileChange}
                 handlAddClick={handlAddClick}
+                loading={!!isLoading}
               />
             </div>
           </div>

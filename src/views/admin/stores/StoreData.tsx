@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosInstance } from 'utils/http-interceptor';
+import { cdnUrl } from "consts/shared";
 
 interface StoreDataProps {
   logo: File | null;
@@ -10,6 +11,7 @@ interface StoreDataProps {
   appName: string;
   storeLogo: string;
   cover_sliders: string[];
+  handleStoreFormSubmit: (e?: React.FormEvent) => void;
 }
 
 interface StoreDataForm {
@@ -52,7 +54,8 @@ const StoreData: React.FC<StoreDataProps> = ({
   name_he,
   appName,
   storeLogo,
-  cover_sliders
+  cover_sliders,
+  handleStoreFormSubmit
 }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -155,6 +158,7 @@ const StoreData: React.FC<StoreDataProps> = ({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    await handleStoreFormSubmit(e);
     e.preventDefault();
     try {
       setLoading(true);
@@ -178,7 +182,7 @@ const StoreData: React.FC<StoreDataProps> = ({
         await axiosInstance.post('/store/add', dataToSend);
         toast.success('Store data added successfully');
       }
-      navigate('/admin/stores');
+       navigate('/admin/stores');
     } catch (error) {
       toast.error('Failed to save store data');
       console.error('Error saving store data:', error);
@@ -481,7 +485,7 @@ const StoreData: React.FC<StoreDataProps> = ({
                 <p className="mb-2"><strong>לוגו:</strong></p>
                 {storeLogo && (
                   <img
-                    src={storeLogo}
+                  src={storeLogo && storeLogo.startsWith("blob:") ? storeLogo : cdnUrl + storeLogo}
                     alt="Store Logo"
                     className="h-20 w-20 object-contain border rounded"
                   />
@@ -493,7 +497,7 @@ const StoreData: React.FC<StoreDataProps> = ({
                   {cover_sliders.map((url, index) => (
                     <img
                       key={index}
-                      src={url}
+                      src={cdnUrl + url}
                       alt={`Cover Image ${index + 1}`}
                       className="h-32 w-full object-cover rounded"
                     />

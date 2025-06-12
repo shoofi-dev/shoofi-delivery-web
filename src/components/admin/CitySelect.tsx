@@ -24,6 +24,7 @@ const CitySelect: React.FC<CitySelectProps> = ({ value, onChange, className }) =
         console.log("res",res)
         setCities(res);
         setLoading(false);
+        onChange(res[0]._id);
       });
     
   }, []);
