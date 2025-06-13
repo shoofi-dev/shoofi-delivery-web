@@ -20,7 +20,7 @@ function arabicToEnglishNumber(str: string): string {
   return str.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
 }
 const defaultOption = (type: ExtraType) => ({
-  id: "",
+  id: Math.random().toString(36).substr(2, 9),
   nameAR: "",
   nameHE: "",
   price: 0,
