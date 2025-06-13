@@ -19,6 +19,8 @@ const DeliveryAreaForm = () => {
   const [geometry, setGeometry] = useState<any>(null); // GeoJSON Polygon
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [mapCenter, setMapCenter] = useState({ lat: 32.11453261988036, lng: 34.97186886900658  });
+  const [minETA, setMinETA] = useState<number | ''>('');
+  const [maxETA, setMaxETA] = useState<number | ''>('');
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
@@ -38,6 +40,8 @@ const DeliveryAreaForm = () => {
       axiosInstance.get(`/delivery/area/${id}`).then((res: any) => {
         setName(res.name);
         setGeometry(res.geometry); // Should be GeoJSON Polygon
+        setMinETA(res.minETA ?? '');
+        setMaxETA(res.maxETA ?? '');
         if (res.geometry?.coordinates?.[0]) {
           // Calculate center of polygon
           const coords = res.geometry.coordinates[0];
@@ -76,7 +80,7 @@ const DeliveryAreaForm = () => {
     e.preventDefault();
     if (!geometry) return alert("Please draw a polygon on the map");
     if (!cityId) return alert("City ID is missing");
-    const data = { name, geometry, cityId };
+    const data = { name, geometry, cityId, minETA: minETA === '' ? undefined : minETA, maxETA: maxETA === '' ? undefined : maxETA };
     if (id) {
       await axiosInstance.post(`/delivery/area/update/${id}`, data);
     } else {
@@ -136,6 +140,30 @@ const DeliveryAreaForm = () => {
           <label className="block text-sm font-medium text-gray-700">עיר</label>
           <div className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-50">
             {city ? `${city.nameAR} / ${city.nameHE}` : 'Loading...'}
+          </div>
+        </div>
+        <div className="mb-4 grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">זמן הגעה מינימלי (דקות)</label>
+            <input
+              type="number"
+              min="0"
+              value={minETA}
+              onChange={e => setMinETA(e.target.value === '' ? '' : Number(e.target.value))}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              placeholder="הזן זמן מינימלי"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">זמן הגעה מקסימלי (דקות)</label>
+            <input
+              type="number"
+              min="0"
+              value={maxETA}
+              onChange={e => setMaxETA(e.target.value === '' ? '' : Number(e.target.value))}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              placeholder="הזן זמן מקסימלי"
+            />
           </div>
         </div>
         <div className="mb-4">

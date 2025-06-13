@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { getCategoriesListApi } from "apis/admin/category/get-categories";
 import { cdnUrl } from "consts/shared";
 import StoreData from './StoreData';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 
 interface StoreFormData {
   appName: string;
@@ -13,10 +14,17 @@ interface StoreFormData {
   business_visible: boolean;
   categoryIds: string[];
   supportedCities: string[];
+  lat?: number;
+  lng?: number;
+  descriptionAR?: string;
+  descriptionHE?: string;
 }
 
 // Add this regex for validation
 const appNameRegex = /^[a-z]+(-[a-z]+)*$/;
+
+const defaultCenter = { lat: 32.11453261988036, lng: 34.97186886900658 };
+const mapContainerStyle = { width: '100%', height: '300px' };
 
 export default function StoreForm() {
   const { id } = useParams();
@@ -31,6 +39,8 @@ export default function StoreForm() {
     business_visible: true,
     categoryIds: [],
     supportedCities: [],
+    descriptionAR: "",
+    descriptionHE: "",
   });
   const [logo, setLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<any>();
@@ -38,6 +48,10 @@ export default function StoreForm() {
   const [coverPreviews, setCoverPreviews] = useState<string[]>([]);
   const [existingCoverSliders, setExistingCoverSliders] = useState<string[]>([]);
   const [appNameError, setAppNameError] = useState("");
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
+  });
 
   useEffect(() => {
     fetchCategories();
@@ -72,6 +86,8 @@ export default function StoreForm() {
     try {
       const response: any = await axiosInstance.get(`/shoofiAdmin/store/${id}`);
       const store = response;
+      const lat = store.location && Array.isArray(store.location.coordinates) ? store.location.coordinates[1] : store.lat;
+      const lng = store.location && Array.isArray(store.location.coordinates) ? store.location.coordinates[0] : store.lng;
       setFormData({
         appName: store.appName,
         name_ar: store.name_ar || "",
@@ -79,7 +95,14 @@ export default function StoreForm() {
         business_visible: store.business_visible ?? true,
         categoryIds: store.categoryIds || [],
         supportedCities: store.supportedCities,
+        lat,
+        lng,
+        descriptionAR: store.descriptionAR || "",
+        descriptionHE: store.descriptionHE || "",
       });
+      if (lat && lng) {
+        setLocation({ lat, lng });
+      }
       if (store.storeLogo) {
         setLogoPreview( store.storeLogo.uri);
       }
@@ -171,6 +194,14 @@ export default function StoreForm() {
     handleChange(e);
   };
 
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (appNameError) {
       e?.preventDefault();
@@ -184,10 +215,15 @@ export default function StoreForm() {
       formDataToSend.append("appName", formData.appName);
       formDataToSend.append("name_ar", formData.name_ar);
       formDataToSend.append("name_he", formData.name_he);
+      formDataToSend.append("descriptionAR", formData.descriptionAR || "");
+      formDataToSend.append("descriptionHE", formData.descriptionHE || "");
       formDataToSend.append("business_visible", formData.business_visible.toString());
       formDataToSend.append("categoryIds", JSON.stringify(formData.categoryIds));
       formDataToSend.append("supportedCities", JSON.stringify(formData.supportedCities));
-      
+      if (location) {
+        formDataToSend.append("lat", String(location.lat));
+        formDataToSend.append("lng", String(location.lng));
+      }
       if (logo) {
         formDataToSend.append("logo", logo);
       }
@@ -266,7 +302,7 @@ export default function StoreForm() {
                 />
               </div>
             </div>
-            <div className="w-full lg:w-6/12 px-4">
+            <div className="w-full lg:w-12/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
                   שם (עברית)
@@ -278,6 +314,28 @@ export default function StoreForm() {
                   onChange={handleChange}
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   required
+                />
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2 mt-4">
+                  תיאור החנות (עברית)
+                </label>
+                <textarea
+                  name="descriptionHE"
+                  value={formData.descriptionHE}
+                  onChange={handleDescriptionChange}
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  rows={3}
+                  placeholder="הזן תיאור החנות בעברית"
+                />
+                <label className="block uppercase text-blueGray-600 text-md font-bold mb-2 mt-4">
+                  תיאור החנות (ערבית)
+                </label>
+                <textarea
+                  name="descriptionAR"
+                  value={formData.descriptionAR}
+                  onChange={handleDescriptionChange}
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  rows={3}
+                  placeholder="הזן תיאור החנות בערבית"
                 />
               </div>
             </div>
@@ -422,6 +480,33 @@ export default function StoreForm() {
                 </div>
               </div>
             </div>
+            <div className="w-full px-4 mb-6">
+              <label className="block uppercase text-blueGray-600 text-md font-bold mb-2">
+                מיקום חנות על המפה
+              </label>
+              {loadError && <div>שגיאה בטעינת המפה</div>}
+              {!isLoaded ? (
+                <div>טוען מפה...</div>
+              ) : (
+                <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  center={location || defaultCenter}
+                  zoom={15}
+                  onClick={e => {
+                    if (e.latLng) {
+                      setLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+                    }
+                  }}
+                >
+                  {location && <Marker position={location} />}
+                </GoogleMap>
+              )}
+              {location && (
+                <div className="mt-2 text-sm text-gray-600">
+                  Lat: {location.lat}, Lng: {location.lng}
+                </div>
+              )}
+            </div>
           </div>
           {!id && <div className="flex justify-end space-x-4 gap-4">
             <button
@@ -453,6 +538,9 @@ export default function StoreForm() {
               storeLogo={logoPreview}
               cover_sliders={[...existingCoverSliders, ...coverPreviews]}
               handleStoreFormSubmit={handleSubmit}
+              location={location || { lat: 0, lng: 0 }}
+              descriptionAR={formData.descriptionAR}
+              descriptionHE={formData.descriptionHE}
             />
           </div>
         </div>}

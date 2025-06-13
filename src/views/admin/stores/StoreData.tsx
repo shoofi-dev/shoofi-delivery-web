@@ -12,6 +12,12 @@ interface StoreDataProps {
   storeLogo: string;
   cover_sliders: string[];
   handleStoreFormSubmit: (e?: React.FormEvent) => void;
+  location: {
+    lat: number;
+    lng: number;
+  };
+  descriptionAR?: string;
+  descriptionHE?: string;
 }
 
 interface StoreDataForm {
@@ -36,6 +42,8 @@ interface StoreDataForm {
   phone: string;
   address: string;
   openDays: { [key: string]: boolean };
+  minReady?: number;
+  maxReady?: number;
 }
 
 const weekDays = [
@@ -55,7 +63,10 @@ const StoreData: React.FC<StoreDataProps> = ({
   appName,
   storeLogo,
   cover_sliders,
-  handleStoreFormSubmit
+  handleStoreFormSubmit,
+  location,
+  descriptionAR,
+  descriptionHE
 }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -89,6 +100,8 @@ const StoreData: React.FC<StoreDataProps> = ({
       friday: true,
       saturday: true,
     },
+    minReady: undefined,
+    maxReady: undefined,
   });
 
   useEffect(() => {
@@ -99,7 +112,6 @@ const StoreData: React.FC<StoreDataProps> = ({
     try {
       setLoading(true);
       const response: any = await axiosInstance.get(`/store/get/${appName}`);
-      console.log("response", response);
       if(response){
         setFormData({
           ...response,
@@ -170,7 +182,10 @@ const StoreData: React.FC<StoreDataProps> = ({
         name_ar,
         name_he,
         storeLogo,
-        cover_sliders: cover_sliders || []
+        cover_sliders: cover_sliders || [],
+        location,
+        descriptionAR,
+        descriptionHE
       };
 
       if (isEditMode) {
@@ -405,6 +420,32 @@ const StoreData: React.FC<StoreDataProps> = ({
           {/* Order Time Settings */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">הגדרות זמן הזמנה</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="minReady" className="block mb-2">זמן הכנה מינימלי (דקות)</label>
+                <input
+                  type="number"
+                  id="minReady"
+                  name="minReady"
+                  value={formData.minReady ?? ''}
+                  onChange={handleNumberChange}
+                  className="w-full p-2 border rounded"
+                  placeholder="הזן זמן מינימלי"
+                />
+              </div>
+              <div>
+                <label htmlFor="maxReady" className="block mb-2">זמן הכנה מקסימלי (דקות)</label>
+                <input
+                  type="number"
+                  id="maxReady"
+                  name="maxReady"
+                  value={formData.maxReady ?? ''}
+                  onChange={handleNumberChange}
+                  className="w-full p-2 border rounded"
+                  placeholder="הזן זמן מקסימלי"
+                />
+              </div>
+            </div>
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -477,6 +518,11 @@ const StoreData: React.FC<StoreDataProps> = ({
             <p><strong>מזהה:</strong> {appName}</p>
             <p><strong>שם (ערבית):</strong> {name_ar}</p>
             <p><strong>שם (עברית):</strong> {name_he}</p>
+            {location && (
+              <p><strong>מיקום:</strong> {location.lat}, {location.lng}</p>
+            )}
+            <p><strong>תיאור (עברית):</strong> {descriptionHE}</p>
+            <p><strong>תיאור (ערבית):</strong> {descriptionAR}</p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">תמונות</h3>
