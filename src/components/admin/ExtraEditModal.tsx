@@ -60,6 +60,12 @@ const ExtraEditModal = ({
   const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>(
     extra?.groupId || groupId
   );
+  const [defaultOptionId, setDefaultOptionId] = useState<string | undefined>(
+    extra?.defaultOptionId || (extra?.type === "single" && extra?.options?.[0]?.id)
+  );
+  const [defaultOptionIds, setDefaultOptionIds] = useState<string[]>(
+    extra?.defaultOptionIds || []
+  );
 
   // Update options when type changes
   React.useEffect(() => {
@@ -70,6 +76,18 @@ const ExtraEditModal = ({
       setOptions([defaultOption(type)]);
     }
   }, [type]);
+
+  // When options change, ensure defaultOptionId(s) are valid
+  React.useEffect(() => {
+    if (type === "single" && options.length > 0) {
+      if (!options.find(opt => opt.id === defaultOptionId)) {
+        setDefaultOptionId(options[0].id);
+      }
+    }
+    if (type === "multi" && options.length > 0) {
+      setDefaultOptionIds(ids => ids.filter(id => options.some(opt => opt.id === id)));
+    }
+  }, [options, type]);
 
   const handleOptionChange = (
     idx: number,
@@ -125,7 +143,8 @@ const ExtraEditModal = ({
       nameHE,
       order,
       options,
-      ...(type === "multi" ? { maxCount } : {}),
+      ...(type === "multi" ? { maxCount, defaultOptionIds } : {}),
+      ...(type === "single" ? { defaultOptionId } : {}),
       ...(type === "counter" ? { min, max, step, defaultValue, price } : {}),
       ...(type === "weight" ? { min, max, step, defaultValue, price } : {}),
       ...(selectedGroupId ? { groupId: selectedGroupId } : {}),
@@ -308,7 +327,33 @@ const ExtraEditModal = ({
               <label className="block font-bold mb-1">אפשרויות</label>
               {options.map((opt, idx) => (
                 <div key={idx} className="mb-4 p-3 border rounded">
-                  <div className="flex gap-2 mb-2">
+                  <div className="flex gap-2 mb-2 items-center">
+                    {/* Default selector */}
+                    {type === "single" && (
+                      <input
+                        type="radio"
+                        name="defaultSingleOption"
+                        checked={defaultOptionId === opt.id}
+                        onChange={() => setDefaultOptionId(opt.id)}
+                        className="mr-2"
+                        title="בחר כברירת מחדל"
+                      />
+                    )}
+                    {type === "multi" && (
+                      <input
+                        type="checkbox"
+                        checked={defaultOptionIds.includes(opt.id)}
+                        onChange={e => {
+                          if (e.target.checked) {
+                            setDefaultOptionIds(ids => [...ids, opt.id]);
+                          } else {
+                            setDefaultOptionIds(ids => ids.filter(id => id !== opt.id));
+                          }
+                        }}
+                        className="mr-2"
+                        title="בחר כברירת מחדל"
+                      />
+                    )}
                     <input
                       className="border rounded px-2 py-1 flex-1"
                       placeholder="שם (ערבית)"

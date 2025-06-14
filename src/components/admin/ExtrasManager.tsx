@@ -104,11 +104,17 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
     });
   };
 
-  const renderOption = (opt: Option) => {
+  const renderOption = (opt: Option, extra?: Extra) => {
+    // Default indicator logic
+    let isDefault = false;
+    if (extra?.type === 'single' && extra.defaultOptionId === opt.id) isDefault = true;
+    if (extra?.type === 'multi' && Array.isArray(extra.defaultOptionIds) && extra.defaultOptionIds.includes(opt.id)) isDefault = true;
     if (opt.areaOptions) {
       return (
         <div className="pr-4">
-          <div className="font-medium mb-1">{opt.nameAR}</div>
+          <div className="font-medium mb-1">
+            {opt.nameAR} {isDefault && <span className="text-yellow-500 ml-2">★ (ברירת מחדל)</span>}
+          </div>
           <div className="grid grid-cols-2 gap-2 text-sm">
             {opt.areaOptions.map((area) => (
               <div key={area.id} className="flex justify-between">
@@ -121,9 +127,10 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
       );
     }
     return (
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-2 items-center">
         <div>{opt.nameAR}</div>
         <div>{opt.price ? `- ₪${opt.price}` : ""}</div>
+        {isDefault && <span className="text-yellow-500 ml-2">★ (ברירת מחדל)</span>}
       </div>
     );
   };
@@ -271,7 +278,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                       {extra.options && (
                         <ul className="pr-4 list-disc">
                           {extra.options.map((opt) => (
-                            <li key={opt.id}>{renderOption(opt)}</li>
+                            <li key={opt.id}>{renderOption(opt, extra)}</li>
                           ))}
                         </ul>
                       )}
@@ -328,7 +335,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
                     {extra.options && (
                       <ul className="pr-4 list-disc">
                         {extra.options.map((opt) => (
-                          <li key={opt.id}>{renderOption(opt)}</li>
+                          <li key={opt.id}>{renderOption(opt, extra)}</li>
                         ))}
                       </ul>
                     )}

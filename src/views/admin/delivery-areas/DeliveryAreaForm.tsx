@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "utils/http-interceptor";
-import { GoogleMap, useLoadScript, DrawingManager, Polygon } from "@react-google-maps/api";
+import { GoogleMap, useLoadScript, DrawingManager, Polygon, Marker } from "@react-google-maps/api";
 
 const libraries: ("drawing")[] = ["drawing"];
 
@@ -21,6 +21,12 @@ const DeliveryAreaForm = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 32.11453261988036, lng: 34.97186886900658  });
   const [minETA, setMinETA] = useState<number | ''>('');
   const [maxETA, setMaxETA] = useState<number | ''>('');
+  const [price, setPrice] = useState<number | ''>('');
+  const [areas, setAreas] = useState<any[]>([]);
+  const [selectedCityName, setSelectedCityName] = useState<string>("");
+  const [selectedArea, setSelectedArea] = useState<{ id: string; position: google.maps.LatLng } | null>(null);
+  const [hoveredAreaId, setHoveredAreaId] = useState<string | null>(null);
+  const [editingAreaHovered, setEditingAreaHovered] = useState<boolean>(false);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
@@ -34,6 +40,18 @@ const DeliveryAreaForm = () => {
     }
   }, [cityId]);
 
+  useEffect(() => {
+    if (cityId) {
+      axiosInstance.get(`/delivery/areas/by-city/${cityId}`).then((res: any) => setAreas(res));
+      // Fetch city name for modal title
+    } else {
+      setAreas([]);
+      setSelectedCityName("");
+    }
+  }, [cityId]);
+
+  console.log(areas);
+
   // Load area for edit
   useEffect(() => {
     if (id) {
@@ -42,6 +60,7 @@ const DeliveryAreaForm = () => {
         setGeometry(res.geometry); // Should be GeoJSON Polygon
         setMinETA(res.minETA ?? '');
         setMaxETA(res.maxETA ?? '');
+        setPrice(res.price ?? '');
         if (res.geometry?.coordinates?.[0]) {
           // Calculate center of polygon
           const coords = res.geometry.coordinates[0];
@@ -80,7 +99,8 @@ const DeliveryAreaForm = () => {
     e.preventDefault();
     if (!geometry) return alert("Please draw a polygon on the map");
     if (!cityId) return alert("City ID is missing");
-    const data = { name, geometry, cityId, minETA: minETA === '' ? undefined : minETA, maxETA: maxETA === '' ? undefined : maxETA };
+    if (price === '' || isNaN(Number(price))) return alert("Please enter a valid price");
+    const data = { name, geometry, cityId, minETA: minETA === '' ? undefined : minETA, maxETA: maxETA === '' ? undefined : maxETA, price: Number(price) };
     if (id) {
       await axiosInstance.post(`/delivery/area/update/${id}`, data);
     } else {
@@ -110,6 +130,31 @@ const DeliveryAreaForm = () => {
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
   }, []);
+
+  // Add this function to calculate center of polygon
+  const getPolygonCenter = (coordinates: number[][]) => {
+    const bounds = new google.maps.LatLngBounds();
+    coordinates.forEach(coord => {
+      bounds.extend({ lat: coord[1], lng: coord[0] });
+    });
+    return bounds.getCenter();
+  };
+
+  // Helper to create SVG icon with background for area name
+  const createLabelIcon = (text: string) => {
+    const fontSize = 16;
+    const padding = 8;
+    // Estimate width based on text length (approximate, works for most cases)
+    const width = text.length * fontSize * 0.7 + padding * 2;
+    const height = fontSize + padding * 2;
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}'>
+        <rect x='0' y='0' width='${width}' height='${height}' rx='8' fill='white' stroke='black' stroke-width='2'/>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='${fontSize}' font-family='Arial' fill='black' font-weight='bold'>${text}</text>
+      </svg>
+    `;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  };
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -167,6 +212,18 @@ const DeliveryAreaForm = () => {
           </div>
         </div>
         <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">מחיר משלוח לאזור</label>
+          <input
+            type="number"
+            min="0"
+            required
+            value={price}
+            onChange={e => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            placeholder="הזן מחיר משלוח"
+          />
+        </div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">צייר גבולות האזור</label>
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMap
@@ -175,16 +232,64 @@ const DeliveryAreaForm = () => {
               zoom={13.5}
               onLoad={onMapLoad}
             >
+              {/* Render all existing areas in blue */}
+              {areas.map(area => (
+                area.geometry?.coordinates?.[0] && (
+                  <React.Fragment key={area._id}>
+                    <Polygon
+                      path={area.geometry.coordinates[0].map((coord: number[]) => ({ lng: coord[0], lat: coord[1] }))}
+                      options={{
+                        fillColor: "#2196f3",
+                        fillOpacity: 0.2,
+                        strokeColor: "#1976d2",
+                        strokeWeight: 2,
+                        clickable: true,
+                      }}
+                      onClick={() => {
+                        const center = getPolygonCenter(area.geometry.coordinates[0]);
+                        setSelectedArea({ id: area._id, position: center });
+                      }}
+                      onMouseOver={() => setHoveredAreaId(area._id)}
+                      onMouseOut={() => setHoveredAreaId(null)}
+                    />
+                    {hoveredAreaId === area._id && (
+                      <Marker
+                        position={getPolygonCenter(area.geometry.coordinates[0])}
+                        icon={{
+                          url: createLabelIcon(area.name),
+                          anchor: new google.maps.Point((area.name.length * 16 * 0.7 + 16) / 2, 0),
+                          labelOrigin: new google.maps.Point((area.name.length * 16 * 0.7 + 16) / 2, 0)
+                        }}
+                      />
+                    )}
+                  </React.Fragment>
+                )
+              ))}
+              {/* Render the current (editing) area in black */}
               {geometry && renderPolygonPath.length > 0 && (
-                <Polygon
-                  path={renderPolygonPath}
-                  options={{
-                    fillColor: "#000",
-                    fillOpacity: 0.3,
-                    strokeColor: "#111",
-                    strokeWeight: 2,
-                  }}
-                />
+                <React.Fragment>
+                  <Polygon
+                    path={renderPolygonPath}
+                    options={{
+                      fillColor: "#000",
+                      fillOpacity: 0.3,
+                      strokeColor: "#111",
+                      strokeWeight: 2,
+                    }}
+                    onMouseOver={() => setEditingAreaHovered(true)}
+                    onMouseOut={() => setEditingAreaHovered(false)}
+                  />
+                  {editingAreaHovered && (
+                    <Marker
+                      position={getPolygonCenter(geometry.coordinates[0])}
+                      icon={{
+                        url: createLabelIcon(name || "אזור חדש"),
+                        anchor: new google.maps.Point(((name || "אזור חדש").length * 16 * 0.7 + 16) / 2, 0),
+                        labelOrigin: new google.maps.Point(((name || "אזור חדש").length * 16 * 0.7 + 16) / 2, 0)
+                      }}
+                    />
+                  )}
+                </React.Fragment>
               )}
               {map && (
                 <DrawingManager
