@@ -61,7 +61,7 @@ const ExtraEditModal = ({
     extra?.groupId || groupId
   );
   const [defaultOptionId, setDefaultOptionId] = useState<string | undefined>(
-    extra?.defaultOptionId || (extra?.type === "single" && extra?.options?.[0]?.id)
+    extra?.defaultOptionId
   );
   const [defaultOptionIds, setDefaultOptionIds] = useState<string[]>(
     extra?.defaultOptionIds || []
@@ -80,8 +80,8 @@ const ExtraEditModal = ({
   // When options change, ensure defaultOptionId(s) are valid
   React.useEffect(() => {
     if (type === "single" && options.length > 0) {
-      if (!options.find(opt => opt.id === defaultOptionId)) {
-        setDefaultOptionId(options[0].id);
+      if (defaultOptionId && !options.find(opt => opt.id === defaultOptionId)) {
+        setDefaultOptionId(undefined);
       }
     }
     if (type === "multi" && options.length > 0) {
@@ -334,7 +334,9 @@ const ExtraEditModal = ({
                         type="radio"
                         name="defaultSingleOption"
                         checked={defaultOptionId === opt.id}
-                        onChange={() => setDefaultOptionId(opt.id)}
+                        onChange={() =>
+                          setDefaultOptionId(defaultOptionId === opt.id ? undefined : opt.id)
+                        }
                         className="mr-2"
                         title="בחר כברירת מחדל"
                       />
