@@ -13,6 +13,7 @@ export type ExtraGroup = {
   nameAR: string;
   nameHE: string;
   order?: number;
+  freeCount?: number;
   extras: Extra[];
 };
 

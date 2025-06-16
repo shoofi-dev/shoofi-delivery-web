@@ -56,6 +56,7 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
         groupId: group.id,
         order: group.order,
         options: [],
+        freeCount: group.freeCount,
         isGroupHeader: true, // Mark this as a group header
       };
       setAssignedExtras((prev) => {
@@ -115,10 +116,11 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
           <div className="font-medium mb-1">
             {opt.nameAR} {isDefault && <span className="text-yellow-500 ml-2">★ (ברירת מחדל)</span>}
           </div>
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="grid  gap-2 text-sm">
             {opt.areaOptions.map((area) => (
-              <div key={area.id} className="flex justify-between">
+              <div key={area.id} className="flex  gap-2">
                 <span>{area.name}</span>
+                <span>-</span>
                 <span>₪{area.price}</span>
               </div>
             ))}
@@ -222,7 +224,14 @@ const ExtrasManager: React.FC<ExtrasManagerProps> = ({
             {groupId !== "ungrouped" ? (
               <div className="border rounded-lg overflow-hidden">
                 <div className="bg-blueGray-100 px-4 py-3 flex justify-between items-center border-b">
-                  <h4 className="text-lg font-semibold">{extras[0]?.order ?? 0} - {extras[0]?.nameAR}</h4>
+                  <div>
+                    <h4 className="text-lg font-semibold">{extras[0]?.order ?? 0} - {extras[0]?.nameAR}</h4>
+                    {extras[0]?.freeCount > 0 && (
+                      <div className="text-sm text-gray-600 mt-1">
+                        {extras[0].freeCount} תוספות ראשונות בחינם
+                      </div>
+                    )}
+                  </div>
                   <div className="flex gap-2">
                     <button
                       className="text-blue-600"

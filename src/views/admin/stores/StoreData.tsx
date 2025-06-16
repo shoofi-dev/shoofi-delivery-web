@@ -28,11 +28,6 @@ interface StoreDataForm {
   cash_support: boolean;
   creditcard_support: boolean;
   day: string;
-  start: string;
-  end: string;
-  isOpen: boolean;
-  isStoreClose: boolean;
-  isAlwaysOpen: boolean;
   delivery_price: number;
   order_company_delta_minutes: number;
   isOrderLaterSupport: boolean;
@@ -41,7 +36,6 @@ interface StoreDataForm {
   minTimeToOrder: number;
   phone: string;
   address: string;
-  openDays: { [key: string]: boolean };
   minReady?: number;
   maxReady?: number;
 }
@@ -55,6 +49,16 @@ const weekDays = [
   { key: 'friday', label: 'שישי' },
   { key: 'saturday', label: 'שבת' },
 ];
+
+const defaultOpenHours = {
+  sunday:    { isOpen: true,  start: "10:00", end: "22:00" },
+  monday:    { isOpen: true,  start: "10:00", end: "22:00" },
+  tuesday:   { isOpen: true,  start: "10:00", end: "22:00" },
+  wednesday: { isOpen: true,  start: "10:00", end: "22:00" },
+  thursday:  { isOpen: true,  start: "10:00", end: "22:00" },
+  friday:    { isOpen: false, start: "10:00", end: "16:00" },
+  saturday:  { isOpen: false, start: "10:00", end: "16:00" },
+};
 
 const StoreData: React.FC<StoreDataProps> = ({
   logo,
@@ -72,17 +76,12 @@ const StoreData: React.FC<StoreDataProps> = ({
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState<StoreDataForm & { openDays: { [key: string]: boolean } }>({
+  const [formData, setFormData] = useState<StoreDataForm & { openHours: { [key: string]: { isOpen: boolean; start: string; end: string } } }>({
     delivery_support: true,
     takeaway_support: true,
     cash_support: true,
     creditcard_support: true,
     day: 'Sunday',
-    start: '10:00',
-    end: '00:00',
-    isOpen: true,
-    isStoreClose: false,
-    isAlwaysOpen: true,
     delivery_price: 0,
     order_company_delta_minutes: 0,
     isOrderLaterSupport: false,
@@ -91,15 +90,7 @@ const StoreData: React.FC<StoreDataProps> = ({
     minTimeToOrder: 60,
     phone: '',
     address: '',
-    openDays: {
-      sunday: true,
-      monday: true,
-      tuesday: true,
-      wednesday: true,
-      thursday: true,
-      friday: true,
-      saturday: true,
-    },
+    openHours: defaultOpenHours,
     minReady: undefined,
     maxReady: undefined,
   });
@@ -115,15 +106,7 @@ const StoreData: React.FC<StoreDataProps> = ({
       if(response){
         setFormData({
           ...response,
-          openDays: response.openDays || {
-            sunday: true,
-            monday: true,
-            tuesday: true,
-            wednesday: true,
-            thursday: true,
-            friday: true,
-            saturday: true,
-          },
+          openHours: response.openHours || defaultOpenHours,
           cover_sliders: response.cover_sliders || []
         });
         setShowForm(true);
@@ -159,12 +142,15 @@ const StoreData: React.FC<StoreDataProps> = ({
     }));
   };
 
-  const handleOpenDayChange = (dayKey: string) => {
+  const handleOpenHourChange = (dayKey: string, field: 'isOpen' | 'start' | 'end', value: any) => {
     setFormData(prev => ({
       ...prev,
-      openDays: {
-        ...prev.openDays,
-        [dayKey]: !prev.openDays[dayKey]
+      openHours: {
+        ...prev.openHours,
+        [dayKey]: {
+          ...prev.openHours[dayKey],
+          [field]: value
+        }
       }
     }));
   };
@@ -223,7 +209,7 @@ const StoreData: React.FC<StoreDataProps> = ({
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'ערוך נתוני חנות' : 'הוסף נתוני חנות'}</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
           {/* Support Options */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">אפשרויות תמיכה</h2>
@@ -282,83 +268,36 @@ const StoreData: React.FC<StoreDataProps> = ({
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">שעות פעילות</h2>
             <div className="space-y-2">
-              <label className="block mb-2 font-semibold">ימים פתוחים</label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <label className="block mb-2 font-semibold">שעות פתיחה לכל יום</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {weekDays.map(day => (
-                  <label key={day.key} className="flex items-center">
+                  <div key={day.key} className="flex items-center space-x-2 border p-2 rounded">
                     <input
                       type="checkbox"
-                      checked={formData.openDays[day.key]}
-                      onChange={() => handleOpenDayChange(day.key)}
+                      checked={formData.openHours[day.key]?.isOpen}
+                      onChange={e => handleOpenHourChange(day.key, 'isOpen', e.target.checked)}
                       className="form-checkbox h-5 w-5 ml-2"
                     />
-                    {day.label}
-                  </label>
+                    <span className="w-16">{day.label}</span>
+                    <input
+                      type="time"
+                      value={formData.openHours[day.key]?.start}
+                      onChange={e => handleOpenHourChange(day.key, 'start', e.target.value)}
+                      className="w-28 p-1 border rounded mx-2"
+                      disabled={!formData.openHours[day.key]?.isOpen}
+                    />
+                    <span>עד</span>
+                    <input
+                      type="time"
+                      value={formData.openHours[day.key]?.end}
+                      onChange={e => handleOpenHourChange(day.key, 'end', e.target.value)}
+                      className="w-28 p-1 border rounded mx-2"
+                      disabled={!formData.openHours[day.key]?.isOpen}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="start" className="block mb-2">שעת פתיחה</label>
-                <input
-                  type="time"
-                  id="start"
-                  name="start"
-                  value={formData.start}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label htmlFor="end" className="block mb-2">שעת סגירה</label>
-                <input
-                  type="time"
-                  id="end"
-                  name="end"
-                  value={formData.end}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Store Status */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">סטטוס חנות</h2>
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="isOpen"
-                name="isOpen"
-                checked={formData.isOpen}
-                onChange={handleChange}
-                className="form-checkbox h-5 w-5 ml-2"
-              />
-              <label htmlFor="isOpen">חנות פתוחה</label>
-            </div>
-            {/* <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="isStoreClose"
-                name="isStoreClose"
-                checked={formData.isStoreClose}
-                onChange={handleChange}
-                className="form-checkbox h-5 w-5 ml-2"
-              />
-              <label htmlFor="isStoreClose">חנות סגורה</label>
-            </div> */}
-            {/* <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="isAlwaysOpen"
-                name="isAlwaysOpen"
-                checked={formData.isAlwaysOpen}
-                onChange={handleChange}
-                className="form-checkbox h-5 w-5 ml-2"
-              />
-              <label htmlFor="isAlwaysOpen">חנות פתוחה תמיד</label>
-            </div> */}
           </div>
 
           {/* Store Information */}
@@ -393,17 +332,6 @@ const StoreData: React.FC<StoreDataProps> = ({
           {/* Order Settings */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">הגדרות הזמנה</h2>
-            {/* <div>
-              <label htmlFor="delivery_price" className="block mb-2">מחיר משלוח</label>
-              <input
-                type="number"
-                id="delivery_price"
-                name="delivery_price"
-                value={formData.delivery_price}
-                onChange={handleNumberChange}
-                className="w-full p-2 border rounded"
-              />
-            </div> */}
             <div>
               <label htmlFor="order_company_delta_minutes" className="block mb-2">זמן הכנה משוער(דקות)</label>
               <input

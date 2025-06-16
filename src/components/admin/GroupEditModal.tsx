@@ -11,12 +11,15 @@ const GroupEditModal = ({ group, onSave, onClose }: GroupEditModalProps) => {
   const [nameAR, setNameAR] = useState(group?.nameAR || "");
   const [nameHE, setNameHE] = useState(group?.nameHE || "");
   const [order, setOrder] = useState(group?.order || 0);
+  const [freeCount, setFreeCount] = useState<number>(group?.freeCount ?? 0);
+
   const handleSave = () => {
     onSave({
       id: group?.id || Math.random().toString(36).substr(2, 9),
       nameAR,
       nameHE,
       order,
+      freeCount,
       extras: group?.extras || []
     });
   };
@@ -48,6 +51,17 @@ const GroupEditModal = ({ group, onSave, onClose }: GroupEditModalProps) => {
             value={order}
             onChange={(e) => setOrder(Number(e.target.value))}
           />
+        </div>
+        <div className="mb-3">
+          <label className="block font-bold mb-1">כמות תוספות חינם</label>
+          <input
+            className="border rounded px-3 py-2 w-full"
+            type="number"
+            min={0}
+            value={freeCount}
+            onChange={(e) => setFreeCount(Number(e.target.value))}
+          />
+          <div className="text-xs text-gray-500 mt-1">מספר התוספות הראשונות שיהיו בחינם</div>
         </div>
         <div className="flex justify-end gap-2 mt-4">
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>

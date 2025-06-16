@@ -11,10 +11,6 @@ const defaultPizzaOptions = [
   { id: "full", name: "full-pizza", price: 0 },
   { id: "half1", name: "first-half", price: 0 },
   { id: "half2", name: "second-half", price: 0 },
-  { id: "quarter1", name: "first-quarter", price: 0 },
-  { id: "quarter2", name: "second-quarter", price: 0 },
-  { id: "quarter3", name: "third-quarter", price: 0 },
-  { id: "quarter4", name: "fourth-quarter", price: 0 },
 ];
 function arabicToEnglishNumber(str: string): string {
   return str.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
@@ -107,15 +103,21 @@ const ExtraEditModal = ({
     optionIdx: number,
     areaIdx: number,
     field: string,
-    value: string | number
+    value: string | number,
+    areaId: string
   ) => {
     setOptions((opts) =>
       opts.map((opt, i) => {
         if (i === optionIdx && opt.areaOptions) {
-          const updatedAreaOptions = opt.areaOptions.map((area, j) =>
-            j === areaIdx
-              ? { ...area, [field]: field === "price" ? Number(value) : value }
-              : area
+          const updatedAreaOptions = opt.areaOptions.map((area, j) =>{
+            if(j === areaIdx){
+              return { ...area, [field]: field === "price" ? Number(value) : value }
+            }
+            if(areaId === "full" && (area.id === "half1" || area.id === "half2")){
+              return { ...area, [field]: field === "price" ? Number(value) / 2 : value }
+            }
+            return area
+          }
           );
           return { ...opt, areaOptions: updatedAreaOptions };
         }
@@ -412,7 +414,8 @@ const ExtraEditModal = ({
                                 idx,
                                 areaIdx,
                                 "price",
-                                e.target.value
+                                e.target.value,
+                                area.id
                               )
                             }
                           />
