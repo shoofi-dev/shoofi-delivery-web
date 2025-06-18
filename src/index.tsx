@@ -73,6 +73,9 @@ import GeneralCategoryForm from "views/admin/general-categories/GeneralCategoryF
 import GeneralCategoriesList from "views/admin/general-categories/GeneralCategoriesList";
 import AdsList from "views/admin/ads/AdsList";
 import AddEditAd from "views/admin/ads/add/AddEditAd";
+import CouponList from "views/admin/coupons/CouponList";
+import CouponForm from "views/admin/coupons/CouponForm";
+import CouponUsageChart from "views/admin/coupons/CouponUsageChart";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY!;
 
@@ -152,6 +155,10 @@ const AppWithGoogleMaps = () => {
             <Route path="/admin/ads" element={<AdsList />} />
             <Route path="/admin/ads/add" element={<AddEditAd />} />
             <Route path="/admin/ads/edit/:id" element={<AddEditAd />} />
+            <Route path="/admin/coupons" element={<CouponList />} />
+            <Route path="/admin/coupons/add" element={<CouponForm open={true} onClose={() => {}} onSubmit={() => {}} />} />
+            <Route path="/admin/coupons/edit/:id" element={<CouponForm open={true} onClose={() => {}} onSubmit={() => {}} />} />
+            <Route path="/admin/coupons/analytics" element={<CouponUsageChart />} />
             <Route path="" element={<Navigate to="/admin/dashboard" />} />
           </Route>
           <Route path="auth" element={<Auth />}>

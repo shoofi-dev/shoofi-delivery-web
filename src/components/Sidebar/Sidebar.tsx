@@ -690,6 +690,53 @@ export default function Sidebar() {
                 </Link>
               </li> */}
 
+              <hr className="my-4 md:min-w-full" />
+              <h6 className="md:min-w-full text-blueGray-900 text-lg uppercase font-bold block pt-1 pb-4 no-underline">
+                ניהול קופונים
+              </h6>
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/coupons") !== -1 && !window.location.href.includes("/analytics")
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/coupons"
+                >
+                  <i
+                    className={
+                      "fas fa-ticket-alt mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/coupons") !== -1 && !window.location.href.includes("/analytics")
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>ניהול קופונים</div>
+                </Link>
+              </li>
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "flex items-center text-md uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/coupons/analytics") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/coupons/analytics"
+                >
+                  <i
+                    className={
+                      "fas fa-chart-line mx-2 text-lg " +
+                      (window.location.href.indexOf("/admin/coupons/analytics") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>
+                  <div>ניתוח קופונים</div>
+                </Link>
+              </li>
+
             </ul>
             {/* {sideBarList()} */}
           </div>
