@@ -14,6 +14,7 @@ import {
   Typography,
   Chip,
   DialogTitle,
+  Tooltip,
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
@@ -113,6 +114,8 @@ const CouponList: React.FC = () => {
                   <TableCell>שימוש לכל משתמש</TableCell>
                   <TableCell>תאריך התחלה</TableCell>
                   <TableCell>תאריך סיום</TableCell>
+                  <TableCell>לקוח ספציפי</TableCell>
+                  <TableCell>שימוש</TableCell>
                   <TableCell>סטטוס</TableCell>
                   <TableCell>פעולות</TableCell>
                 </TableRow>
@@ -127,6 +130,30 @@ const CouponList: React.FC = () => {
                     <TableCell>{coupon.usagePerUser}</TableCell>
                     <TableCell>{format(new Date(coupon.start), 'dd/MM/yyyy HH:mm')}</TableCell>
                     <TableCell>{format(new Date(coupon.end), 'dd/MM/yyyy HH:mm')}</TableCell>
+                    <TableCell>
+                      {coupon.isCustomerSpecific ? (
+                        <Chip
+                          label="לקוח ספציפי"
+                          color="warning"
+                          size="small"
+                        />
+                      ) : (
+                        <Chip
+                          label="כללי"
+                          color="default"
+                          size="small"
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title={`שימוש: ${coupon.usageCount || 0} מתוך ${coupon.usageLimit} אפשרויות`}>
+                        <Chip
+                          label={`${coupon.usageCount || 0}/${coupon.usageLimit}`}
+                          color={coupon.isUsed ? 'success' : 'default'}
+                          size="small"
+                        />
+                      </Tooltip>
+                    </TableCell>
                     <TableCell>
                       <Chip
                         label={coupon.isActive ? 'פעיל' : 'לא פעיל'}
