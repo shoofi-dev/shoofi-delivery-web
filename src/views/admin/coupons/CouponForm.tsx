@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -30,6 +30,10 @@ const CouponForm: React.FC<CouponFormProps> = ({
   const [code, setCode] = useState(initialValues?.code || "");
   const [loadingCode, setLoadingCode] = useState(false);
 
+  useEffect(() => {
+    setCode(initialValues?.code || "");
+  }, [initialValues?.code]);
+
   const handleGenerateCode = async () => {
     setLoadingCode(true);
     try {
@@ -58,7 +62,7 @@ const CouponForm: React.FC<CouponFormProps> = ({
       usagePerUser: parseInt(formData.get("usagePerUser") as string),
       start: new Date(formData.get("start") as string),
       end: new Date(formData.get("end") as string),
-      isActive: formData.get("isActive") === "true",
+      isActive: formData.get("isActive") === "on",
     };
     onSubmit(data);
   };
