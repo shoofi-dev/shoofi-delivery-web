@@ -49,6 +49,7 @@ export default function StoreForm() {
   const [existingCoverSliders, setExistingCoverSliders] = useState<string[]>([]);
   const [appNameError, setAppNameError] = useState("");
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [citiesError, setCitiesError] = useState("");
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
   });
@@ -164,6 +165,8 @@ export default function StoreForm() {
         supportedCities: []
       }));
     }
+    // Clear error when cities are selected/deselected
+    setCitiesError("");
   };
 
   const handleCityChange = (cityId: string) => {
@@ -173,6 +176,8 @@ export default function StoreForm() {
         ? prev.supportedCities.filter(id => id !== cityId)
         : [...prev.supportedCities, cityId]
     }));
+    // Clear error when cities are selected
+    setCitiesError("");
   };
 
   const handleCategoryChange = (categoryId: string) => {
@@ -207,6 +212,14 @@ export default function StoreForm() {
       e?.preventDefault();
       return;
     }
+    console.log("formData.supportedCities", formData.supportedCities);
+    // Validate that at least one city is selected
+    if (formData.supportedCities.length === 0) {
+      setCitiesError("יש לבחור לפחות עיר אחת");
+      e?.preventDefault();
+      return;
+    }
+    
     e?.preventDefault();
     setLoading(true);
 
@@ -245,7 +258,7 @@ export default function StoreForm() {
         await axiosInstance.post("/shoofiAdmin/store/add", formDataToSend);
         toast.success("Store added successfully");
       }
-      await fetchStore();
+      //await fetchStore();
        navigate("/admin/stores");
     } catch (error) {
       console.error("Error saving store:", error);
@@ -408,6 +421,9 @@ export default function StoreForm() {
                       </label>
                     ))}
                   </div>
+                  {citiesError && (
+                    <div className="text-red-600 text-sm mt-2">{citiesError}</div>
+                  )}
                 </div>
               </div>
             </div>
