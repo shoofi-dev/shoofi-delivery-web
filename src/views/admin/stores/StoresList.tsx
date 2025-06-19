@@ -307,7 +307,7 @@ export default function StoresList() {
             </tr>
           </thead>
           <tbody>
-            {stores.map((store) => (
+            {stores?.map((store) => (
               <tr key={store._id}>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                   {store.storeLogo && (
