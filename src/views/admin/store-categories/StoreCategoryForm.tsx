@@ -9,7 +9,7 @@ const DEFAULT_APP_NAME = process.env.REACT_APP_APP_NAME || '';
 const StoreCategoryForm: React.FC = () => {
   const { id, appName } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState<{ nameAR: string; nameHE: string; img: File | null }>({ nameAR: '', nameHE: '', img: null });
+  const [form, setForm] = useState<{ nameAR: string; nameHE: string; img: File | null; order: number }>({ nameAR: '', nameHE: '', img: null, order: 0 });
   const [imgPreview, setImgPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const isEditMode = Boolean(id);
@@ -31,7 +31,7 @@ const StoreCategoryForm: React.FC = () => {
       const cat = res.find((c: any) => (c._id?.$oid || c._id) === id);
       console.log("cat",cat)
       if (cat) {
-        setForm({ nameAR: cat.nameAR, nameHE: cat.nameHE, img: null });
+        setForm({ nameAR: cat.nameAR, nameHE: cat.nameHE, img: null, order: cat.order || 0 });
         if (cat.img && cat.img.length > 0) {
           setImgPreview(`${cdnUrl}${cat.img[0].uri}`);
         }
@@ -62,6 +62,7 @@ const StoreCategoryForm: React.FC = () => {
       const data = new FormData();
       data.append('nameAR', form.nameAR);
       data.append('nameHE', form.nameHE);
+      data.append('order', String(form.order));
       if (form.img) data.append('img', form.img);
       if (isEditMode) {
         await axiosInstance.post(`/store-category/update/${id}`, data, {
@@ -106,6 +107,16 @@ const StoreCategoryForm: React.FC = () => {
             onChange={handleChange}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400"
             required
+          />
+        </div>
+        <div>
+          <label className="block mb-2 font-semibold">סדר</label>
+          <input
+            type="number"
+            name="order"
+            value={form.order}
+            onChange={handleChange}
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400"
           />
         </div>
         <div>

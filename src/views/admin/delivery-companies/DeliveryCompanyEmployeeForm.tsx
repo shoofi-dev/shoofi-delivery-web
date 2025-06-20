@@ -8,6 +8,8 @@ interface EmployeeForm {
   fullName: string;
   isActive: boolean;
   companyId: string;
+  isDriver: boolean,
+  userName: string,
 }
 
 const DeliveryCompanyEmployeeForm: React.FC = () => {
@@ -19,6 +21,8 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
     fullName: '',
     isActive: true,
     companyId: companyId || '',
+    isDriver: true,
+    userName: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,6 +62,8 @@ const DeliveryCompanyEmployeeForm: React.FC = () => {
       if (id) {
         await axiosInstance.post(`/delivery/company/employee/update/${id}`, form);
       } else {
+        form.userName =  "11" + form.phone.slice(2);
+
         await axiosInstance.post(`/delivery/company/${companyId}/employee/add`, form);
       }
       navigate(`/admin/delivery-companies/${companyId}/employees`);

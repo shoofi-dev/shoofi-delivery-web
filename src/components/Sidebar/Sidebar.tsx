@@ -81,6 +81,28 @@ const sideBarList = () => {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/delivery-monitor") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/delivery-monitor"
+                >
+                  <i
+                    className={
+                      "fas fa-truck mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/delivery-monitor") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Delivery Monitor
+                </Link>
+              </li>
+
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/maps") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-900")
@@ -737,6 +759,29 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+
+
+              <li className="items-center cursor-pointer">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/delivery-monitor") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-900")
+                  }
+                  to="/admin/delivery-monitor"
+                >
+                  <i
+                    className={
+                      "fas fa-truck mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/delivery-monitor") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Delivery Monitor
+                </Link>
+              </li>
             </ul>
             {/* {sideBarList()} */}
           </div>
